@@ -1,0 +1,13 @@
+{
+  "result_path": "results/baseline_CLAUD_results_10_20250711_162758.jsonl",
+  "skipped": 0,
+  "accuracy": 0.8889,
+  "precision": 0.5,
+  "recall": 1.0,
+  "negative_precision": 1.0,
+  "negative_recall": 0.875,
+  "true_negative": 7,
+  "false_positive": 1,
+  "false_negative": 0,
+  "true_positive": 1
+}

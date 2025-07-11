@@ -4,12 +4,17 @@ import json
 import os
 from dotenv import load_dotenv
 import google.generativeai as genai
+import anthropic
 
 load_dotenv()
 api_key = os.getenv("GOOGLE_API_KEY")
 genai.configure(api_key=api_key)
 
-model = genai.GenerativeModel("models/gemini-2.5-flash")
+
+claude_api_key = os.getenv("ANTHROPIC_API_KEY")
+claude_client = anthropic.Anthropic(api_key=claude_api_key)
+
+GEN_model = genai.GenerativeModel("models/gemini-2.5-flash")
 
 def get_db_ids_from_json():
     """从 NL2SQL-Bugs.json 中提取所有 db_id"""
@@ -53,7 +58,7 @@ Is the SQL semantically correct?"""
 
 def query_gemini(prompt: str) -> str:
     """Call Gemini 2.5 Flash"""
-    response = model.generate_content(prompt)
+    response = GEN_model.generate_content(prompt)
     return response.text.strip().lower()
 
 def parse_answer(text: str) -> bool:
@@ -64,10 +69,21 @@ def parse_answer(text: str) -> bool:
         return False
     else:
         return None
+    
+def query_claude(prompt: str) -> str:
+    """Call Claude 4 sonnet"""
+    response = claude_client.messages.create(
+        model="claude-sonnet-4-20250514",
+        max_tokens=50,
+        temperature=0,  # Lower temperature for deterministic output
+        messages=[
+            {"role": "user", "content": prompt + "\nOnly answer 'Yes' or 'No'. Do not explain."}
+        ]
+    )
+    return response.content[0].text.strip().lower()
 
 if __name__ == "__main__":
     prompt = "You are a helpful assistant. Respond 'yes' or 'no'. Is the sky blue?"
-    result = query_gemini(prompt)
-    print("[Gemini Response]:", result)
-
-
+    # result = query_gemini(prompt)
+    result = query_claude(prompt)
+    print("[Claude Response]:", result)
