@@ -1,0 +1,13 @@
+{
+  "result_path": "results/baseline_results_10_20250710_181906.jsonl",
+  "skipped": 0,
+  "accuracy": 0.7,
+  "precision": 0.25,
+  "recall": 1.0,
+  "negative_precision": 1.0,
+  "negative_recall": 0.6667,
+  "true_negative": 6,
+  "false_positive": 3,
+  "false_negative": 0,
+  "true_positive": 1
+}

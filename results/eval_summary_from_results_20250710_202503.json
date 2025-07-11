@@ -1,0 +1,12 @@
+{
+  "result_path": "results/baseline_results_1199_20250710_184124.jsonl",
+  "accuracy": 0.6699,
+  "precision": 0.3048,
+  "recall": 0.7978,
+  "negative_precision": 0.9424,
+  "negative_recall": 0.645,
+  "true_negative": 605,
+  "false_positive": 333,
+  "false_negative": 37,
+  "true_positive": 146
+}

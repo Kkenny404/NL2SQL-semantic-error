@@ -1,0 +1,32 @@
+{
+  "metrics": {
+    "ensemble_uncertainty": {
+      "accuracy": 0.6,
+      "precision": 0.3333333333333333,
+      "recall": 1.0,
+      "f1_score": 0.5,
+      "total_samples": 5,
+      "avg_uncertainty": 0.20424136834610723,
+      "high_uncertainty_rate": 0.0,
+      "uncertainty_correctness_correlation": -0.3722461715337048
+    }
+  },
+  "uncertainty_analysis": {
+    "low_uncertainty": {
+      "correct": 3,
+      "total": 5,
+      "accuracy": 0.6
+    },
+    "medium_uncertainty": {
+      "correct": 0,
+      "total": 0,
+      "accuracy": 0
+    },
+    "high_uncertainty": {
+      "correct": 0,
+      "total": 0,
+      "accuracy": 0
+    }
+  },
+  "total_samples": 5
+}

@@ -1,0 +1,12 @@
+{
+  "result_path": "results/baseline_GEMINIresults_1199_20250711_031233.jsonl",
+  "accuracy": 0.7548,
+  "precision": 0.3863,
+  "recall": 0.79,
+  "negative_precision": 0.9466,
+  "negative_recall": 0.7477,
+  "true_negative": 744,
+  "false_positive": 251,
+  "false_negative": 42,
+  "true_positive": 158
+}

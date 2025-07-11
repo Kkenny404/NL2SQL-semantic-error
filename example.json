@@ -1,0 +1,37 @@
+
+  {
+    "id": 1,
+    "error_types": [
+      {"error_type": "Table-Related Errors"},
+      {"error_type": "Join-Related Errors"}
+    ]
+  },
+  {
+    "id": 2,
+    "error_types": [
+      {"error_type": "Condition-Related Errors"}
+    ]
+  },
+  {
+    "id": 3, 
+    "error_types": [
+      {"error_type": "Table-Related Errors"},
+      {"error_type": "Rare-Error-Type"}
+    ]
+  }
+
+
+
+  
+# 处理 Sample 1
+# "Table-Related Errors" 组: 空 → 添加 Sample 1
+# added_examples = {1}
+
+# 处理 Sample 2  
+# "Condition-Related Errors" 组: 空 → 添加 Sample 2
+# added_examples = {1, 2}
+
+# 处理 Sample 3
+# "Table-Related Errors" 组: 已有1个样本，但<5个 → 可以添加
+# 但 Sample 3 还有 "Rare-Error-Type"，且该组为空 → 优先添加到 "Rare-Error-Type"
+# added_examples = {1, 2, 3}
