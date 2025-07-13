@@ -1,0 +1,234 @@
+# # utils.py
+import sqlite3
+import json
+import os
+from dotenv import load_dotenv
+import google.generativeai as genai
+import anthropic
+from openai import OpenAI
+
+load_dotenv()
+api_key = os.getenv("GOOGLE_API_KEY")
+genai.configure(api_key=api_key)
+
+
+claude_api_key = os.getenv("ANTHROPIC_API_KEY")
+claude_client = anthropic.Anthropic(api_key=claude_api_key)
+
+# OpenAI 配置
+openai_api_key = os.getenv("OPENAI_API_KEY")
+openai_client = OpenAI(api_key=openai_api_key)
+
+GEN_model = genai.GenerativeModel("models/gemini-2.5-flash")
+
+def get_db_ids_from_json():
+    """从 NL2SQL-Bugs.json 中提取所有 db_id"""
+    with open("data/NL2SQL-Bugs.json", "r") as f:
+        data = json.load(f)
+
+    db_ids = sorted(set(example["db_id"] for example in data))
+    print(f"共需要 {len(db_ids)} 个数据库：")
+    for db in db_ids:
+        print(db)
+
+def extract_schema_from_sqlite(sqlite_path: str) -> str:
+    """Extract table and column info from .sqlite database"""
+    conn = sqlite3.connect(sqlite_path)
+    cursor = conn.cursor()
+    cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
+    tables = [row[0] for row in cursor.fetchall() if row[0] != 'sqlite_sequence']
+    schema_parts = []
+    for table in tables:
+        cursor.execute(f"PRAGMA table_info('{table}');")
+        cols = [col[1] for col in cursor.fetchall()]
+        schema_parts.append(f"{table}({', '.join(cols)})")
+    conn.close()
+    return " | ".join(schema_parts)
+
+def build_prompt(question: str, schema: str, sql: str) -> str:
+    """Fill in the prompt template"""
+    return f"""You are a database expert.
+
+Given the following natural language question, SQL query, and database schema, please determine whether the SQL is semantically correct with respect to the question.
+
+Answer with "Yes" or "No" only.
+
+Question: {question}
+
+Schema: {schema}
+
+SQL: {sql}
+
+Is the SQL semantically correct?"""
+
+
+def build_cot_prompt(question: str, schema: str, sql: str) -> str:
+    return f"""You are a database expert. Analyze whether the SQL query correctly answers the natural language question. 
+
+Question: {question}
+
+Database Schema: {schema}
+
+SQL Query: {sql}
+
+Analyze this step by step in your mind (do not output the steps, just the final answer):
+
+1. Question Understanding: What exactly is the question asking for?
+   - What information should be retrieved?
+   - Are there any specific conditions or constraints?
+
+2. SQL Logic Analysis: Break down what the SQL actually does:
+   - Which tables and columns are selected?
+   - What are the JOIN conditions?
+   - What filters are applied in WHERE clause?
+   - Are aggregations/sorting correctly used?
+
+3. Semantic Correctness Check: 
+   - Do the selected columns semantically match what the question requests?
+   - Are the table relationships and JOIN logic semantically appropriate?
+   - Do the WHERE conditions semantically align with the question's intent?
+   - Does the overall query logic semantically represent the question's meaning?
+
+4. Final Verification: Does the SQL query produce the exact information requested in the question?
+
+Final Answer: [Yes or No]. Answer one word only, without any explanation or additional text.
+
+"""
+
+def query_gemini(prompt: str) -> str:
+    """Call Gemini 2.5 Flash with error handling"""
+    safety_settings = [
+        {
+            "category": "HARM_CATEGORY_HARASSMENT",
+            "threshold": "BLOCK_ONLY_HIGH"  # 或 "BLOCK_NONE"
+        },
+        {
+            "category": "HARM_CATEGORY_HATE_SPEECH", 
+            "threshold": "BLOCK_ONLY_HIGH"
+        },
+        {
+            "category": "HARM_CATEGORY_SEXUALLY_EXPLICIT",
+            "threshold": "BLOCK_ONLY_HIGH"
+        },
+        {
+            "category": "HARM_CATEGORY_DANGEROUS_CONTENT",
+            "threshold": "BLOCK_ONLY_HIGH"
+        }
+    ]
+    
+    try:
+        response = GEN_model.generate_content(
+            prompt,
+            generation_config=genai.types.GenerationConfig(
+                temperature=0,
+                max_output_tokens=200,  # 增加到 200，给 CoT 足够空间
+            ),
+            safety_settings=safety_settings
+        )
+        
+        if not response.candidates:
+            print("[ERROR] No candidates returned")
+            return "unknown"
+            
+        candidate = response.candidates[0]
+        
+        # 正确的finish_reason处理
+        if candidate.finish_reason == 1:  # STOP - 正常完成
+            return response.text.strip().lower()
+        elif candidate.finish_reason == 2:  # SAFETY - 安全过滤
+            print(f"[SAFETY] Content filtered by safety settings")
+            return "unknown"
+        elif candidate.finish_reason == 3:  # RECITATION - 重复内容
+            print(f"[RECITATION] Content blocked for recitation")
+            return "unknown" 
+        elif candidate.finish_reason == 4:  # MAX_TOKENS - 真正的token限制
+            print(f"[MAX_TOKENS] Hit max tokens limit")
+            return "unknown"
+        else:
+            print(f"[UNKNOWN] Unknown finish reason: {candidate.finish_reason}")
+            return "unknown"
+    except Exception as e:
+        print(f"[ERROR] Gemini API error: {e}")
+        return "no"
+
+# def parse_answer(text: str) -> bool:
+#     """Parse model's Yes/No answer to boolean"""
+#     if "yes" in text:
+#         return True
+#     elif "no" in text:
+#         return False
+#     else:
+#         return None
+
+def parse_answer(text: str) -> bool:
+    """Parse model's Yes/No answer to boolean - improved version"""
+    text = text.lower().strip()
+    
+    # 按行分割，从后往前找第一个包含 yes/no 的行
+    lines = text.split('\n')
+    for line in reversed(lines):
+        line = line.strip()
+        if 'yes' in line and 'no' not in line:
+            return True
+        elif 'no' in line and 'yes' not in line:
+            return False
+    
+    # 如果按行找不到，用原来的逻辑
+    if "yes" in text and "no" not in text:
+        return True
+    elif "no" in text and "yes" not in text:
+        return False
+    else:
+        return None
+    
+
+def query_claude(prompt: str) -> str:
+    """Call Claude 4 sonnet"""
+    response = claude_client.messages.create(
+        model="claude-sonnet-4-20250514",
+        max_tokens=50,
+        temperature=0,  # Lower temperature for deterministic output
+        messages=[
+            {"role": "user", "content": prompt}
+        ]
+    )
+    return response.content[0].text.strip().lower()
+
+def query_gpt(prompt: str, model: str = "gpt-4o") -> str:
+    """Call GPT model using Chat Completions API"""
+    try:
+        response = openai_client.chat.completions.create(
+            model=model,  # 可以使用 "gpt-4o", "gpt-4", "gpt-3.5-turbo" 等
+            messages=[
+                {"role": "user", "content": prompt}
+            ],
+            max_tokens=50,
+            temperature=0,  # 确定性输出
+        )
+        return response.choices[0].message.content.strip().lower()
+    except Exception as e:
+        print(f"[ERROR] GPT API call failed: {e}")
+        raise e
+
+
+
+
+
+
+
+
+if __name__ == "__main__":
+    # 简单测试
+    simple_prompt = "Answer with 'Yes' or 'No' only. Is 2+2=4?"
+    result = query_gemini(simple_prompt)
+    print(f"[Gemini Simple Test]: '{result}'")
+    
+    # SQL 测试
+    sql_prompt = """You are a database expert.
+Question: What is the name of the student with ID 1?
+Schema: students(id, name, age)
+SQL: SELECT name FROM students WHERE id = 1;
+Answer 'Yes' or 'No' only: Is this SQL correct?"""
+    
+    result2 = query_gemini(sql_prompt)
+    print(f"[Gemini SQL Test]: '{result2}'")

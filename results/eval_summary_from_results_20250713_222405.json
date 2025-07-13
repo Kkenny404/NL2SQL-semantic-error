@@ -1,0 +1,12 @@
+{
+  "result_path": "results/CoT_Gemini_results_None_20250713_215524.jsonl",
+  "accuracy": 0.8332,
+  "precision": 0.0,
+  "recall": 0.0,
+  "negative_precision": 0.8332,
+  "negative_recall": 1.0,
+  "true_negative": 999,
+  "false_positive": 0,
+  "false_negative": 200,
+  "true_positive": 0
+}

@@ -1,0 +1,13 @@
+{
+  "result_path": "results/CoT_GPT_results_None_20250713_220628.jsonl",
+  "skipped": 0,
+  "accuracy": 0.7556,
+  "precision": 0.3805,
+  "recall": 0.74,
+  "negative_precision": 0.9358,
+  "negative_recall": 0.7588,
+  "true_negative": 758,
+  "false_positive": 241,
+  "false_negative": 52,
+  "true_positive": 148
+}

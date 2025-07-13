@@ -1,0 +1,13 @@
+{
+  "result_path": "results/CoT_CLAUD_results_10_20250713_211823.jsonl",
+  "skipped": 0,
+  "accuracy": 1.0,
+  "precision": 0.0,
+  "recall": 0.0,
+  "negative_precision": 1.0,
+  "negative_recall": 1.0,
+  "true_negative": 3,
+  "false_positive": 0,
+  "false_negative": 0,
+  "true_positive": 0
+}

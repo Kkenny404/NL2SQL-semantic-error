@@ -1,0 +1,184 @@
+{
+  "Value-Related Errors": {
+    "Value Mismatch": {
+      "total": 252,
+      "detected_false_positives": 212,
+      "recall": 0.8413
+    },
+    "Data Format Mismatch": {
+      "total": 20,
+      "detected_false_positives": 19,
+      "recall": 0.95
+    },
+    "average_recall": 0.8956
+  },
+  "Table-Related Errors": {
+    "Table Redundancy": {
+      "total": 111,
+      "detected_false_positives": 95,
+      "recall": 0.8559
+    },
+    "Table Missing": {
+      "total": 63,
+      "detected_false_positives": 59,
+      "recall": 0.9365
+    },
+    "Join Condition Mismatch": {
+      "total": 82,
+      "detected_false_positives": 67,
+      "recall": 0.8171
+    },
+    "Table Mismatch": {
+      "total": 96,
+      "detected_false_positives": 83,
+      "recall": 0.8646
+    },
+    "Join Type Mismatch": {
+      "total": 3,
+      "detected_false_positives": 3,
+      "recall": 1.0
+    },
+    "average_recall": 0.8948
+  },
+  "Function-Related Errors": {
+    "Conditional Functions": {
+      "total": 50,
+      "detected_false_positives": 40,
+      "recall": 0.8
+    },
+    "Aggregate Functions": {
+      "total": 75,
+      "detected_false_positives": 65,
+      "recall": 0.8667
+    },
+    "Conversion Functions": {
+      "total": 13,
+      "detected_false_positives": 13,
+      "recall": 1.0
+    },
+    "Date/Time Functions": {
+      "total": 22,
+      "detected_false_positives": 18,
+      "recall": 0.8182
+    },
+    "String Functions": {
+      "total": 18,
+      "detected_false_positives": 16,
+      "recall": 0.8889
+    },
+    "Math Functions": {
+      "total": 9,
+      "detected_false_positives": 5,
+      "recall": 0.5556
+    },
+    "Window Functions": {
+      "total": 3,
+      "detected_false_positives": 2,
+      "recall": 0.6667
+    },
+    "average_recall": 0.7994
+  },
+  "Condition-Related Errors": {
+    "Explicit Condition Missing": {
+      "total": 111,
+      "detected_false_positives": 99,
+      "recall": 0.8919
+    },
+    "Explicit Condition Mismatch": {
+      "total": 101,
+      "detected_false_positives": 91,
+      "recall": 0.901
+    },
+    "Explicit Condition Redundancy": {
+      "total": 24,
+      "detected_false_positives": 19,
+      "recall": 0.7917
+    },
+    "Implicit Condition Missing": {
+      "total": 32,
+      "detected_false_positives": 21,
+      "recall": 0.6562
+    },
+    "average_recall": 0.8102
+  },
+  "Other Errors": {
+    "DISTINCT": {
+      "total": 94,
+      "detected_false_positives": 78,
+      "recall": 0.8298
+    },
+    "Other": {
+      "total": 34,
+      "detected_false_positives": 29,
+      "recall": 0.8529
+    },
+    "ASC/DESC": {
+      "total": 9,
+      "detected_false_positives": 7,
+      "recall": 0.7778
+    },
+    "average_recall": 0.8202
+  },
+  "Attribute-Related Errors": {
+    "Attribute Missing": {
+      "total": 60,
+      "detected_false_positives": 56,
+      "recall": 0.9333
+    },
+    "Attribute Mismatch": {
+      "total": 338,
+      "detected_false_positives": 278,
+      "recall": 0.8225
+    },
+    "Attribute Redundancy": {
+      "total": 52,
+      "detected_false_positives": 41,
+      "recall": 0.7885
+    },
+    "average_recall": 0.8481
+  },
+  "Subquery-Related Errors": {
+    "Subquery Missing": {
+      "total": 30,
+      "detected_false_positives": 30,
+      "recall": 1.0
+    },
+    "Subquery Mismatch": {
+      "total": 6,
+      "detected_false_positives": 5,
+      "recall": 0.8333
+    },
+    "Partial Query": {
+      "total": 4,
+      "detected_false_positives": 4,
+      "recall": 1.0
+    },
+    "average_recall": 0.9444
+  },
+  "Clause-Related Errors": {
+    "Clause Missing": {
+      "total": 95,
+      "detected_false_positives": 80,
+      "recall": 0.8421
+    },
+    "Clause Redundancy": {
+      "total": 29,
+      "detected_false_positives": 24,
+      "recall": 0.8276
+    },
+    "average_recall": 0.8348
+  },
+  "Operator-Related Errors": {
+    "Logical Operator Mismatch": {
+      "total": 11,
+      "detected_false_positives": 10,
+      "recall": 0.9091
+    },
+    "Comparison Operator Mismatch": {
+      "total": 26,
+      "detected_false_positives": 25,
+      "recall": 0.9615
+    },
+    "average_recall": 0.9353
+  }
+}

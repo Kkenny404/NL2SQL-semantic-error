@@ -1,0 +1,4 @@
+Model,Accuracy,Negative Precision (NP),Negative Recall (NR),Positive Precision (PP),Positive Recall (PR)
+Gemini-2.5-flash,0.7548,0.9466,0.7477,0.3863,0.79
+GPT-4o,0.6699,0.9424,0.645,0.3048,0.7978
+Claude-3.5,0.8065,0.9275,0.8328,0.447,0.675

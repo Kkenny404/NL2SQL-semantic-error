@@ -1,0 +1,7 @@
+BIRD/
+spider2-lite/
+spider2-snow/
+.env
+.DS_Store
+.env.*
+*.env

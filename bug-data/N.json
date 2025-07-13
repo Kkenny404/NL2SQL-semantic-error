@@ -1,0 +1,9 @@
+[{
+    "id": 1448,
+    "question": "What is the average overall rating of the football player Aaron Doran?",
+    "db_id": "european_football_2",
+    "sql": "SELECT avg(player_attributes.overall_rating) FROM player INNER JOIN player_attributes ON player.player_api_id = player_attributes.player_api_id WHERE player.player_name = 'Aaron Doran'",
+    "label": true,
+    "error_types": []
+  }
+]
