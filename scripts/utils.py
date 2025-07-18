@@ -12,13 +12,16 @@ api_key = os.getenv("GOOGLE_API_KEY")
 genai.configure(api_key=api_key)
 
 
+# Anthropic 配置
 claude_api_key = os.getenv("ANTHROPIC_API_KEY")
 claude_client = anthropic.Anthropic(api_key=claude_api_key)
 
 # OpenAI 配置
 openai_client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-GEN_model = genai.GenerativeModel("models/gemini-2.5-flash")
+# Gemini 模型配置
+gen_id = "models/gemini-2.5-flash"
+GEN_model = genai.GenerativeModel(gen_id)
 
 def get_db_ids_from_json():
     """从 NL2SQL-Bugs.json 中提取所有 db_id"""
@@ -50,7 +53,7 @@ def build_prompt(question: str, schema: str, sql: str) -> str:
 
 Given the following natural language question, SQL query, and database schema, please determine whether the SQL is semantically correct with respect to the question.
 
-Answer with "Yes" or "No" only.
+You need to answer with "Yes" or "No" only, without outputting any explanation or additional text.
 
 Question: {question}
 
@@ -95,7 +98,7 @@ Final Answer: [Yes or No]. Answer one word only, without any explanation or addi
 """
 
 def query_gemini(prompt: str) -> str:
-    print(f"[Gemini] Querying model: {GEN_model.name}")
+    print(f"[Gemini] Querying model: {gen_id}")
     response = GEN_model.generate_content(prompt)
     return response.text.strip().lower()
 
@@ -179,7 +182,7 @@ def query_claude(prompt: str) -> str:
     print("[Claude] Querying model: claude-sonnet-4-20250514")
     response = claude_client.messages.create(
         model="claude-sonnet-4-20250514",
-        max_tokens=100,
+        max_tokens=50,
         temperature=0,  # Lower temperature for deterministic output
         messages=[
             {"role": "user", "content": prompt}
@@ -214,8 +217,8 @@ def query_gpt(prompt: str, model: str = "gpt-4o") -> str:
 if __name__ == "__main__":
     # 简单测试
     simple_prompt = "Answer with 'Yes' or 'No' only. Is 2+2=4?"
-    result = query_gpt(simple_prompt)
-    print(f"[GPT Simple Test]: '{result}'")
+    result = query_claude(simple_prompt)
+    print(f"[Claude Simple Test]: '{result}'")
 
 #     # SQL 测试
 #     sql_prompt = """You are a database expert.
