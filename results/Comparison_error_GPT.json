@@ -1,0 +1,220 @@
+{
+    "Value-Related Errors": {
+        "Value Mismatch": {
+            "Baseline Recall": 0.6825,
+            "CoT Recall": 0.7778,
+            "Difference": 0.09530000000000005
+        },
+        "Data Format Mismatch": {
+            "Baseline Recall": 0.55,
+            "CoT Recall": 0.85,
+            "Difference": 0.29999999999999993
+        },
+        "average_recall": {
+            "Baseline Recall": 0.6163,
+            "CoT Recall": 0.8139,
+            "Difference": 0.1976
+        }
+    },
+    "Table-Related Errors": {
+        "Table Redundancy": {
+            "Baseline Recall": 0.6216,
+            "CoT Recall": 0.7477,
+            "Difference": 0.1261
+        },
+        "Table Missing": {
+            "Baseline Recall": 0.7937,
+            "CoT Recall": 0.8413,
+            "Difference": 0.04760000000000009
+        },
+        "Join Condition Mismatch": {
+            "Baseline Recall": 0.6951,
+            "CoT Recall": 0.7439,
+            "Difference": 0.048799999999999955
+        },
+        "Table Mismatch": {
+            "Baseline Recall": 0.6354,
+            "CoT Recall": 0.7917,
+            "Difference": 0.1563
+        },
+        "Join Type Mismatch": {
+            "Baseline Recall": 0.6667,
+            "CoT Recall": 1.0,
+            "Difference": 0.33330000000000004
+        },
+        "average_recall": {
+            "Baseline Recall": 0.6825,
+            "CoT Recall": 0.8249,
+            "Difference": 0.14239999999999997
+        }
+    },
+    "Function-Related Errors": {
+        "Conditional Functions": {
+            "Baseline Recall": 0.7,
+            "CoT Recall": 0.7,
+            "Difference": 0.0
+        },
+        "Aggregate Functions": {
+            "Baseline Recall": 0.7067,
+            "CoT Recall": 0.8133,
+            "Difference": 0.10660000000000003
+        },
+        "Conversion Functions": {
+            "Baseline Recall": 0.7692,
+            "CoT Recall": 0.9231,
+            "Difference": 0.15390000000000004
+        },
+        "Date/Time Functions": {
+            "Baseline Recall": 0.5909,
+            "CoT Recall": 0.7727,
+            "Difference": 0.18180000000000007
+        },
+        "String Functions": {
+            "Baseline Recall": 0.4444,
+            "CoT Recall": 0.7778,
+            "Difference": 0.33340000000000003
+        },
+        "Math Functions": {
+            "Baseline Recall": 0.4444,
+            "CoT Recall": 0.6667,
+            "Difference": 0.22229999999999994
+        },
+        "Window Functions": {
+            "Baseline Recall": 0.6667,
+            "CoT Recall": 1.0,
+            "Difference": 0.33330000000000004
+        },
+        "average_recall": {
+            "Baseline Recall": 0.6175,
+            "CoT Recall": 0.8077,
+            "Difference": 0.19019999999999992
+        }
+    },
+    "Condition-Related Errors": {
+        "Explicit Condition Missing": {
+            "Baseline Recall": 0.6757,
+            "CoT Recall": 0.7568,
+            "Difference": 0.08110000000000006
+        },
+        "Explicit Condition Mismatch": {
+            "Baseline Recall": 0.6832,
+            "CoT Recall": 0.7624,
+            "Difference": 0.07919999999999994
+        },
+        "Explicit Condition Redundancy": {
+            "Baseline Recall": 0.5833,
+            "CoT Recall": 0.5833,
+            "Difference": 0.0
+        },
+        "Implicit Condition Missing": {
+            "Baseline Recall": 0.4062,
+            "CoT Recall": 0.5938,
+            "Difference": 0.1876
+        },
+        "average_recall": {
+            "Baseline Recall": 0.5871,
+            "CoT Recall": 0.6741,
+            "Difference": 0.08700000000000008
+        }
+    },
+    "Other Errors": {
+        "DISTINCT": {
+            "Baseline Recall": 0.5532,
+            "CoT Recall": 0.6596,
+            "Difference": 0.10639999999999994
+        },
+        "Other": {
+            "Baseline Recall": 0.6765,
+            "CoT Recall": 0.7941,
+            "Difference": 0.11760000000000004
+        },
+        "ASC/DESC": {
+            "Baseline Recall": 0.5556,
+            "CoT Recall": 0.7778,
+            "Difference": 0.22220000000000006
+        },
+        "average_recall": {
+            "Baseline Recall": 0.5951,
+            "CoT Recall": 0.7438,
+            "Difference": 0.14870000000000005
+        }
+    },
+    "Attribute-Related Errors": {
+        "Attribute Missing": {
+            "Baseline Recall": 0.7667,
+            "CoT Recall": 0.9167,
+            "Difference": 0.1499999999999999
+        },
+        "Attribute Mismatch": {
+            "Baseline Recall": 0.6272,
+            "CoT Recall": 0.7515,
+            "Difference": 0.12429999999999997
+        },
+        "Attribute Redundancy": {
+            "Baseline Recall": 0.5385,
+            "CoT Recall": 0.7115,
+            "Difference": 0.17300000000000004
+        },
+        "average_recall": {
+            "Baseline Recall": 0.6441,
+            "CoT Recall": 0.7932,
+            "Difference": 0.1491
+        }
+    },
+    "Subquery-Related Errors": {
+        "Subquery Missing": {
+            "Baseline Recall": 0.7,
+            "CoT Recall": 0.9333,
+            "Difference": 0.23330000000000006
+        },
+        "Subquery Mismatch": {
+            "Baseline Recall": 0.5,
+            "CoT Recall": 0.8333,
+            "Difference": 0.33330000000000004
+        },
+        "Partial Query": {
+            "Baseline Recall": 1.0,
+            "CoT Recall": 1.0,
+            "Difference": 0.0
+        },
+        "average_recall": {
+            "Baseline Recall": 0.7333,
+            "CoT Recall": 0.9222,
+            "Difference": 0.18890000000000007
+        }
+    },
+    "Clause-Related Errors": {
+        "Clause Missing": {
+            "Baseline Recall": 0.6,
+            "CoT Recall": 0.7474,
+            "Difference": 0.14739999999999998
+        },
+        "Clause Redundancy": {
+            "Baseline Recall": 0.6552,
+            "CoT Recall": 0.8276,
+            "Difference": 0.1724
+        },
+        "average_recall": {
+            "Baseline Recall": 0.6276,
+            "CoT Recall": 0.7875,
+            "Difference": 0.15989999999999993
+        }
+    },
+    "Operator-Related Errors": {
+        "Logical Operator Mismatch": {
+            "Baseline Recall": 0.7273,
+            "CoT Recall": 0.8182,
+            "Difference": 0.09090000000000009
+        },
+        "Comparison Operator Mismatch": {
+            "Baseline Recall": 0.5769,
+            "CoT Recall": 0.7308,
+            "Difference": 0.15390000000000004
+        },
+        "average_recall": {
+            "Baseline Recall": 0.6521,
+            "CoT Recall": 0.7745,
+            "Difference": 0.12239999999999995
+        }
+    }
+}

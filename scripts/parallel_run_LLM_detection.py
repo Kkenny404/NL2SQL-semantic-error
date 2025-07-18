@@ -171,7 +171,7 @@ evaluation_summary = {
     "true_positive": int(tp),
 }
 
-eval_path = f"results/eval_CLAUDE_summary_{MAX_EXAMPLES}_{timestamp}.json"
+eval_path = f"results/CoT_GEN_summary_{MAX_EXAMPLES}_{timestamp}.json"
 with open(eval_path, "w") as f:
     json.dump(evaluation_summary, f, indent=2)
 print(f"\nEvaluation summary saved to: {eval_path}")

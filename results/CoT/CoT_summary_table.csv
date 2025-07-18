@@ -1,0 +1,4 @@
+Model,Accuracy,Positive Precision,Positive Recall,Negative Precision,Negative Recall,Overall Precision Avg,Overall Recall Avg,F1 Score
+GPT-4o,0.7556,0.3805,0.74,0.9358,0.7588,0.6581,0.7494,0.5025
+Claude-sonnet-4,0.8107,0.4487,0.59,0.9124,0.8549,0.6805,0.7224,0.5097
+Gemini-2.5-flash,0.7373,0.3672,0.795,0.9465,0.7257,0.6568,0.7604,0.5024

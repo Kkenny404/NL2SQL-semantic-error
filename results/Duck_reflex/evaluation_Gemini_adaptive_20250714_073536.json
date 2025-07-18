@@ -1,0 +1,16 @@
+{
+  "result_path": "results/Duck_reflex/Duck_reflex_GEMINI_adaptive_None_20250714_073536.jsonl",
+  "detection_method": "adaptive",
+  "total_examples": 1199,
+  "processed": 1199,
+  "skipped": 0,
+  "accuracy": 0.6847,
+  "precision": 0.3308,
+  "recall": 0.87,
+  "negative_precision": 0.9614,
+  "negative_recall": 0.6476,
+  "true_negative": 647,
+  "false_positive": 352,
+  "false_negative": 26,
+  "true_positive": 174
+}

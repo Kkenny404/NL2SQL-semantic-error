@@ -1,0 +1,17 @@
+  {
+    "id": 74,
+    "question": "In which mailing street address can you find the school that has the lowest average score in reading? Also give the school's name.",
+    "db_id": "california_schools",
+    "sql": "SELECT schools.mailstreet, satscores.sname FROM satscores INNER JOIN schools ON satscores.cds = schools.cdscode ORDER BY satscores.avgscrread ASC LIMIT 1",
+    "label": false,
+    "error_types": [
+      {
+        "error_type": "Attribute-Related Errors",
+        "sub_error_type": "Attribute Mismatch"
+      },
+      {
+        "error_type": "Condition-Related Errors",
+        "sub_error_type": "Implicit Condition Missing"
+      }
+    ]
+  },

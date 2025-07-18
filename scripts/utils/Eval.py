@@ -67,8 +67,8 @@ import os
 
 # 路径配置
 SUBSET_PATH = "bug-data/NL2SQL-Bugs-Subset.json"
-RESULT_PATH = "results/CoT/CoT_GPT_results_None_20250713_220628.jsonl"
-OUTPUT_PATH = "results/CoT/error_GPT.json"
+RESULT_PATH = "results/Duck_reflex/Duck_reflex_gpt4o_adaptive_None_20250714_070836.jsonl"
+OUTPUT_PATH = "results/Duck_reflex/error_GPT4o.json"
 
 # 加载原始数据和预测结果
 with open(SUBSET_PATH, "r") as f:

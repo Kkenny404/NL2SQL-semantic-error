@@ -16,8 +16,7 @@ claude_api_key = os.getenv("ANTHROPIC_API_KEY")
 claude_client = anthropic.Anthropic(api_key=claude_api_key)
 
 # OpenAI 配置
-openai_api_key = os.getenv("OPENAI_API_KEY")
-openai_client = OpenAI(api_key=openai_api_key)
+openai_client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))a
 
 GEN_model = genai.GenerativeModel("models/gemini-2.5-flash")
 
@@ -96,60 +95,52 @@ Final Answer: [Yes or No]. Answer one word only, without any explanation or addi
 """
 
 def query_gemini(prompt: str) -> str:
-    """Call Gemini 2.5 Flash with error handling"""
-    safety_settings = [
-        {
-            "category": "HARM_CATEGORY_HARASSMENT",
-            "threshold": "BLOCK_ONLY_HIGH"  # 或 "BLOCK_NONE"
-        },
-        {
-            "category": "HARM_CATEGORY_HATE_SPEECH", 
-            "threshold": "BLOCK_ONLY_HIGH"
-        },
-        {
-            "category": "HARM_CATEGORY_SEXUALLY_EXPLICIT",
-            "threshold": "BLOCK_ONLY_HIGH"
-        },
-        {
-            "category": "HARM_CATEGORY_DANGEROUS_CONTENT",
-            "threshold": "BLOCK_ONLY_HIGH"
-        }
-    ]
+    response = GEN_model.generate_content(prompt)
+    return response.text.strip().lower()
+
+# def query_gemini(prompt: str) -> str:
+#     """Call Gemini 2.5 Flash with error handling"""
+#     safety_settings = [
+#         {"category": "HARM_CATEGORY_HARASSMENT", "threshold": "BLOCK_NONE"},
+#         {"category": "HARM_CATEGORY_HATE_SPEECH", "threshold": "BLOCK_NONE"},
+#         {"category": "HARM_CATEGORY_SEXUALLY_EXPLICIT", "threshold": "BLOCK_NONE"},
+#         {"category": "HARM_CATEGORY_DANGEROUS_CONTENT", "threshold": "BLOCK_NONE"},
+#     ]
     
-    try:
-        response = GEN_model.generate_content(
-            prompt,
-            generation_config=genai.types.GenerationConfig(
-                temperature=0,
-                max_output_tokens=200,  # 增加到 200，给 CoT 足够空间
-            ),
-            safety_settings=safety_settings
-        )
+#     try:
+#         response = GEN_model.generate_content(
+#             "You are a harmless assistant for academic research. The following input is about database query analysis only.\n\n" + prompt,
+#             generation_config=genai.types.GenerationConfig(
+#                 temperature=0,
+#                 max_output_tokens=200,
+#             ),
+#             safety_settings=safety_settings  # ✅ 这必须被传入
+#         )
         
-        if not response.candidates:
-            print("[ERROR] No candidates returned")
-            return "unknown"
+#         if not response.candidates:
+#             print("[ERROR] No candidates returned")
+#             return "unknown"
             
-        candidate = response.candidates[0]
+#         candidate = response.candidates[0]
         
-        # 正确的finish_reason处理
-        if candidate.finish_reason == 1:  # STOP - 正常完成
-            return response.text.strip().lower()
-        elif candidate.finish_reason == 2:  # SAFETY - 安全过滤
-            print(f"[SAFETY] Content filtered by safety settings")
-            return "unknown"
-        elif candidate.finish_reason == 3:  # RECITATION - 重复内容
-            print(f"[RECITATION] Content blocked for recitation")
-            return "unknown" 
-        elif candidate.finish_reason == 4:  # MAX_TOKENS - 真正的token限制
-            print(f"[MAX_TOKENS] Hit max tokens limit")
-            return "unknown"
-        else:
-            print(f"[UNKNOWN] Unknown finish reason: {candidate.finish_reason}")
-            return "unknown"
-    except Exception as e:
-        print(f"[ERROR] Gemini API error: {e}")
-        return "no"
+#         # 正确的finish_reason处理
+#         if candidate.finish_reason == 1:  # STOP - 正常完成
+#             return response.text.strip().lower()
+#         elif candidate.finish_reason == 2:  # SAFETY - 安全过滤
+#             print(f"[SAFETY] Content filtered by safety settings")
+#             return "unknown"
+#         elif candidate.finish_reason == 3:  # RECITATION - 重复内容
+#             print(f"[RECITATION] Content blocked for recitation")
+#             return "unknown" 
+#         elif candidate.finish_reason == 4:  # MAX_TOKENS - 真正的token限制
+#             print(f"[MAX_TOKENS] Hit max tokens limit")
+#             return "unknown"
+#         else:
+#             print(f"[UNKNOWN] Unknown finish reason: {candidate.finish_reason}")
+#             return "unknown"
+#     except Exception as e:
+#         print(f"[ERROR] Gemini API error: {e}")
+#         return "no"
 
 # def parse_answer(text: str) -> bool:
 #     """Parse model's Yes/No answer to boolean"""
@@ -186,7 +177,7 @@ def query_claude(prompt: str) -> str:
     """Call Claude 4 sonnet"""
     response = claude_client.messages.create(
         model="claude-sonnet-4-20250514",
-        max_tokens=50,
+        max_tokens=100,
         temperature=0,  # Lower temperature for deterministic output
         messages=[
             {"role": "user", "content": prompt}
@@ -202,7 +193,7 @@ def query_gpt(prompt: str, model: str = "gpt-4o") -> str:
             messages=[
                 {"role": "user", "content": prompt}
             ],
-            max_tokens=50,
+            max_tokens=100,
             temperature=0,  # 确定性输出
         )
         return response.choices[0].message.content.strip().lower()
@@ -218,10 +209,11 @@ def query_gpt(prompt: str, model: str = "gpt-4o") -> str:
 
 
 if __name__ == "__main__":
+    print(f"Loaded OpenAI API Key: {openai_api_key}")
     # 简单测试
     simple_prompt = "Answer with 'Yes' or 'No' only. Is 2+2=4?"
     result = query_gemini(simple_prompt)
-    print(f"[Gemini Simple Test]: '{result}'")
+    print(f"[GPGeminiT Simple Test]: '{result}'")
     
     # SQL 测试
     sql_prompt = """You are a database expert.

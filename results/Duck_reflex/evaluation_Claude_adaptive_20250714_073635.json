@@ -1,0 +1,16 @@
+{
+  "result_path": "results/Duck_reflex/Duck_reflex_Claude_adaptive_None_20250714_073635.jsonl",
+  "detection_method": "adaptive",
+  "total_examples": 1199,
+  "processed": 1007,
+  "skipped": 0,
+  "accuracy": 0.427,
+  "precision": 0.2052,
+  "recall": 0.8614,
+  "negative_precision": 0.9258,
+  "negative_recall": 0.3413,
+  "true_negative": 287,
+  "false_positive": 554,
+  "false_negative": 23,
+  "true_positive": 143
+}

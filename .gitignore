@@ -1,7 +1,22 @@
 BIRD/
 spider2-lite/
 spider2-snow/
-.env
 .DS_Store
-.env.*
-*.env
+
+# Python cache files
+__pycache__/
+*.pyc
+*.pyo
+
+# Virtual environment
+venv/
+.env
+.env/
+experiment/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Logs and temporary files
+*.log
+*.tmp

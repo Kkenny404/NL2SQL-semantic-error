@@ -3,7 +3,7 @@ import os
 from sklearn.metrics import precision_score, recall_score, f1_score, accuracy_score, confusion_matrix
 
 # === 修改为你的 JSONL 文件路径 ===
-jsonl_path = "results/Baseline/baseline_CLAUD_results_None_20250711_164040.jsonl"
+jsonl_path = "results/Duck_reflex/Duck_reflex_gpt4o_adaptive_None_20250714_070836.jsonl"
 output_path = os.path.splitext(jsonl_path)[0] + "_basic_summary.json"
 
 # === 读取数据 ===

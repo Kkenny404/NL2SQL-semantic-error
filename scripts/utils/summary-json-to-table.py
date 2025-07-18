@@ -1,52 +1,44 @@
 import json
 import pandas as pd
 
-# 替换为你的文件路径
+# 文件路径
 file_paths = {
-    "Gemini-2.5-flash": "results/eval_GEMINIsummary_1199_20250711_031233.json",
-    "GPT-4o": "results/GPTeval_summary_from_results_20250710_202503.json",
-    "Claude-3.5": "results/Claude—eval_summary_from_results_20250713_165223.json"
+    "GPT-4o": "results/CoT/CoT_GPT_results_None_20250713_220628_basic_summary.json",
+    "Claude-sonnet-4": "results/CoT/CoT_CLAUD_results_None_20250713_214609_basic_summary.json",
+    "Gemini-2.5-flash": "results/CoT/CoT_Gemini_results_None_20250714_051846_basic_summary.json"
 }
 
 # 存储结果
 results = []
 
+# 读取每个文件并提取数据
 for model_name, file_path in file_paths.items():
     try:
         with open(file_path, 'r') as f:
-            file_content = f.read()  # Read the entire file content
-            data = json.loads(file_content)  # Parse the full JSON object
+            data = json.load(f)  # 解析 JSON 文件
 
-        tp = data["true_positive"]
-        fp = data["false_positive"]
-        fn = data["false_negative"]
-        tn = data["true_negative"]
-        accruacy = data["accuracy"]
-
-        # 计算指标
-        npv = tn / (tn + fn) if (tn + fn) > 0 else 0  # Negative Precision
-        nr = tn / (tn + fp) if (tn + fp) > 0 else 0   # Negative Recall
-        pp = tp / (tp + fp) if (tp + fp) > 0 else 0   # Positive Precision
-        pr = tp / (tp + fn) if (tp + fn) > 0 else 0   # Positive Recall
-
+        # 添加到结果列表
         results.append({
             "Model": model_name,
-            "Accuracy": round(accruacy, 4),
-            "Negative Precision (NP)": round(npv, 4),
-            "Negative Recall (NR)": round(nr, 4),
-            "Positive Precision (PP)": round(pp, 4),
-            "Positive Recall (PR)": round(pr, 4),
+            "Accuracy": round(data["accuracy"], 4),
+            "Positive Precision": round(data["positive_precision"], 4),
+            "Positive Recall": round(data["positive_recall"], 4),
+            "Negative Precision": round(data["negative_precision"], 4),
+            "Negative Recall": round(data["negative_recall"], 4),
+            "Overall Precision Avg": round(data["overall_precision_avg"], 4),
+            "Overall Recall Avg": round(data["overall_recall_avg"], 4),
+            "F1 Score": round(data["f1_score"], 4)
         })
-    except json.JSONDecodeError as e:
-        print(f"Error decoding JSON from file {file_path}: {e}")
-    except KeyError as e:
-        print(f"Missing key in JSON data from file {file_path}: {e}")
+    except Exception as e:
+        print(f"Error processing file {file_path}: {e}")
 
-# 创建 DataFrame 并输出
+# 创建 DataFrame
 df = pd.DataFrame(results)
+
+# 打印表格
 print(df)
 
 # 导出到 CSV 文件
-output_file = "results/table_summary.csv"  # 指定输出文件路径
+output_file = "results/CoT/CoT_summary_table.csv"
 df.to_csv(output_file, index=False, encoding="utf-8")
-print(f"Results have been exported to {output_file}")
+print(f"Table has been exported to {output_file}")
