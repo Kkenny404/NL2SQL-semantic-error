@@ -9,3 +9,4 @@ openpyxl
 tqdm
 dotenv
 scikit-learn
+seaborn

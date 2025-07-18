@@ -1,0 +1,80 @@
+Table: account
+- account_id [PK]
+- district_id
+- frequency
+- date
+
+Table: card
+- card_id [PK]
+- disp_id
+- type
+- issued
+
+Table: client
+- client_id [PK]
+- gender
+- birth_date
+- district_id
+
+Table: disp
+- disp_id [PK]
+- client_id
+- account_id
+- type
+
+Table: district
+- district_id [PK]
+- A2
+- A3
+- A4
+- A5
+- A6
+- A7
+- A8
+- A9
+- A10
+- A11
+- A12
+- A13
+- A14
+- A15
+- A16
+
+Table: loan
+- loan_id [PK]
+- account_id
+- date
+- amount
+- duration
+- payments
+- status
+
+Table: order
+- order_id [PK]
+- account_id
+- bank_to
+- account_to
+- amount
+- k_symbol
+
+Table: trans
+- trans_id [PK]
+- account_id
+- date
+- type
+- operation
+- amount
+- balance
+- k_symbol
+- bank
+- account
+
+Foreign Keys:
+- account.district_id → district.district_id
+- card.disp_id → disp.disp_id
+- client.district_id → district.district_id
+- disp.client_id → client.client_id
+- disp.account_id → account.account_id
+- loan.account_id → account.account_id
+- order.account_id → account.account_id
+- trans.account_id → account.account_id

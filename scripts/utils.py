@@ -33,6 +33,8 @@ def get_db_ids_from_json():
     for db in db_ids:
         print(db)
 
+# NOTE：提取 SQLite 数据库模式，19/07之间都是使用这个版本，但是并不能完全满足需求，只能提取表名和列名，没有外键等信息
+# 后面更新一个schema_extract_test.py来提取更详细的模式信息
 def extract_schema_from_sqlite(sqlite_path: str) -> str:
     """Extract table and column info from .sqlite database"""
     conn = sqlite3.connect(sqlite_path)
@@ -46,6 +48,7 @@ def extract_schema_from_sqlite(sqlite_path: str) -> str:
         schema_parts.append(f"{table}({', '.join(cols)})")
     conn.close()
     return " | ".join(schema_parts)
+
 
 def build_prompt(question: str, schema: str, sql: str) -> str:
     """Fill in the prompt template"""
@@ -217,8 +220,9 @@ def query_gpt(prompt: str, model: str = "gpt-4o") -> str:
 if __name__ == "__main__":
     # 简单测试
     simple_prompt = "Answer with 'Yes' or 'No' only. Is 2+2=4?"
-    result = query_claude(simple_prompt)
-    print(f"[Claude Simple Test]: '{result}'")
+    result = query_gemini(simple_prompt)
+    print(f"[GPT Simple Test]: '{result}'")
+
 
 #     # SQL 测试
 #     sql_prompt = """You are a database expert.
