@@ -16,7 +16,7 @@ claude_api_key = os.getenv("ANTHROPIC_API_KEY")
 claude_client = anthropic.Anthropic(api_key=claude_api_key)
 
 # OpenAI 配置
-openai_client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))a
+openai_client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 GEN_model = genai.GenerativeModel("models/gemini-2.5-flash")
 
@@ -95,6 +95,7 @@ Final Answer: [Yes or No]. Answer one word only, without any explanation or addi
 """
 
 def query_gemini(prompt: str) -> str:
+    print(f"[Gemini] Querying model: {GEN_model.name}")
     response = GEN_model.generate_content(prompt)
     return response.text.strip().lower()
 
@@ -175,6 +176,7 @@ def parse_answer(text: str) -> bool:
 
 def query_claude(prompt: str) -> str:
     """Call Claude 4 sonnet"""
+    print("[Claude] Querying model: claude-sonnet-4-20250514")
     response = claude_client.messages.create(
         model="claude-sonnet-4-20250514",
         max_tokens=100,
@@ -187,6 +189,7 @@ def query_claude(prompt: str) -> str:
 
 def query_gpt(prompt: str, model: str = "gpt-4o") -> str:
     """Call GPT model using Chat Completions API"""
+    print(f"[GPT] Querying model: {model}")
     try:
         response = openai_client.chat.completions.create(
             model=model,  # 可以使用 "gpt-4o", "gpt-4", "gpt-3.5-turbo" 等
@@ -209,18 +212,17 @@ def query_gpt(prompt: str, model: str = "gpt-4o") -> str:
 
 
 if __name__ == "__main__":
-    print(f"Loaded OpenAI API Key: {openai_api_key}")
     # 简单测试
     simple_prompt = "Answer with 'Yes' or 'No' only. Is 2+2=4?"
-    result = query_gemini(simple_prompt)
-    print(f"[GPGeminiT Simple Test]: '{result}'")
+    result = query_gpt(simple_prompt)
+    print(f"[GPT Simple Test]: '{result}'")
+
+#     # SQL 测试
+#     sql_prompt = """You are a database expert.
+# Question: What is the name of the student with ID 1?
+# Schema: students(id, name, age)
+# SQL: SELECT name FROM students WHERE id = 1;
+# Answer 'Yes' or 'No' only: Is this SQL correct?"""
     
-    # SQL 测试
-    sql_prompt = """You are a database expert.
-Question: What is the name of the student with ID 1?
-Schema: students(id, name, age)
-SQL: SELECT name FROM students WHERE id = 1;
-Answer 'Yes' or 'No' only: Is this SQL correct?"""
-    
-    result2 = query_gemini(sql_prompt)
-    print(f"[Gemini SQL Test]: '{result2}'")
+#     result2 = query_gemini(sql_prompt)
+#     print(f"[Gemini SQL Test]: '{result2}'")

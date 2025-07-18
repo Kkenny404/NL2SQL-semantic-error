@@ -8,12 +8,12 @@ from sklearn.metrics import accuracy_score, precision_score, recall_score
 from utils import extract_schema_from_sqlite, build_prompt, parse_answer, query_gemini, query_claude, build_cot_prompt, query_gpt
 
 # path
-DATA_PATH = "bug-data/NL2SQL-Bugs-Subset.json"
+DATA_PATH = "bug-data/NL2SQL-Bugs.json"
 DB_ROOT = "BIRD/dev_20240627/dev_databases"
 MAX_EXAMPLES = None # None for all, and running is super slow for whole dataset, so use a small number for now
 
 timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-RESULT_PATH = f"results/Baseline/baseline_gpt4o_results_{MAX_EXAMPLES}_{timestamp}.jsonl"
+RESULT_PATH = f"results/Baseline/BUGS-2008/baseline_GPT_results_{MAX_EXAMPLES}_{timestamp}.jsonl"
 
 # load data
 with open(DATA_PATH, "r") as f:
