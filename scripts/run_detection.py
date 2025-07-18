@@ -13,7 +13,7 @@ DB_ROOT = "BIRD/dev_20240627/dev_databases"
 MAX_EXAMPLES = None # None for all, and running is super slow for whole dataset, so use a small number for now
 
 timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-RESULT_PATH = f"results/Baseline/BUGS-2008/baseline_GPT_results_{MAX_EXAMPLES}_{timestamp}.jsonl"
+RESULT_PATH = f"results/Baseline/BUGS-2008/baseline_Claude_results_{MAX_EXAMPLES}_{timestamp}.jsonl"
 
 # load data
 with open(DATA_PATH, "r") as f:
@@ -49,7 +49,7 @@ for idx, ex in enumerate(tqdm(examples)):
         # retry logic
         for attempt in range(MAX_RETRIES):
             try:
-                response = query_gpt(prompt)
+                response = query_claude(prompt)
                 break
             except Exception as e:
                 error_str = str(e).lower()
@@ -125,7 +125,7 @@ evaluation_summary = {
     "true_positive": int(tp),
 }
 
-eval_path = f"results/Baseline/Baseline_GPT4o_could_delete.json"
+eval_path = f"results/Baseline/2008/Baseline_Claude_could_delete.json"
 with open(eval_path, "w") as f:
     json.dump(evaluation_summary, f, indent=2)
 print(f"\nEvaluation summary saved to: {eval_path}")
