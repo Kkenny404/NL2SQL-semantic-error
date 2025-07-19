@@ -10,7 +10,8 @@
         "sub_error_type": "Table Mismatch"
       }
     ],
-    "external_knowledge": null
+    "external_knowledge": null,
+    "label": false
   },
   {
     "true_sql_id": "bq268",
@@ -23,20 +24,22 @@
         "sub_error_type": "Table Mismatch"
       }
     ],
-    "external_knowledge": null
+    "external_knowledge": null,
+    "label": false
   },
   {
-    "true_sql_id": "bq398",
-    "sql_id": "bq398_TableMismatch.sql",
-    "db": "world_bank",
-    "question": "What are the top three debt indicators for Russia based on the highest debt values?",
+    "true_sql_id": "sf_bq219",
+    "sql_id": "sf_bq219_TableMismatch.sql",
+    "db": "IOWA_LIQUOR_SALES",
+    "question": "In the Iowa Liquor Sales dataset, starting from January 1, 2022 through the last fully completed month, which two liquor categories, each contributing an average of at least 1% to the monthly sales volume over at least 24 months of available data, have the lowest Pearson correlation coefficient when comparing their monthly percentages of total liquor sales across those months, and what are their names?",
     "error_types": [
       {
         "error_type": "Table-related Errors",
         "sub_error_type": "Table Mismatch"
       }
     ],
-    "external_knowledge": null
+    "external_knowledge": null,
+    "label": false
   },
   {
     "true_sql_id": "ga018",
@@ -49,7 +52,8 @@
         "sub_error_type": "Table Mismatch"
       }
     ],
-    "external_knowledge": "ga4_page_category.md"
+    "external_knowledge": "ga4_page_category.md",
+    "label": false
   },
   {
     "true_sql_id": "local309",
@@ -62,7 +66,8 @@
         "sub_error_type": "Table Mismatch"
       }
     ],
-    "external_knowledge": null
+    "external_knowledge": null,
+    "label": false
   },
   {
     "true_sql_id": "sf011",
@@ -75,7 +80,8 @@
         "sub_error_type": "Table Mismatch"
       }
     ],
-    "external_knowledge": null
+    "external_knowledge": null,
+    "label": false
   },
   {
     "true_sql_id": "sf_bq167",
@@ -88,7 +94,8 @@
         "sub_error_type": "Table Mismatch"
       }
     ],
-    "external_knowledge": null
+    "external_knowledge": null,
+    "label": false
   },
   {
     "true_sql_id": "local210",
@@ -101,7 +108,8 @@
         "sub_error_type": "Table Mismatch"
       }
     ],
-    "external_knowledge": null
+    "external_knowledge": null,
+    "label": false
   },
   {
     "true_sql_id": "bq374",
@@ -114,7 +122,8 @@
         "sub_error_type": "Table Mismatch"
       }
     ],
-    "external_knowledge": null
+    "external_knowledge": null,
+    "label": false
   },
   {
     "true_sql_id": "bq280",
@@ -127,7 +136,8 @@
         "sub_error_type": "Table Mismatch"
       }
     ],
-    "external_knowledge": null
+    "external_knowledge": null,
+    "label": false
   },
   {
     "true_sql_id": "sf_bq334",
@@ -140,7 +150,8 @@
         "sub_error_type": "Table Redundancy"
       }
     ],
-    "external_knowledge": null
+    "external_knowledge": null,
+    "label": false
   },
   {
     "true_sql_id": "bq144",
@@ -153,7 +164,8 @@
         "sub_error_type": "Table Redundancy"
       }
     ],
-    "external_knowledge": "NCAA_Basketball_Tournament_SQL_Query_Variable_Guide.md"
+    "external_knowledge": "NCAA_Basketball_Tournament_SQL_Query_Variable_Guide.md",
+    "label": false
   },
   {
     "true_sql_id": "bq419",
@@ -166,7 +178,8 @@
         "sub_error_type": "Table Redundancy"
       }
     ],
-    "external_knowledge": null
+    "external_knowledge": null,
+    "label": false
   },
   {
     "true_sql_id": "sf_bq246",
@@ -179,7 +192,8 @@
         "sub_error_type": "Table Redundancy"
       }
     ],
-    "external_knowledge": null
+    "external_knowledge": null,
+    "label": false
   },
   {
     "true_sql_id": "ga020",
@@ -192,7 +206,8 @@
         "sub_error_type": "Table Redundancy"
       }
     ],
-    "external_knowledge": "retention_rate.md"
+    "external_knowledge": "retention_rate.md",
+    "label": false
   },
   {
     "true_sql_id": "bq354",
@@ -205,7 +220,8 @@
         "sub_error_type": "Table Redundancy"
       }
     ],
-    "external_knowledge": null
+    "external_knowledge": null,
+    "label": false
   },
   {
     "true_sql_id": "ga008",
@@ -218,7 +234,8 @@
         "sub_error_type": "Table Redundancy"
       }
     ],
-    "external_knowledge": null
+    "external_knowledge": null,
+    "label": false
   },
   {
     "true_sql_id": "bq366",
@@ -231,7 +248,8 @@
         "sub_error_type": "Table Redundancy"
       }
     ],
-    "external_knowledge": null
+    "external_knowledge": null,
+    "label": false
   },
   {
     "true_sql_id": "bq039",
@@ -244,7 +262,8 @@
         "sub_error_type": "Table Redundancy"
       }
     ],
-    "external_knowledge": null
+    "external_knowledge": null,
+    "label": false
   },
   {
     "true_sql_id": "sf_bq252",
@@ -257,7 +276,8 @@
         "sub_error_type": "Table Redundancy"
       }
     ],
-    "external_knowledge": null
+    "external_knowledge": null,
+    "label": false
   },
   {
     "true_sql_id": "sf_bq264",
@@ -270,7 +290,8 @@
         "sub_error_type": "Table Missing"
       }
     ],
-    "external_knowledge": null
+    "external_knowledge": null,
+    "label": false
   },
   {
     "true_sql_id": "sf_bq159",
@@ -283,7 +304,8 @@
         "sub_error_type": "Table Missing"
       }
     ],
-    "external_knowledge": null
+    "external_knowledge": null,
+    "label": false
   },
   {
     "true_sql_id": "sf_bq150",
@@ -296,7 +318,8 @@
         "sub_error_type": "Table Missing"
       }
     ],
-    "external_knowledge": "TCGA_F_Score.md"
+    "external_knowledge": "TCGA_F_Score.md",
+    "label": false
   },
   {
     "true_sql_id": "ga002",
@@ -309,7 +332,22 @@
         "sub_error_type": "Table Missing"
       }
     ],
-    "external_knowledge": null
+    "external_knowledge": null,
+    "label": false
+  },
+  {
+    "true_sql_id": "bq398",
+    "sql_id": "bq398_TableMissing.sql",
+    "db": "world_bank",
+    "question": "What are the top three debt indicators for Russia based on the highest debt values?",
+    "error_types": [
+      {
+        "error_type": "Table-related Errors",
+        "sub_error_type": "Table Missing"
+      }
+    ],
+    "external_knowledge": null,
+    "label": false
   },
   {
     "true_sql_id": "bq003",
@@ -322,7 +360,8 @@
         "sub_error_type": "Table Missing"
       }
     ],
-    "external_knowledge": "google_analytics_sample.ga_sessions.md"
+    "external_knowledge": "google_analytics_sample.ga_sessions.md",
+    "label": false
   },
   {
     "true_sql_id": "ga004",
@@ -335,7 +374,8 @@
         "sub_error_type": "Table Missing"
       }
     ],
-    "external_knowledge": null
+    "external_knowledge": null,
+    "label": false
   },
   {
     "true_sql_id": "bq414",
@@ -348,7 +388,8 @@
         "sub_error_type": "Table Missing"
       }
     ],
-    "external_knowledge": null
+    "external_knowledge": null,
+    "label": false
   },
   {
     "true_sql_id": "bq397",
@@ -361,7 +402,8 @@
         "sub_error_type": "Table Missing"
       }
     ],
-    "external_knowledge": null
+    "external_knowledge": null,
+    "label": false
   },
   {
     "true_sql_id": "sf_bq412",
@@ -374,7 +416,8 @@
         "sub_error_type": "Table Missing"
       }
     ],
-    "external_knowledge": null
+    "external_knowledge": null,
+    "label": false
   },
   {
     "true_sql_id": "bq396",
@@ -387,7 +430,8 @@
         "sub_error_type": "Join Condition Mismatch"
       }
     ],
-    "external_knowledge": null
+    "external_knowledge": null,
+    "label": false
   },
   {
     "true_sql_id": "bq442",
@@ -400,7 +444,8 @@
         "sub_error_type": "Join Condition Mismatch"
       }
     ],
-    "external_knowledge": "Trade_Capture_Report_Data_List.md"
+    "external_knowledge": "Trade_Capture_Report_Data_List.md",
+    "label": false
   },
   {
     "true_sql_id": "bq362",
@@ -413,7 +458,8 @@
         "sub_error_type": "Join Condition Mismatch"
       }
     ],
-    "external_knowledge": null
+    "external_knowledge": null,
+    "label": false
   },
   {
     "true_sql_id": "bq284",
@@ -426,7 +472,8 @@
         "sub_error_type": "Join Condition Mismatch"
       }
     ],
-    "external_knowledge": null
+    "external_knowledge": null,
+    "label": false
   },
   {
     "true_sql_id": "sf_bq209",
@@ -439,7 +486,8 @@
         "sub_error_type": "Join Condition Mismatch"
       }
     ],
-    "external_knowledge": null
+    "external_knowledge": null,
+    "label": false
   },
   {
     "true_sql_id": "bq198",
@@ -452,7 +500,8 @@
         "sub_error_type": "Join Condition Mismatch"
       }
     ],
-    "external_knowledge": null
+    "external_knowledge": null,
+    "label": false
   },
   {
     "true_sql_id": "bq025",
@@ -465,7 +514,8 @@
         "sub_error_type": "Join Condition Mismatch"
       }
     ],
-    "external_knowledge": null
+    "external_knowledge": null,
+    "label": false
   },
   {
     "true_sql_id": "bq144",
@@ -478,7 +528,8 @@
         "sub_error_type": "Join Condition Mismatch"
       }
     ],
-    "external_knowledge": "NCAA_Basketball_Tournament_SQL_Query_Variable_Guide.md"
+    "external_knowledge": "NCAA_Basketball_Tournament_SQL_Query_Variable_Guide.md",
+    "label": false
   },
   {
     "true_sql_id": "bq419",
@@ -491,7 +542,8 @@
         "sub_error_type": "Join Condition Mismatch"
       }
     ],
-    "external_knowledge": null
+    "external_knowledge": null,
+    "label": false
   },
   {
     "true_sql_id": "sf_bq347",
@@ -504,7 +556,8 @@
         "sub_error_type": "Join Condition Mismatch"
       }
     ],
-    "external_knowledge": null
+    "external_knowledge": null,
+    "label": false
   },
   {
     "true_sql_id": "bq151",
@@ -517,7 +570,8 @@
         "sub_error_type": "Join Type Mismatch"
       }
     ],
-    "external_knowledge": null
+    "external_knowledge": null,
+    "label": false
   },
   {
     "true_sql_id": "bq130",
@@ -530,7 +584,8 @@
         "sub_error_type": "Join Type Mismatch"
       }
     ],
-    "external_knowledge": null
+    "external_knowledge": null,
+    "label": false
   },
   {
     "true_sql_id": "bq281",
@@ -543,7 +598,8 @@
         "sub_error_type": "Join Type Mismatch"
       }
     ],
-    "external_knowledge": null
+    "external_knowledge": null,
+    "label": false
   },
   {
     "true_sql_id": "bq428",
@@ -556,7 +612,8 @@
         "sub_error_type": "Join Type Mismatch"
       }
     ],
-    "external_knowledge": "ncaa_data_model.md"
+    "external_knowledge": "ncaa_data_model.md",
+    "label": false
   },
   {
     "true_sql_id": "bq109",
@@ -569,7 +626,8 @@
         "sub_error_type": "Join Type Mismatch"
       }
     ],
-    "external_knowledge": null
+    "external_knowledge": null,
+    "label": false
   },
   {
     "true_sql_id": "sf_bq260",
@@ -582,7 +640,8 @@
         "sub_error_type": "Join Type Mismatch"
       }
     ],
-    "external_knowledge": null
+    "external_knowledge": null,
+    "label": false
   },
   {
     "true_sql_id": "sf_bq233",
@@ -595,7 +654,8 @@
         "sub_error_type": "Join Type Mismatch"
       }
     ],
-    "external_knowledge": null
+    "external_knowledge": null,
+    "label": false
   },
   {
     "true_sql_id": "local131",
@@ -608,7 +668,8 @@
         "sub_error_type": "Join Type Mismatch"
       }
     ],
-    "external_knowledge": null
+    "external_knowledge": null,
+    "label": false
   },
   {
     "true_sql_id": "sf_bq028",
@@ -621,7 +682,8 @@
         "sub_error_type": "Join Type Mismatch"
       }
     ],
-    "external_knowledge": null
+    "external_knowledge": null,
+    "label": false
   },
   {
     "true_sql_id": "sf_bq091",
@@ -634,6 +696,7 @@
         "sub_error_type": "Join Type Mismatch"
       }
     ],
-    "external_knowledge": null
+    "external_knowledge": null,
+    "label": false
   }
 ]

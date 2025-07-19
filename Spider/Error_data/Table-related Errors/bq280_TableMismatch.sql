@@ -2,7 +2,7 @@ WITH UserAnswers AS (
   SELECT
     owner_user_id AS answer_owner_id,
     COUNT(id) AS answer_count
-  FROM bigquery-public-data.stackoverflow.posts_tag_wiki  -- ❌ Table Mismatch injected: incorrect table
+  FROM bigquery-public-data.stackoverflow.posts_tag_wiki
   WHERE owner_user_id IS NOT NULL
   GROUP BY owner_user_id
 ),
