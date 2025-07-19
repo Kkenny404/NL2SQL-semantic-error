@@ -1,213 +1,214 @@
-{
-  "error_explanations": {
-    "attribute_related": {
-      "category_name": "Attribute-related Errors",
-      "category_description": "Errors when NL2SQL models incorrectly map required columns in natural language queries to corresponding attributes in the database schema.",
-      "subcategories": {
-        "attribute_mismatch": {
-          "name": "Attribute Mismatch",
-          "description": "The model selects incorrect attributes from the schema, indicating a misunderstanding between natural language expressions and their corresponding database fields. For example, when asked for 'student age', the model might incorrectly select 'birth_date' instead of 'age' column.",
-          "prompt_explanation": "Replace one or more correct columns with semantically related but incorrect columns from the schema. For example, change 'age' to 'birth_date', or 'total_amount' to 'unit_price'."
-        },
-        "attribute_redundancy": {
-          "name": "Attribute Redundancy", 
-          "description": "The model includes unnecessary attributes not mentioned or implied in the natural language query, suggesting over-interpretation of the input. For example, selecting both 'first_name' and 'last_name' when only 'name' is requested, or including 'student_id' when not asked for.",
-          "prompt_explanation": "Add extra columns that are not mentioned or implied in the natural language query. Include unnecessary attributes like IDs, timestamps, or related fields not required by the question."
-        },
-        "attribute_missing": {
-          "name": "Attribute Missing",
-          "description": "The model fails to identify and include attributes that are essential to fulfilling the query intent, indicating an incomplete understanding of the natural language requirements. For example, omitting 'grade' when asked for 'student performance' or missing 'date' when temporal information is requested.",
-          "prompt_explanation": "Remove one or more essential columns from the SELECT clause that are required to fully answer the natural language question. Omit key attributes mentioned in the query."
-        }
-      }
-    },
-    "table_related": {
-      "category_name": "Table-related Errors",
-      "category_description": "Errors when NL2SQL models fail to correctly identify, link, or utilize the required tables from the database schema.",
-      "subcategories": {
-        "table_mismatch": {
-          "name": "Table Mismatch",
-          "description": "The model selects incorrect tables from the schema, indicating a misalignment between natural language query intent and table identification.",
-          "prompt_explanation": "Check if the selected tables align with the natural language query intent."
-        },
-        "table_redundancy": {
-          "name": "Table Redundancy",
-          "description": "The model includes unnecessary tables not required by the query intent, which occurs particularly frequently and suggests over-complication of the query structure.",
-          "prompt_explanation": "Verify that all included tables are required by the query intent."
-        },
-        "table_missing": {
-          "name": "Table Missing", 
-          "description": "The model fails to include tables that are required, leading to an incomplete understanding of the schema.",
-          "prompt_explanation": "Ensure all required tables are included for complete schema understanding."
-        },
-        "join_condition_mismatch": {
-          "name": "Join Condition Mismatch",
-          "description": "The model exhibits errors in constructing JOIN conditions between tables, creating invalid JOIN between unrelated attributes, which demonstrates difficulties in understanding the relationships between tables in the database.",
-          "prompt_explanation": "Check if JOIN conditions correctly represent table relationships in the database."
-        },
-        "join_type_mismatch": {
-          "name": "Join Type Mismatch",
-          "description": "The model selects inappropriate JOIN types (e.g., LEFT JOIN, INNER JOIN) that do not align with the natural language query intent, showing a misinterpretation of the desired data inclusion/exclusion patterns.",
-          "prompt_explanation": "Verify that the JOIN type aligns with the desired data inclusion/exclusion patterns from the natural language."
-        }
-      }
-    },
-    "value_related": {
-      "category_name": "Value-related Errors",
-      "category_description": "Errors when NL2SQL models incorrectly parse or interpret the required attribute values from natural language expressions.",
-      "subcategories": {
-        "value_mismatch": {
-          "name": "Value Mismatch",
-          "description": "The model fails to map values from natural language descriptions to their actual representations in the database, occurring frequently and reflecting a misunderstanding of how values are actually stored in the database.",
-          "prompt_explanation": "Check if values from natural language are correctly mapped to their actual database representations."
-        },
-        "data_format_mismatch": {
-          "name": "Data Format Mismatch",
-          "description": "The model fails to properly format values according to the attribute's data type requirements, showing difficulties in handling type-specific representations.",
-          "prompt_explanation": "Verify that values are properly formatted according to the attribute's data type requirements."
-        }
-      }
-    },
-    "operator_related": {
-      "category_name": "Operator-related Errors", 
-      "category_description": "Errors when NL2SQL models fail to select appropriate operators for SQL conditions.",
-      "subcategories": {
-        "comparison_operator": {
-          "name": "Comparison Operator",
-          "description": "The model selects incorrect comparison operators in query conditions, such as using '>' when '>=' is required or confusing 'LIKE' with '=', indicating a semantic gap between natural language intent and SQL comparison operations.",
-          "prompt_explanation": "Check if comparison operators correctly reflect the natural language intent in query conditions."
-        },
-        "logical_operator": {
-          "name": "Logical Operator",
-          "description": "The model misinterprets logical relationships expressed in natural language, resulting in the incorrect use of boolean operators (e.g., AND, OR, NOT) in SQL conditions or the logical operator precedence may be wrong.",
-          "prompt_explanation": "Verify that logical operators and their precedence correctly represent the natural language logical relationships."
-        }
-      }
-    },
-    "condition_related": {
-      "category_name": "Condition-related Errors",
-      "category_description": "Errors when NL2SQL models fail to properly handle query conditions, particularly in cases where multiple condition-related issues co-exist.",
-      "subcategories": {
-        "explicit_condition_missing": {
-          "name": "Explicit Condition Missing",
-          "description": "The model fails to include conditions that are explicitly stated in the natural language query, indicating an incomplete interpretation of the user requirements.",
-          "prompt_explanation": "Ensure all explicitly stated conditions in the natural language query are included."
-        },
-        "explicit_condition_mismatch": {
-          "name": "Explicit Condition Mismatch", 
-          "description": "The model generates incorrect conditions that deviate from the natural language requirements, showing a misunderstanding of the query intent. A condition typically consists of three parts (attribute, operator, and value), and we classify it as a condition error only when errors occur in two or more components.",
-          "prompt_explanation": "Check if generated conditions correctly match the natural language requirements with proper attribute, operator, and value."
-        },
-        "explicit_condition_redundancy": {
-          "name": "Explicit Condition Redundancy",
-          "description": "The model adds unnecessary conditions not mentioned in the natural language query, suggesting an over-interpretation of the query requirements.",
-          "prompt_explanation": "Verify that all conditions are mentioned in the natural language query and avoid over-interpretation."
-        },
-        "implicit_condition_missing": {
-          "name": "Implicit Condition Missing",
-          "description": "The model fails to include necessary conditions that are implied but not explicitly stated in the natural language query, such as NULL value handling.",
-          "prompt_explanation": "Consider if implied conditions like NULL value handling are necessary based on the context."
-        }
-      }
-    },
-    "function_related": {
-      "category_name": "Function-related Errors",
-      "category_description": "Errors when NL2SQL models fail to correctly use SQL functions or misunderstand their purposes.",
-      "subcategories": {
-        "aggregate_functions": {
-          "name": "Aggregate Functions",
-          "description": "The model incorrectly applies aggregate functions (e.g., SUM), such as using them without proper GROUP BY clauses or misunderstanding their effect on result sets.",
-          "prompt_explanation": "Check if aggregate functions are correctly applied with proper GROUP BY clauses and understand their effect on result sets."
-        },
-        "window_functions": {
-          "name": "Window Functions", 
-          "description": "The model misuses window functions (e.g., OVER, PARTITION BY), often failing to properly specify window frames or partition criteria.",
-          "prompt_explanation": "Verify that window functions properly specify window frames and partition criteria."
-        },
-        "date_time_functions": {
-          "name": "Date/Time Functions",
-          "description": "The model incorrectly handles date and time manipulations (e.g., STRFTIME), such as wrong format strings or improper date arithmetic.",
-          "prompt_explanation": "Check if date/time functions use correct format strings and proper date arithmetic."
-        },
-        "conversion_functions": {
-          "name": "Conversion Functions",
-          "description": "The model fails to properly convert between data types (e.g., CAST, CONVERT), leading to type mismatch errors or incorrect data transformations.",
-          "prompt_explanation": "Verify that data type conversions are properly handled without type mismatch errors."
-        },
-        "math_functions": {
-          "name": "Math Functions",
-          "description": "The model misapplies mathematical functions (e.g., ROUND, CEIL, FLOOR), such as incorrect precision specifications or inappropriate numerical operations.",
-          "prompt_explanation": "Check if mathematical functions have correct precision specifications and appropriate numerical operations."
-        },
-        "string_functions": {
-          "name": "String Functions",
-          "description": "The model incorrectly uses string manipulation functions (e.g., SUBSTR, CONCAT), such as wrong substring positions or improper string concatenations.",
-          "prompt_explanation": "Verify that string functions use correct substring positions and proper string concatenations."
-        },
-        "conditional_functions": {
-          "name": "Conditional Functions",
-          "description": "The model misuses conditional functions (e.g., IIF, CASE WHEN), such as incorrect condition logic or improper result expressions.",
-          "prompt_explanation": "Check if conditional functions have correct condition logic and proper result expressions."
-        }
-      }
-    },
-    "clause_related": {
-      "category_name": "Clause-related Errors",
-      "category_description": "Errors when NL2SQL models fail to correctly include, omit, or structure SQL clauses. These errors primarily involve mishandling GROUP BY, ORDER BY, and HAVING clauses.",
-      "subcategories": {
-        "clause_missing": {
-          "name": "Clause Missing",
-          "description": "The model fails to include necessary clauses such as GROUP BY, ORDER BY, or HAVING, resulting in incomplete or incorrect SQL queries that do not fully capture the intent of the natural language.",
-          "prompt_explanation": "Check if necessary clauses like GROUP BY, ORDER BY, or HAVING are included to fully capture the natural language intent."
-        },
-        "clause_redundancy": {
-          "name": "Clause Redundancy", 
-          "description": "The model includes extraneous clauses like GROUP BY, ORDER BY, or HAVING that are not required by the natural language query, indicating an over-interpretation or misunderstanding of the input requirements.",
-          "prompt_explanation": "Verify that all clauses are required by the natural language query and avoid over-interpretation of requirements."
-        }
-      }
-    },
-    "subquery_related": {
-      "category_name": "Subquery-related Errors",
-      "category_description": "Errors when NL2SQL models fail to correctly use or generate subqueries.",
-      "subcategories": {
-        "subquery_missing": {
-          "name": "Subquery Missing",
-          "description": "The model fails to generate a necessary subquery, leading to an incomplete or incorrect SQL statement.",
-          "prompt_explanation": "Check if a necessary subquery is missing that would complete the SQL statement correctly."
-        },
-        "subquery_mismatch": {
-          "name": "Subquery Mismatch",
-          "description": "The model generates a subquery that does not match the context or requirements of the outer query, resulting in logical errors or unexpected results.",
-          "prompt_explanation": "Verify that the subquery matches the context and requirements of the outer query."
-        },
-        "partial_query": {
-          "name": "Partial Query",
-          "description": "The model generates an SQL query that is only a part of the complete query required to fully address the natural language request. The generated SQL needs to be wrapped inside another query or combined with additional SQL constructs to produce the desired output.",
-          "prompt_explanation": "Check if the query fully addresses the natural language request or if it needs additional SQL constructs."
-        }
-      }
-    },
-    "other_errors": {
-      "category_name": "Other Errors",
-      "category_description": "Errors caused by incorrect use of some special keywords in SQL and queries where the SQL intent seriously deviates from the original intent of NL.",
-      "subcategories": {
-        "asc_desc": {
-          "name": "ASC/DESC",
-          "description": "This error occurs when the model improperly handles the ordering of query results by either failing to include the correct sorting order (ASC/DESC) or by incorrectly specifying the order.",
-          "prompt_explanation": "Check if the sorting order (ASC/DESC) is correctly specified according to the natural language requirements."
-        },
-        "distinct": {
-          "name": "DISTINCT",
-          "description": "This error occurs in SQL queries, typically due to the failure to properly apply deduplication operations (e.g., missing DISTINCT), resulting in the presence of duplicate records or unnecessary deduplication, which impacts the accuracy and performance of the query results.",
-          "prompt_explanation": "Verify if DISTINCT is properly applied for deduplication operations based on the natural language requirements."
-        },
-        "other": {
-          "name": "Other",
-          "description": "The SQL generated by the model deviates significantly from the required SQL, almost necessitating a complete rewrite. It is difficult to achieve the expected results through corrective modifications.",
-          "prompt_explanation": "The SQL deviates significantly from requirements and may need substantial revision to match the natural language intent."
-        }
-      }
-    }
-  }
-}
+// {
+//   "error_explanations": {
+//     "attribute_related": {
+//       "category_name": "Attribute-related Errors",
+//       "category_description": "Errors when NL2SQL models incorrectly map required columns in natural language queries to corresponding attributes in the database schema.",
+//       "subcategories": {
+//         "attribute_mismatch": {
+//           "name": "Attribute Mismatch",
+//           "description": "The model selects incorrect attributes from the schema, indicating a misunderstanding between natural language expressions and their corresponding database fields. For example, when asked for 'student age', the model might incorrectly select 'birth_date' instead of 'age' column.",
+//           "prompt_explanation": "Replace one or more correct columns with semantically related but incorrect columns from the schema. For example, change 'age' to 'birth_date', or 'total_amount' to 'unit_price'."
+//         },
+//         "attribute_redundancy": {
+//           "name": "Attribute Redundancy", 
+//           "description": "The model includes unnecessary attributes not mentioned or implied in the natural language query, suggesting over-interpretation of the input. For example, selecting both 'first_name' and 'last_name' when only 'name' is requested, or including 'student_id' when not asked for.",
+//           "prompt_explanation": "Add extra columns that are not mentioned or implied in the natural language query. Include unnecessary attributes like IDs, timestamps, or related fields not required by the question."
+//         },
+//         "attribute_missing": {
+//           "name": "Attribute Missing",
+//           "description": "The model fails to identify and include attributes that are essential to fulfilling the query intent, indicating an incomplete understanding of the natural language requirements. For example, omitting 'grade' when asked for 'student performance' or missing 'date' when temporal information is requested.",
+//           "prompt_explanation": "Remove one or more essential columns from the SELECT clause that are required to fully answer the natural language question. Omit key attributes mentioned in the query."
+//         }
+//       }
+//     },
+//     "table_related": {
+//       "category_name": "Table-related Errors",
+//       "category_description": "Errors when NL2SQL models fail to correctly identify, link, or utilize the required tables from the database schema.",
+//       "subcategories": {
+//         "table_mismatch": {
+//           "name": "Table Mismatch",
+//           "description": "The model selects incorrect tables from the schema, indicating a misalignment between natural language query intent and table identification.",
+//           "prompt_explanation": "Check if the selected tables align with the natural language query intent."
+//         },
+//         "table_redundancy": {
+//           "name": "Table Redundancy",
+//           "description": "The model includes unnecessary tables not required by the query intent, which occurs particularly frequently and suggests over-complication of the query structure.",
+//           "prompt_explanation": "Verify that all included tables are required by the query intent."
+//         },
+//         "table_missing": {
+//           "name": "Table Missing", 
+//           "description": "The model fails to include tables that are required, leading to an incomplete understanding of the schema.",
+//           "prompt_explanation": "Ensure all required tables are included for complete schema understanding."
+//         },
+//         "join_condition_mismatch": {
+//           "name": "Join Condition Mismatch",
+//           "description": "The model exhibits errors in constructing JOIN conditions between tables, creating invalid JOIN between unrelated attributes, which demonstrates difficulties in understanding the relationships between tables in the database.",
+//           "prompt_explanation": "Check if JOIN conditions correctly represent table relationships in the database."
+//         },
+//         "join_type_mismatch": {
+//           "name": "Join Type Mismatch",
+//           "description": "The model selects inappropriate JOIN types (e.g., LEFT JOIN, INNER JOIN) that do not align with the natural language query intent, showing a misinterpretation of the desired data inclusion/exclusion patterns.",
+//           "prompt_explanation": "Verify that the JOIN type aligns with the desired data inclusion/exclusion patterns from the natural language."
+//         }
+//       }
+//     },
+//     "value_related": {
+//       "category_name": "Value-related Errors",
+//       "category_description": "Errors when NL2SQL models incorrectly parse or interpret the required attribute values from natural language expressions.",
+//       "subcategories": {
+//         "value_mismatch": {
+//           "name": "Value Mismatch",
+//           "description": "The model fails to map values from natural language descriptions to their actual representations in the database, occurring frequently and reflecting a misunderstanding of how values are actually stored in the database.",
+//           "prompt_explanation": "Check if values from natural language are correctly mapped to their actual database representations."
+//         },
+//         "data_format_mismatch": {
+//           "name": "Data Format Mismatch",
+//           "description": "The model fails to properly format values according to the attribute's data type requirements, showing difficulties in handling type-specific representations.",
+//           "prompt_explanation": "Verify that values are properly formatted according to the attribute's data type requirements."
+//         }
+//       }
+//     },
+//     "operator_related": {
+//       "category_name": "Operator-related Errors", 
+//       "category_description": "Errors when NL2SQL models fail to select appropriate operators for SQL conditions.",
+//       "subcategories": {
+//         "comparison_operator": {
+//           "name": "Comparison Operator",
+//           "description": "The model selects incorrect comparison operators in query conditions, such as using '>' when '>=' is required or confusing 'LIKE' with '=', indicating a semantic gap between natural language intent and SQL comparison operations.",
+//           "prompt_explanation": "Check if comparison operators correctly reflect the natural language intent in query conditions."
+//         },
+//         "logical_operator": {
+//           "name": "Logical Operator",
+//           "description": "The model misinterprets logical relationships expressed in natural language, resulting in the incorrect use of boolean operators (e.g., AND, OR, NOT) in SQL conditions or the logical operator precedence may be wrong.",
+//           "prompt_explanation": "Verify that logical operators and their precedence correctly represent the natural language logical relationships."
+//         }
+//       }
+//     },
+//     "condition_related": {
+//       "category_name": "Condition-related Errors",
+//       "category_description": "Errors when NL2SQL models fail to properly handle query conditions, particularly in cases where multiple condition-related issues co-exist.",
+//       "subcategories": {
+//         "explicit_condition_missing": {
+//           "name": "Explicit Condition Missing",
+//           "description": "The model fails to include conditions that are explicitly stated in the natural language query, indicating an incomplete interpretation of the user requirements.",
+//           "prompt_explanation": "Ensure all explicitly stated conditions in the natural language query are included."
+//         },
+//         "explicit_condition_mismatch": {
+//           "name": "Explicit Condition Mismatch", 
+//           "description": "The model generates incorrect conditions that deviate from the natural language requirements, showing a misunderstanding of the query intent. A condition typically consists of three parts (attribute, operator, and value), and we classify it as a condition error only when errors occur in two or more components.",
+//           "prompt_explanation": "Check if generated conditions correctly match the natural language requirements with proper attribute, operator, and value."
+//         },
+//         "explicit_condition_redundancy": {
+//           "name": "Explicit Condition Redundancy",
+//           "description": "The model adds unnecessary conditions not mentioned in the natural language query, suggesting an over-interpretation of the query requirements.",
+//           "prompt_explanation": "Verify that all conditions are mentioned in the natural language query and avoid over-interpretation."
+//         },
+//         "implicit_condition_missing": {
+//           "name": "Implicit Condition Missing",
+//           "description": "The model fails to include necessary conditions that are implied but not explicitly stated in the natural language query, such as NULL value handling.",
+//           "prompt_explanation": "Consider if implied conditions like NULL value handling are necessary based on the context."
+//         }
+//       }
+//     },
+//     "function_related": {
+//       "category_name": "Function-related Errors",
+//       "category_description": "Errors when NL2SQL models fail to correctly use SQL functions or misunderstand their purposes.",
+//       "subcategories": {
+//         "aggregate_functions": {
+//           "name": "Aggregate Functions",
+//           "description": "The model incorrectly applies aggregate functions (e.g., SUM), such as using them without proper GROUP BY clauses or misunderstanding their effect on result sets.",
+//           "prompt_explanation": "Check if aggregate functions are correctly applied with proper GROUP BY clauses and understand their effect on result sets."
+//         },
+//         "window_functions": {
+//           "name": "Window Functions", 
+//           "description": "The model misuses window functions (e.g., OVER, PARTITION BY), often failing to properly specify window frames or partition criteria.",
+//           "prompt_explanation": "Verify that window functions properly specify window frames and partition criteria."
+//         },
+//         "date_time_functions": {
+//           "name": "Date/Time Functions",
+//           "description": "The model incorrectly handles date and time manipulations (e.g., STRFTIME), such as wrong format strings or improper date arithmetic.",
+//           "prompt_explanation": "Check if date/time functions use correct format strings and proper date arithmetic."
+//         },
+//         "conversion_functions": {
+//           "name": "Conversion Functions",
+//           "description": "The model fails to properly convert between data types (e.g., CAST, CONVERT), leading to type mismatch errors or incorrect data transformations.",
+//           "prompt_explanation": "Verify that data type conversions are properly handled without type mismatch errors."
+//         },
+//         "math_functions": {
+//           "name": "Math Functions",
+//           "description": "The model misapplies mathematical functions (e.g., ROUND, CEIL, FLOOR), such as incorrect precision specifications or inappropriate numerical operations.",
+//           "prompt_explanation": "Check if mathematical functions have correct precision specifications and appropriate numerical operations."
+//         },
+//         "string_functions": {
+//           "name": "String Functions",
+//           "description": "The model incorrectly uses string manipulation functions (e.g., SUBSTR, CONCAT), such as wrong substring positions or improper string concatenations.",
+//           "prompt_explanation": "Verify that string functions use correct substring positions and proper string concatenations."
+//         },
+//         "conditional_functions": {
+//           "name": "Conditional Functions",
+//           "description": "The model misuses conditional functions (e.g., IIF, CASE WHEN), such as incorrect condition logic or improper result expressions.",
+//           "prompt_explanation": "Check if conditional functions have correct condition logic and proper result expressions."
+//         }
+//       }
+//     },
+//     "clause_related": {
+//       "category_name": "Clause-related Errors",
+//       "category_description": "Errors when NL2SQL models fail to correctly include, omit, or structure SQL clauses. These errors primarily involve mishandling GROUP BY, ORDER BY, and HAVING clauses.",
+//       "subcategories": {
+//         "clause_missing": {
+//           "name": "Clause Missing",
+//           "description": "The model fails to include necessary clauses such as GROUP BY, ORDER BY, or HAVING, resulting in incomplete or incorrect SQL queries that do not fully capture the intent of the natural language.",
+//           "prompt_explanation": "Check if necessary clauses like GROUP BY, ORDER BY, or HAVING are included to fully capture the natural language intent."
+//         },
+//         "clause_redundancy": {
+//           "name": "Clause Redundancy", 
+//           "description": "The model includes extraneous clauses like GROUP BY, ORDER BY, or HAVING that are not required by the natural language query, indicating an over-interpretation or misunderstanding of the input requirements.",
+//           "prompt_explanation": "Verify that all clauses are required by the natural language query and avoid over-interpretation of requirements."
+//         }
+//       }
+//     },
+//     "subquery_related": {
+//       "category_name": "Subquery-related Errors",
+//       "category_description": "Errors when NL2SQL models fail to correctly use or generate subqueries.",
+//       "subcategories": {
+//         "subquery_missing": {
+//           "name": "Subquery Missing",
+//           "description": "The model fails to generate a necessary subquery, leading to an incomplete or incorrect SQL statement.",
+//           "prompt_explanation": "Check if a necessary subquery is missing that would complete the SQL statement correctly."
+//         },
+//         "subquery_mismatch": {
+//           "name": "Subquery Mismatch",
+//           "description": "The model generates a subquery that does not match the context or requirements of the outer query, resulting in logical errors or unexpected results.",
+//           "prompt_explanation": "Verify that the subquery matches the context and requirements of the outer query."
+//         },
+//         "partial_query": {
+//           "name": "Partial Query",
+//           "description": "The model generates an SQL query that is only a part of the complete query required to fully address the natural language request. The generated SQL needs to be wrapped inside another query or combined with additional SQL constructs to produce the desired output.",
+//           "prompt_explanation": "Check if the query fully addresses the natural language request or if it needs additional SQL constructs."
+//         }
+//       }
+//     },
+//     "other_errors": {
+//       "category_name": "Other Errors",
+//       "category_description": "Errors caused by incorrect use of some special keywords in SQL and queries where the SQL intent seriously deviates from the original intent of NL.",
+//       "subcategories": {
+//         "asc_desc": {
+//           "name": "ASC/DESC",
+//           "description": "This error occurs when the model improperly handles the ordering of query results by either failing to include the correct sorting order (ASC/DESC) or by incorrectly specifying the order.",
+//           "prompt_explanation": "Check if the sorting order (ASC/DESC) is correctly specified according to the natural language requirements."
+//         },
+//         "distinct": {
+//           "name": "DISTINCT",
+//           "description": "This error occurs in SQL queries, typically due to the failure to properly apply deduplication operations (e.g., missing DISTINCT), resulting in the presence of duplicate records or unnecessary deduplication, which impacts the accuracy and performance of the query results.",
+//           "prompt_explanation": "Verify if DISTINCT is properly applied for deduplication operations based on the natural language requirements."
+//         },
+//         "other": {
+//           "name": "Other",
+//           "description": "The SQL generated by the model deviates significantly from the required SQL, almost necessitating a complete rewrite. It is difficult to achieve the expected results through corrective modifications.",
+//           "prompt_explanation": "The SQL deviates significantly from requirements and may need substantial revision to match the natural language intent."
+//         }
+//       }
+//     }
+//   }
+// }
+

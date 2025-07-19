@@ -1,0 +1,484 @@
+[
+  {
+    "id": 0,
+    "instance_id": "sf_bq219",
+    "db": "IOWA_LIQUOR_SALES",
+    "question": "In the Iowa Liquor Sales dataset, starting from January 1, 2022 through the last fully completed month, which two liquor categories, each contributing an average of at least 1% to the monthly sales volume over at least 24 months of available data, have the lowest Pearson correlation coefficient when comparing their monthly percentages of total liquor sales across those months, and what are their names?",
+    "temporal": "Yes",
+    "external_knowledge": null,
+    "label": false,
+    "error_types": [
+      {
+        "error_type": "Attribute-related Errors",
+        "sub_error_type": [
+          "Attribute Mismatch"
+        ]
+      }
+    ]
+  },
+  {
+    "id": 1,
+    "instance_id": "sf_bq265",
+    "db": "THELOOK_ECOMMERCE",
+    "question": "Can you list the email addresses of the top 10 users who registered in 2019 and made purchases in 2019, ranking them by their highest average order value, where average order value is calculated by multiplying the number of items in each order by the sale price, summing this total across all orders for each user, and then dividing by the total number of orders?",
+    "temporal": "Yes",
+    "external_knowledge": null,
+    "label": false,
+    "error_types": [
+      {
+        "error_type": "Attribute-related Errors",
+        "sub_error_type": [
+          "Attribute Mismatch"
+        ]
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "instance_id": "sf_bq052",
+    "db": "PATENTSVIEW",
+    "question": "Retrieve the following information for U.S. patents: The patent ID, title, and application date. The number of backward citations within 1 month before the application date (i.e., patents that cited the current patent before its application). The number of forward citations within 1 month after the application date (i.e., patents that cited the current patent after its application). The abstract text of the patent. Only include patents that belong to specific CPC categories, such as subsection 'C05' or group 'A01G'. The query should filter patents to include only those that have at least one backward citation or one forward citation in the 1-month period specified. Sort the results by application date and return all matching records.",
+    "external_knowledge": null,
+    "label": false,
+    "error_types": [
+      {
+        "error_type": "Attribute-related Errors",
+        "sub_error_type": [
+          "Attribute Mismatch"
+        ]
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "instance_id": "local163",
+    "db": "education_business",
+    "question": "Which university faculty members' salaries are closest to the average salary for their respective ranks? Please provide the ranks, first names, last names, and salaries.university",
+    "external_knowledge": null,
+    "label": false,
+    "error_types": [
+      {
+        "error_type": "Attribute-related Errors",
+        "sub_error_type": [
+          "Attribute Mismatch"
+        ]
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "instance_id": "bq112",
+    "db": "bls",
+    "question": "Between 1998 and 2017, for Allegheny County in the Pittsburgh area, did the average annual wages for all industries keep pace with the inflation of all consumer items, and what were the respective percentage growth rates (to two decimal places) for wages and the CPI over that period?",
+    "external_knowledge": null,
+    "label": false,
+    "error_types": [
+      {
+        "error_type": "Attribute-related Errors",
+        "sub_error_type": [
+          "Attribute Mismatch"
+        ]
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "instance_id": "sf_bq222",
+    "db": "PATENTS",
+    "question": "Find the CPC technology areas in Germany that had the highest exponential moving average (smoothing factor 0.1) of patent filings per year, specifically for patents granted in December 2016. For each CPC group at level 4, show the full title, CPC group, and the year with the highest exponential moving average of patent filings.",
+    "external_knowledge": "sliding_windows_calculation_cpc.md",
+    "label": false,
+    "error_types": [
+      {
+        "error_type": "Attribute-related Errors",
+        "sub_error_type": [
+          "Attribute Mismatch"
+        ]
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "instance_id": "bq396",
+    "db": "nhtsa_traffic_fatalities",
+    "question": "Which top 3 states had the largest differences in the number of traffic accidents between rainy and clear weather during weekends in 2016? Please also provide the respective differences for each state.",
+    "external_knowledge": null,
+    "label": false,
+    "error_types": [
+      {
+        "error_type": "Attribute-related Errors",
+        "sub_error_type": [
+          "Attribute Mismatch"
+        ]
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "instance_id": "sf_bq176",
+    "db": "TCGA_MITELMAN",
+    "question": "Identify the case barcodes from the TCGA-LAML study with the highest weighted average copy number in cytoband 15q11 on chromosome 15, using segment data and cytoband overlaps from TCGA's genomic and Mitelman databases.",
+    "external_knowledge": null,
+    "label": false,
+    "error_types": [
+      {
+        "error_type": "Attribute-related Errors",
+        "sub_error_type": [
+          "Attribute Mismatch"
+        ]
+      }
+    ]
+  },
+  {
+    "id": 8,
+    "instance_id": "bq198",
+    "db": "ncaa_basketball",
+    "question": "List the top 5 universities with the most seasons where they achieved the maximum wins in their respective NCAA basketball seasons between 1900-2000, showing each team's total number of such peak-performance seasons, while excluding entries with missing team names.",
+    "external_knowledge": null,
+    "label": false,
+    "error_types": [
+      {
+        "error_type": "Attribute-related Errors",
+        "sub_error_type": [
+          "Attribute Mismatch"
+        ]
+      }
+    ]
+  },
+  {
+    "id": 9,
+    "instance_id": "bq309",
+    "db": "stackoverflow",
+    "question": "Retrieve the top 10 longest questions on Stack Overflow, measured by the length of their body text, where each question either has an accepted answer or has no accepted answer but has at least one answer with a score-to-view ratio exceeding 0.01. For each of these questions, include the reputation of the user who asked the question, the user's net votes (calculated as their total up_votes minus down_votes), and the total number of badges the user has earned.",
+    "external_knowledge": null,
+    "label": false,
+    "error_types": [
+      {
+        "error_type": "Attribute-related Errors",
+        "sub_error_type": [
+          "Attribute Mismatch"
+        ]
+      }
+    ]
+  },
+  {
+    "id": 10,
+    "instance_id": "ga002",
+    "db": "ga4",
+    "question": "Tell me the most purchased other products and their quantities by customers who bought the Google Red Speckled Tee each month for the three months starting from November 2020.",
+    "external_knowledge": null,
+    "label": false,
+    "error_types": [
+      {
+        "error_type": "Attribute-related Errors",
+        "sub_error_type": [
+          "Attribute Redundancy"
+        ]
+      }
+    ]
+  },
+  {
+    "id": 11,
+    "instance_id": "bq199",
+    "db": "iowa_liquor_sales",
+    "question": "Identify the top 10 liquor categories in Iowa in 2021 by calculating, for each category, the average of the per-liter retail prices across all sales transactions in that category during 2021. For these top categories, provide their average per-liter retail prices calculated in the same manner for the years 2019, 2020, and 2021.",
+    "external_knowledge": null,
+    "label": false,
+    "error_types": [
+      {
+        "error_type": "Attribute-related Errors",
+        "sub_error_type": [
+          "Attribute Redundancy"
+        ]
+      }
+    ]
+  },
+  {
+    "id": 12,
+    "instance_id": "sf_bq209",
+    "db": "PATENTS",
+    "question": "Can you calculate the number of utility patents that were granted in 2010 and have exactly one forward citation within a 10-year window following their application/filing date? For this analysis, forward citations should be counted as distinct citing application numbers that cited the patent within 10 years after the patent's own filing date.",
+    "external_knowledge": null,
+    "label": false,
+    "error_types": [
+      {
+        "error_type": "Attribute-related Errors",
+        "sub_error_type": [
+          "Attribute Redundancy"
+        ]
+      }
+    ]
+  },
+  {
+    "id": 13,
+    "instance_id": "sf012",
+    "db": "WEATHER__ENVIRONMENT",
+    "question": "Using data from the FEMA National Flood Insurance Program Claim Index, for each year from 2010 through 2019, what were the total building damage amounts and total contents damage amounts reported under the National Flood Insurance Program for the NFIP community named 'City Of New York,' grouped by each year of loss?",
+    "external_knowledge": null,
+    "label": false,
+    "error_types": [
+      {
+        "error_type": "Attribute-related Errors",
+        "sub_error_type": [
+          "Attribute Redundancy"
+        ]
+      }
+    ]
+  },
+  {
+    "id": 14,
+    "instance_id": "sf_bq295",
+    "db": "GITHUB_REPOS_DATE",
+    "question": "Using the 2017 GitHub Archive data for watch events, which three repositories that include at least one Python file (with a .py extension) smaller than 15,000 bytes and containing the substring \"def \" in its content have the highest total number of watch events for that year?",
+    "external_knowledge": null,
+    "label": false,
+    "error_types": [
+      {
+        "error_type": "Attribute-related Errors",
+        "sub_error_type": [
+          "Attribute Redundancy"
+        ]
+      }
+    ]
+  },
+  {
+    "id": 15,
+    "instance_id": "bq010",
+    "db": "ga360",
+    "question": "Find the top-selling product among customers who bought 'Youtube Men’s Vintage Henley' in July 2017, excluding itself.",
+    "external_knowledge": "google_analytics_sample.ga_sessions.md",
+    "label": false,
+    "error_types": [
+      {
+        "error_type": "Attribute-related Errors",
+        "sub_error_type": [
+          "Attribute Redundancy"
+        ]
+      }
+    ]
+  },
+  {
+    "id": 16,
+    "instance_id": "bq053",
+    "db": "new_york",
+    "question": "Calculate the change in the number of living trees of each fall color in New York City from 1995 to 2015 by computing, for each tree species, the difference between the number of trees not marked as dead in 1995 and the number of trees alive in 2015, matching species by the uppercase form of their scientific names from the tree_species table. Then, group the species by their fall color and sum these differences to determine the total change in the number of trees for each fall color.",
+    "external_knowledge": null,
+    "label": false,
+    "error_types": [
+      {
+        "error_type": "Attribute-related Errors",
+        "sub_error_type": [
+          "Attribute Redundancy"
+        ]
+      }
+    ]
+  },
+  {
+    "id": 17,
+    "instance_id": "sf_bq012",
+    "db": "ETHEREUM_BLOCKCHAIN",
+    "question": "Calculate the average balance (in quadrillions, 10^15) of the top 10 Ethereum addresses by net balance, including incoming and outgoing transfers from traces (only successful transactions and excluding call types like delegatecall, callcode, and staticcall), miner rewards (sum of gas fees per block), and sender gas fee deductions. Exclude null addresses and round the result to two decimal places.",
+    "external_knowledge": null,
+    "label": false,
+    "error_types": [
+      {
+        "error_type": "Attribute-related Errors",
+        "sub_error_type": [
+          "Attribute Redundancy"
+        ]
+      }
+    ]
+  },
+  {
+    "id": 18,
+    "instance_id": "bq430",
+    "db": "ebi_chembl",
+    "question": "Find pairs of different molecules tested in the same assay and standard type, where both have 10–15 heavy atoms, fewer than 5 activities in that assay, fewer than 2 duplicate activities, non-null standard values, and pChEMBL values over 10. For each pair, report the maximum heavy atom count, the latest publication date (calculated based on the document's rank within the same journal and year, and map it to a synthetic month and day), the highest document ID, classify the change in standard values as 'increase', 'decrease', or 'no-change' based on their values and relations, and generate UUIDs from their activity IDs and canonical SMILES.",
+    "external_knowledge": "chembl.md",
+    "label": false,
+    "error_types": [
+      {
+        "error_type": "Attribute-related Errors",
+        "sub_error_type": [
+          "Attribute Redundancy"
+        ]
+      }
+    ]
+  },
+  {
+    "id": 19,
+    "instance_id": "bq204",
+    "db": "eclipse_megamovie",
+    "question": "Find the user with the highest total clicks across all records from all available photo collections.",
+    "external_knowledge": null,
+    "label": false,
+    "error_types": [
+      {
+        "error_type": "Attribute-related Errors",
+        "sub_error_type": [
+          "Attribute Redundancy"
+        ]
+      }
+    ]
+  },
+  {
+    "id": 20,
+    "instance_id": "local003",
+    "db": "E_commerce",
+    "question": "According to the RFM definition document, calculate the average sales per order for each customer within distinct RFM segments, considering only 'delivered' orders. Use the customer unique identifier. Clearly define how to calculate Recency based on the latest purchase timestamp and specify the criteria for classifying RFM segments. The average sales should be computed as the total spend divided by the total number of orders. Please analyze and report the differences in average sales across the RFM segments",
+    "external_knowledge": "RFM.md",
+    "label": false,
+    "error_types": [
+      {
+        "error_type": "Attribute-related Errors",
+        "sub_error_type": [
+          "Attribute Missing"
+        ]
+      }
+    ]
+  },
+  {
+    "id": 21,
+    "instance_id": "bq406",
+    "db": "google_dei",
+    "question": "Please calculate the growth rates for Asians, Black people, Latinx people, Native Americans, White people, US women, US men, global women, and global men from 2014 to 2024 concerning the overall workforce.",
+    "external_knowledge": null,
+    "label": false,
+    "error_types": [
+      {
+        "error_type": "Attribute-related Errors",
+        "sub_error_type": [
+          "Attribute Missing"
+        ]
+      }
+    ]
+  },
+  {
+    "id": 22,
+    "instance_id": "local023",
+    "db": "IPL",
+    "question": "Please help me find the names of top 5 players with the highest average runs per match in season 5, along with their batting averages.",
+    "external_knowledge": null,
+    "label": false,
+    "error_types": [
+      {
+        "error_type": "Attribute-related Errors",
+        "sub_error_type": [
+          "Attribute Missing"
+        ]
+      }
+    ]
+  },
+  {
+    "id": 23,
+    "instance_id": "bq232",
+    "db": "london",
+    "question": "Could you provide the total number of 'Other Theft' incidents within the 'Theft and Handling' category for each year in the Westminster borough?",
+    "external_knowledge": null,
+    "label": false,
+    "error_types": [
+      {
+        "error_type": "Attribute-related Errors",
+        "sub_error_type": [
+          "Attribute Missing"
+        ]
+      }
+    ]
+  },
+  {
+    "id": 24,
+    "instance_id": "ga004",
+    "db": "ga4",
+    "question": "Can you figure out the average difference in pageviews between users who bought something and those who didn’t in December 2020? Just label anyone who was involved in purchase events as a purchaser.",
+    "external_knowledge": null,
+    "label": false,
+    "error_types": [
+      {
+        "error_type": "Attribute-related Errors",
+        "sub_error_type": [
+          "Attribute Missing"
+        ]
+      }
+    ]
+  },
+  {
+    "id": 25,
+    "instance_id": "bq022",
+    "db": "chicago",
+    "question": "Calculate the minimum and maximum trip duration in minutes (rounded to the nearest whole number), total number of trips, and average fare for each of six equal quantile groups based on trip duration, considering only trips between 0 and 60 minutes.",
+    "external_knowledge": null,
+    "label": false,
+    "error_types": [
+      {
+        "error_type": "Attribute-related Errors",
+        "sub_error_type": [
+          "Attribute Missing"
+        ]
+      }
+    ]
+  },
+  {
+    "id": 26,
+    "instance_id": "bq039",
+    "db": "new_york_plus",
+    "question": "Find the top 10 taxi trips in New York City between July 1 and July 7, 2016 (ensuring both pickup and dropoff times fall within these dates) where the passenger count is greater than five, the trip distance is at least ten miles, and there are no negative fare-related amounts (including tip, tolls, mta tax, fare, and total costs). Exclude any trips where the dropoff time is not strictly after the pickup time, then sort the results by total fare amount in descending order. Finally, display each trip’s pickup zone, dropoff zone, trip duration in seconds, driving speed in miles per hour, and tip rate as a percentage of the total fare amount.",
+    "external_knowledge": null,
+    "label": false,
+    "error_types": [
+      {
+        "error_type": "Attribute-related Errors",
+        "sub_error_type": [
+          "Attribute Missing"
+        ]
+      }
+    ]
+  },
+  {
+    "id": 27,
+    "instance_id": "ga022",
+    "db": "firebase",
+    "question": "Could you please help me get the weekly customer retention rate in September 2018 for new customers who first used our app (first_open event) within the first week starting from September 1st, 2018 (timezone in Shanghai)? The retention rates should cover the following weeks 1, 2, and 3 period after the initial use and display them in column format.",
+    "external_knowledge": "retention_rate.md",
+    "label": false,
+    "error_types": [
+      {
+        "error_type": "Attribute-related Errors",
+        "sub_error_type": [
+          "Attribute Missing"
+        ]
+      }
+    ]
+  },
+  {
+    "id": 28,
+    "instance_id": "sf014",
+    "db": "CENSUS_GALAXY__AIML_MODEL_DATA_ENRICHMENT_SAMPLE",
+    "question": "What is the New York State ZIP code with the highest number of commuters traveling over one hour, according to 2021 ACS data? Include the zip code, the total commuters, state benchmark for this duration, and state population.",
+    "external_knowledge": null,
+    "label": false,
+    "error_types": [
+      {
+        "error_type": "Attribute-related Errors",
+        "sub_error_type": [
+          "Attribute Missing"
+        ]
+      }
+    ]
+  },
+  {
+    "id": 29,
+    "instance_id": "sf_bq153",
+    "db": "PANCANCER_ATLAS_1",
+    "question": "Calculate, for each histology type specified in the 'icd_o_3_histology' field (excluding those enclosed in square brackets), the average of the per-patient average log10(normalized_count + 1) expression levels of the IGF2 gene among LGG patients with valid IGF2 expression data. Match gene expression and clinical data using the ParticipantBarcode field.",
+    "external_knowledge": null,
+    "label": false,
+    "error_types": [
+      {
+        "error_type": "Attribute-related Errors",
+        "sub_error_type": [
+          "Attribute Missing"
+        ]
+      }
+    ]
+  }
+]
