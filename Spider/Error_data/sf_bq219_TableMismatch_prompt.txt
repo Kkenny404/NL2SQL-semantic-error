@@ -1,0 +1,117 @@
+You are an expert at injecting SQL semantic errors.
+
+Given a natural language question, database schema, and its correct SQL query, please change the correct SQL to include the specific semantic error described below.
+This error called Table Mismatch in the category of Table-related Errors -- Table-related Errors occur when NL2SQL models fail to correctly identify, link, or utilize the required tables from the database schema. These errors encompass both basic table selection issues and more complex JOIN operations..
+The meaning of this error is as follows:
+The model selects incorrect tables from the schema, indicating a misalignment between the natural language query intent and table identification.
+
+The new SQL should include only this error, and no other types of errors. Maintain valid syntax and keep the structure as close as possible to the original.
+
+Return only the incorrect SQL query.
+
+---
+
+Question:
+In the Iowa Liquor Sales dataset, starting from January 1, 2022 through the last fully completed month, which two liquor categories, each contributing an average of at least 1% to the monthly sales volume over at least 24 months of available data, have the lowest Pearson correlation coefficient when comparing their monthly percentages of total liquor sales across those months, and what are their names?
+
+Database Schema:
+table_name,description,DDL
+SALES,,"create or replace TABLE SALES (
+	""invoice_and_item_number"" VARCHAR(16777216),
+	""date"" DATE,
+	""store_number"" VARCHAR(16777216),
+	""store_name"" VARCHAR(16777216),
+	""address"" VARCHAR(16777216),
+	""city"" VARCHAR(16777216),
+	""zip_code"" VARCHAR(16777216),
+	""store_location"" BINARY(8388608),
+	""county_number"" VARCHAR(16777216),
+	""county"" VARCHAR(16777216),
+	""category"" VARCHAR(16777216),
+	""category_name"" VARCHAR(16777216),
+	""vendor_number"" VARCHAR(16777216),
+	""vendor_name"" VARCHAR(16777216),
+	""item_number"" VARCHAR(16777216),
+	""item_description"" VARCHAR(16777216),
+	""pack"" NUMBER(38,0),
+	""bottle_volume_ml"" NUMBER(38,0),
+	""state_bottle_cost"" FLOAT,
+	""state_bottle_retail"" FLOAT,
+	""bottles_sold"" NUMBER(38,0),
+	""sale_dollars"" FLOAT,
+	""volume_sold_liters"" FLOAT,
+	""volume_sold_gallons"" FLOAT
+);"
+
+
+Correct SQL:
+WITH
+MonthlyTotals AS
+(
+  SELECT
+    TO_CHAR("date", 'YYYY-MM') AS "month",
+    SUM("volume_sold_gallons") AS "total_monthly_volume"
+  FROM
+    IOWA_LIQUOR_SALES.IOWA_LIQUOR_SALES."SALES"
+  WHERE
+    "date" >= '2022-01-01' 
+    AND TO_CHAR("date", 'YYYY-MM') < TO_CHAR(CURRENT_DATE(), 'YYYY-MM')
+  GROUP BY
+    TO_CHAR("date", 'YYYY-MM')
+),
+
+MonthCategory AS
+(Category2."category"
+  SELECT
+    TO_CHAR("date", 'YYYY-MM') AS "month",
+    "category",
+    "category_name",
+    SUM("volume_sold_gallons") AS "category_monthly_volume",
+    CASE 
+      WHEN "total_monthly_volume" != 0 THEN (SUM("volume_sold_gallons") / "total_monthly_volume") * 100
+      ELSE NULL
+    END AS "category_pct_of_month_volume"
+  FROM
+    IOWA_LIQUOR_SALES.IOWA_LIQUOR_SALES."SALES" AS Sales
+  LEFT JOIN
+    MonthlyTotals ON TO_CHAR(Sales."date", 'YYYY-MM') = MonthlyTotals."month"
+  WHERE
+    Sales."date" >= '2022-01-01' 
+    AND TO_CHAR(Sales."date", 'YYYY-MM') < TO_CHAR(CURRENT_DATE(), 'YYYY-MM')
+  GROUP BY
+    TO_CHAR(Sales."date", 'YYYY-MM'), "category", "category_name", "total_monthly_volume"
+),
+
+middle_info AS 
+(
+  SELECT
+    Category1."category" AS "category1",
+    Category1."category_name" AS "category_name1",
+    Category2."category" AS "category2",
+    Category2."category_name" AS "category_name2",
+    COUNT(DISTINCT Category1."month") AS "num_months",
+    CORR(Category1."category_pct_of_month_volume", Category2."category_pct_of_month_volume") AS "category_corr_across_months",
+    AVG(Category1."category_pct_of_month_volume") AS "category1_avg_pct_of_month_volume",
+    AVG(Category2."category_pct_of_month_volume") AS "category2_avg_pct_of_month_volume"
+  FROM
+    MonthCategory Category1
+  INNER JOIN
+    MonthCategory Category2 
+    ON Category1."month" = Category2."month"
+  GROUP BY
+    Category1."category", Category1."category_name", Category2."category", Category2."category_name"
+  HAVING
+    "num_months" >= 24
+    AND "category1_avg_pct_of_month_volume" >= 1
+    AND "category2_avg_pct_of_month_volume" >= 1
+)
+
+SELECT 
+  "category_name1", 
+  "category_name2"
+FROM 
+  middle_info
+ORDER BY 
+  "category_corr_across_months"
+LIMIT 1;
+

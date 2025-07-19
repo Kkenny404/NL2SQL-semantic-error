@@ -1,0 +1,200 @@
+[
+  {
+    "category": "Table-related Errors",
+    "description": "Table-related Errors occur when NL2SQL models fail to correctly identify, link, or utilize the required tables from the database schema. These errors encompass both basic table selection issues and more complex JOIN operations.",
+    "sub_errors": [
+      {
+        "error_type": "Table Mismatch",
+        "description": "The model selects incorrect tables from the schema, indicating a misalignment between the natural language query intent and table identification."
+      },
+      {
+        "error_type": "Table Redundancy",
+        "description": "The model includes unnecessary tables not required by the query intent. This occurs particularly frequently and suggests over-complication of the query structure."
+      },
+      {
+        "error_type": "Table Missing",
+        "description": "The model fails to include tables that are required, leading to an incomplete understanding of the schema."
+      },
+      {
+        "error_type": "Join Condition Mismatch",
+        "description": "The model exhibits errors in constructing JOIN conditions between tables, creating invalid JOINs between unrelated attributes. This demonstrates difficulties in understanding the relationships between tables in the database."
+      },
+      {
+        "error_type": "Join Type Mismatch",
+        "description": "The model selects inappropriate JOIN types (e.g., LEFT JOIN, INNER JOIN) that do not align with the natural language query intent, showing a misinterpretation of the desired data inclusion/exclusion patterns."
+      }
+    ]
+  },
+  {
+    "category": "Value-related Errors",
+    "description": "Value-related Errors arise when NL2SQL models incorrectly parse or interpret the required attribute values from natural language expressions. These errors manifest in two primary forms.",
+    "sub_errors": [
+      {
+        "error_type": "Value Mismatch",
+        "description": "The model fails to map values from natural language descriptions to their actual representations in the database, occurring frequently and reflecting a misunderstanding of how values are actually stored in the database."
+      },
+      {
+        "error_type": "Data Format Mismatch",
+        "description": "The model fails to properly format values according to the attribute's data type requirements, showing difficulties in handling type-specific representations."
+      }
+    ]
+  },
+  {
+    "category": "Operator-related Errors",
+    "description": "Operator-related Errors occur when NL2SQL models fail to select appropriate operators for SQL conditions. These errors manifest in two primary forms.",
+    "sub_errors": [
+      {
+        "error_type": "Comparison Operator",
+        "description": "The model selects incorrect comparison operators in query conditions, such as using '>' when '>=' is required or confusing 'LIKE' with '=', indicating a semantic gap between natural language intent and SQL comparison operations."
+      },
+      {
+        "error_type": "Logical Operator",
+        "description": "The model misinterprets logical relationships expressed in natural language, resulting in the incorrect use of boolean operators (e.g., AND, OR, NOT) in SQL conditions or the logical operator precedence may be wrong."
+      }
+    ]
+  },
+  {
+    "category": "Condition-related Errors",
+    "description": "Condition-related Errors occur when NL2SQL models fail to properly handle query conditions, particularly in cases where multiple condition-related issues co-exist. These errors are categorized into explicit and implicit conditions.",
+    "sub_errors": [
+      {
+        "error_type": "Explicit Condition Missing",
+        "description": "The model fails to include conditions that are explicitly stated in the natural language query, indicating an incomplete interpretation of the user requirements."
+      },
+      {
+        "error_type": "Explicit Condition Mismatch",
+        "description": "The model generates incorrect conditions that deviate from the natural language requirements, showing a misunderstanding of the query intent. A condition typically consists of three parts (attribute, operator, and value), and we classify it as a condition error only when errors occur in two or more components."
+      },
+      {
+        "error_type": "Explicit Condition Redundancy",
+        "description": "The model adds unnecessary conditions not mentioned in the natural language query, suggesting an over-interpretation of the query requirements."
+      },
+      {
+        "error_type": "Implicit Condition Missing",
+        "description": "The model fails to include necessary conditions that are implied but not explicitly stated in the natural language query, such as NULL value handling."
+      }
+    ]
+  },
+  {
+    "category": "Function-related Errors",
+    "description": "Function-related Errors occur when NL2SQL models fail to correctly use SQL functions or misunderstand their purposes. We consider the following cases.",
+    "sub_errors": [
+      {
+        "error_type": "Aggregate Functions",
+        "description": "The model incorrectly applies aggregate functions (e.g., SUM), such as using them without proper GROUP BY clauses or misunderstanding their effect on result sets."
+      },
+      {
+        "error_type": "Window Functions",
+        "description": "The model misuses window functions (e.g., OVER, PARTITION BY), often failing to properly specify window frames or partition criteria."
+      },
+      {
+        "error_type": "Date/Time Functions",
+        "description": "The model incorrectly handles date and time manipulations (e.g., STRFTIME), such as wrong format strings or improper date arithmetic."
+      },
+      {
+        "error_type": "Conversion Functions",
+        "description": "The model fails to properly convert between data types (e.g., CAST, CONVERT), leading to type mismatch errors or incorrect data transformations."
+      },
+      {
+        "error_type": "Math Functions",
+        "description": "The model misapplies mathematical functions (e.g., ROUND, CEIL, FLOOR), such as incorrect precision specifications or inappropriate numerical operations."
+      },
+      {
+        "error_type": "String Functions",
+        "description": "The model incorrectly uses string manipulation functions (e.g., SUBSTR, CONCAT), such as wrong substring positions or improper string concatenations."
+      },
+      {
+        "error_type": "Conditional Functions",
+        "description": "The model misuses conditional functions (e.g., IIF, CASE WHEN), such as incorrect condition logic or improper result expressions."
+      }
+    ]
+  },
+  {
+    "category": "Function-related Errors",
+    "description": "Function-related Errors occur when NL2SQL models fail to correctly use SQL functions or misunderstand their purposes. We consider the following cases.",
+    "sub_errors": [
+      {
+        "error_type": "Aggregate Functions",
+        "description": "The model incorrectly applies aggregate functions (e.g., SUM), such as using them without proper GROUP BY clauses or misunderstanding their effect on result sets."
+      },
+      {
+        "error_type": "Window Functions",
+        "description": "The model misuses window functions (e.g., OVER, PARTITION BY), often failing to properly specify window frames or partition criteria."
+      },
+      {
+        "error_type": "Date/Time Functions",
+        "description": "The model incorrectly handles date and time manipulations (e.g., STRFTIME), such as wrong format strings or improper date arithmetic."
+      },
+      {
+        "error_type": "Conversion Functions",
+        "description": "The model fails to properly convert between data types (e.g., CAST, CONVERT), leading to type mismatch errors or incorrect data transformations."
+      },
+      {
+        "error_type": "Math Functions",
+        "description": "The model misapplies mathematical functions (e.g., ROUND, CEIL, FLOOR), such as incorrect precision specifications or inappropriate numerical operations."
+      },
+      {
+        "error_type": "String Functions",
+        "description": "The model incorrectly uses string manipulation functions (e.g., SUBSTR, CONCAT), such as wrong substring positions or improper string concatenations."
+      },
+      {
+        "error_type": "Conditional Functions",
+        "description": "The model misuses conditional functions (e.g., IIF, CASE WHEN), such as incorrect condition logic or improper result expressions."
+      }
+    ]
+  },
+  {
+    "category": "Subquery-related Errors",
+    "description": "Subquery-related Errors occur when NL2SQL models fail to correctly use or generate subqueries. These errors manifest in three distinct categories.",
+    "sub_errors": [
+      {
+        "error_type": "Subquery Missing",
+        "description": "The model fails to generate a necessary subquery, leading to an incomplete or incorrect SQL statement."
+      },
+      {
+        "error_type": "Subquery Mismatch",
+        "description": "The model generates a subquery that does not match the context or requirements of the outer query, resulting in logical errors or unexpected results."
+      },
+      {
+        "error_type": "Partial Query",
+        "description": "The model generates an SQL query that is only a part of the complete query required to fully address the natural language request. The generated SQL needs to be wrapped inside another query or combined with additional SQL constructs to produce the desired output."
+      }
+    ]
+  },
+  {
+    "category": "Other Errors",
+    "description": "This category is mainly for errors caused by incorrect use of some special keywords in SQL and queries where the SQL intent seriously deviates from the original intent of the natural language. These errors typically require special handling or indicate a fundamental breakdown in semantic interpretation.",
+    "sub_errors": [
+      {
+        "error_type": "ASC/DESC",
+        "description": "This error occurs when the model improperly handles the ordering of query results by either failing to include the correct sorting order (ASC/DESC) or by incorrectly specifying the order."
+      },
+      {
+        "error_type": "DISTINCT",
+        "description": "This error occurs in SQL queries, typically due to the failure to properly apply deduplication operations (e.g., missing DISTINCT), resulting in the presence of duplicate records or unnecessary deduplication, which impacts the accuracy and performance of the query results."
+      },
+      {
+        "error_type": "Others",
+        "description": "The SQL generated by the model deviates significantly from the required SQL, almost necessitating a complete rewrite. It is difficult to achieve the expected results through corrective modifications. We categorize such errors under this type."
+      }
+    ]
+  },
+  {
+    "category": "Attribute-related Errors",
+    "description": "Attribute-related Errors occur when NL2SQL models incorrectly map the required columns in natural language queries to corresponding attributes in the database schema. These errors manifest in three primary forms.",
+    "sub_errors": [
+      {
+        "error_type": "Attribute Mismatch",
+        "description": "The model selects incorrect attributes from the schema, indicating a misunderstanding between natural language expressions and their corresponding database fields."
+      },
+      {
+        "error_type": "Attribute Redundancy",
+        "description": "The model includes unnecessary attributes not mentioned or implied in the natural language query, suggesting over-interpretation of the input."
+      },
+      {
+        "error_type": "Attribute Missing",
+        "description": "The model fails to identify and include attributes that are essential to fulfilling the query intent, indicating an incomplete understanding of the natural language requirements."
+      }
+    ]
+  }
+]
