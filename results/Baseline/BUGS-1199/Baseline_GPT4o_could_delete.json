@@ -1,13 +1,13 @@
 {
-  "result_path": "results/Baseline/baseline_gpt4o_results_None_20250714_050246.jsonl",
+  "result_path": "results/Baseline/BUGS-2008/baseline_GPT_results_None_20250719_010629.jsonl",
   "skipped": 0,
-  "accuracy": 0.6697,
-  "precision": 0.3172,
-  "recall": 0.85,
-  "negative_precision": 0.9548,
-  "negative_recall": 0.6336,
-  "true_negative": 633,
-  "false_positive": 366,
-  "false_negative": 30,
-  "true_positive": 170
+  "accuracy": 0.7453,
+  "precision": 0.742,
+  "recall": 0.7563,
+  "negative_precision": 0.7487,
+  "negative_recall": 0.7341,
+  "true_negative": 715,
+  "false_positive": 259,
+  "false_negative": 240,
+  "true_positive": 745
 }

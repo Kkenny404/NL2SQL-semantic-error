@@ -52,6 +52,7 @@ for idx, ex in enumerate(tqdm(examples)):
         for attempt in range(MAX_RETRIES):
             try:
                 response = query_claude(prompt)
+                response = query_gemini(prompt)
                 break
             except Exception as e:
                 error_str = str(e).lower()

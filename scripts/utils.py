@@ -19,8 +19,7 @@ claude_client = anthropic.Anthropic(api_key=claude_api_key)
 # OpenAI 配置
 openai_client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-# Gemini 模型配置
-gen_id = "models/gemini-2.5-flash"
+gen_id = "gemini-2.5-flash"  # 使用 Gemini 2.5 Flash 模型   
 GEN_model = genai.GenerativeModel(gen_id)
 
 def get_db_ids_from_json():
