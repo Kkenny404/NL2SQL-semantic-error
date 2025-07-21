@@ -10,35 +10,6 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from scripts.sqlite_schema_extract import sqlite_schema_extract_format
 
 
-# def build_prompt(question: str, schema: str, correct_sql: str,
-#                  error_type: str, sub_error_type: str, error_description: str) -> str:
-#     """
-#     构造用于生成包含特定语义错误的 SQL 的 prompt。
-#     """
-#     prompt = f"""You are an expert at injecting SQL semantic errors.
-
-# Given a natural language question, database schema, and its correct SQL query, please change the correct SQL to include the specific semantic error described below.
-# The meaning of this {error_type} -- {sub_error_type} is as follows:
-# {error_description}
-
-# The new SQL should include only this error, and no other types of errors. Maintain valid syntax and keep the structure as close as possible to the original.
-
-# Return only the incorrect SQL query.
-
-# ---
-
-# Question:
-# {question}
-
-# Database Schema:
-# {schema}
-
-# Correct SQL:
-# {correct_sql}
-# """
-#     return prompt
-
-
 def get_sub_error_types(error_data, category_name):
     for category in error_data:
         if category["category"] == category_name:
@@ -58,13 +29,44 @@ def read_file(path):
         return f.read()
 
 
+def load_sql(sql_root, sql_id):
+    """
+    Load the SQL content from a file based on the given SQL ID.
+
+    Args:
+        sql_root (str): The root directory where SQL files are stored.
+        sql_id (str): The identifier of the SQL file.
+
+    Returns:
+        str: The content of the SQL file.
+
+    Raises:
+        FileNotFoundError: If the SQL file does not exist.
+    """
+    sql_path = os.path.join(sql_root, f"{sql_id}.sql")
+    if not os.path.exists(sql_path):
+        raise FileNotFoundError(f"SQL file not found: {sql_path}")
+    with open(sql_path, "r", encoding="utf-8") as f:
+        return f.read()
+
+def TABLE_join_filter_join_sql(groundtruth, sql_root):
+    """筛选包含 JOIN 的 SQL"""
+    join_sql_entries = []
+    for entry in groundtruth:
+        sql_id = entry["sql_id"]
+        sql_content = load_sql(sql_root, sql_id)
+        if "JOIN" in sql_content.upper():  # 检查是否包含 JOIN
+            join_sql_entries.append(entry)
+    return join_sql_entries
+
 def get_schema(instance_id, db_id, schema_root):
     if instance_id.startswith("sf"):
         base = os.path.join(schema_root, "snowflake", db_id)
     elif instance_id.startswith("bq") or instance_id.startswith("ga"):
         base = os.path.join(schema_root, "bigquery", db_id)
     elif instance_id.startswith("local"):
-        sqlite_path = os.path.join(schema_root, "local_sqlite", f"{db_id}.sqlite")
+        sqlite_path = os.path.join(schema_root, "spider2-localdb", f"{db_id}.sqlite")
+        print(f"Trying to open SQLite file at: {sqlite_path}")
         return sqlite_schema_extract_format(sqlite_path)
     else:
         raise ValueError("❌ 无法识别 instance_id 的前缀")
@@ -92,15 +94,52 @@ def get_schema(instance_id, db_id, schema_root):
 
     return "\n\n".join(all_ddl)
 
-# def build_prompt(question, sql, schema, sub_error_description,):
-    # return (
-    #     f"You are an expert at injecting SQL semantic errors.\n\n"
-    #     f"Given the following natural language question:\n{question}\n\n"
-    #     f"And the corresponding correct SQL query:\n{sql}\n\n"
-    #     f"And the database schema:\n{schema}\n\n"
-    #     f"Please inject an error for the following type:\n{sub_error_description}\n\n"
-    #     f"Return the modified SQL only."
-    # )
+def schema_shrink(schema: str) -> str:
+    """
+    对输入的数据库 schema 进行去重和简化处理。
+    如果多个表的列结构一致，则只保留一个表，并列出其他具有相同列结构的表名。
+
+    Args:
+        schema (str): 原始数据库 schema 字符串。
+
+    Returns:
+        str: 简化后的 schema 字符串，包含去重后的表定义和表名映射信息。
+    """
+    # 使用正则表达式提取表名和字段定义
+    table_pattern = re.compile(r"CREATE TABLE `(.+?)`\s*\((.*?)\);", re.DOTALL)
+    field_pattern = re.compile(r"(\w+)\s+(\w+.*?)(,|$)")
+
+    # 存储表名和字段结构的映射
+    schema_map = {}
+
+    # 遍历所有表的定义
+    for table_match in table_pattern.finditer(schema):
+        table_name = table_match.group(1).strip()
+        fields = table_match.group(2)
+        field_list = []
+        for field_match in field_pattern.finditer(fields):
+            field_name = field_match.group(1).strip()
+            field_type = field_match.group(2).strip()
+            field_list.append(f"{field_name} {field_type}")
+        # 将字段列表转换为不可变的元组，用于比较
+        field_tuple = tuple(sorted(field_list))
+        if field_tuple not in schema_map:
+            schema_map[field_tuple] = [table_name]
+        else:
+            schema_map[field_tuple].append(table_name)
+
+    # 构造简化后的 schema
+    simplified_schema = []
+    for fields, tables in schema_map.items():
+        # 保留第一个表作为代表
+        representative_table = tables[0]
+        simplified_schema.append(f"CREATE TABLE `{representative_table}` (\n    " + ",\n    ".join(fields) + "\n);")
+        if len(tables) > 1:
+            # 添加注释，列出具有相同结构的其他表
+            simplified_schema.append(f"-- Tables with the same structure: {', '.join(tables[1:])}")
+
+    return "\n\n".join(simplified_schema)
+
 def build_prompt(question: str,
         correct_sql: str,
         schema: str,
@@ -142,7 +181,7 @@ def inject_errors_for_category(
     schema_root: str,
     sql_root: str,
     output_dir: str,
-    # llm_call_function: Callable[[str], str]
+    need_filter_errors: list = None
 ):
     os.makedirs(f"{output_dir}/{category_name}", exist_ok=True)
     error_data = load_error_explanation(error_explanation_path)
@@ -151,7 +190,13 @@ def inject_errors_for_category(
     ground_truth_records = []
 
     for sub_error in sub_errors:
-        sampled_data = random.sample(dataset, k=10)
+        # 如果是 Join Condition Mismatch 或 Join Type Mismatch，筛选包含 JOIN 的 SQL
+        if sub_error["error_type"] in need_filter_errors:
+            filtered_dataset = TABLE_join_filter_join_sql(dataset, sql_root)
+        else:
+            filtered_dataset = dataset
+        
+        sampled_data = random.sample(filtered_dataset, k=10)
         for item in sampled_data:
             try:
                 instance_id = item["instance_id"]
@@ -189,7 +234,7 @@ def inject_errors_for_category(
                 print(f"⚠️ Error processing {item['instance_id']}: {e}")
 
     # Save ground truth
-    ground_truth_path = os.path.join(output_dir, category_name, "ground_truth.jsonl")
+    ground_truth_path = os.path.join(output_dir, category_name, "ground_truth_JOIN.jsonl")
     with open(ground_truth_path, "w", encoding="utf-8") as f:
         for record in ground_truth_records:
             f.write(json.dumps(record) + "\n")
@@ -206,7 +251,8 @@ def generate_prompt_from_groundtruth(
     groundtruth_path: str,
     schema_root: str,
     sql_root: str,
-    output_path: str
+    output_path: str,
+    shrink_schema: bool,
 ):
 
     # 1. 加载错误解释
@@ -242,6 +288,8 @@ def generate_prompt_from_groundtruth(
 
     # 3. 加载 schema
     schema = get_schema(instance_id, db_id, schema_root)
+    if shrink_schema:
+        schema = schema_shrink(schema)
 
     # 4. 加载正确 SQL
     sql_path = os.path.join(sql_root, f"{instance_id}.sql")
@@ -276,26 +324,30 @@ if __name__ == "__main__":
     schema_root = "spider2-lite/resource/databases"
     sql_root = "Spider/lite_256_true_sql"
     output_dir = "Spider/Error_data"
+    need_filter_errors = ["Join Condition Mismatch", "Join Type Mismatch"]  
 
-    # inject_errors_for_category(
-    #     category_name=category,
-    #     error_explanation_path=error_explanation_path,
-    #     jsonl_path=jsonl_path,
-    #     schema_root=schema_root,
-    #     sql_root=sql_root,
-    #     output_dir=output_dir
-    # )
-
-    groundtruth_path = "Spider/Error_data/Table-related Errors/ground_truth.json"
-    sub_error_type = "Table Missing"
-    sql_id = "bq398"                           
-    generate_prompt_from_groundtruth(
+    inject_errors_for_category(
+        category_name=category,
         error_explanation_path=error_explanation_path,
-        category=category,
-        sub_error_type=sub_error_type,
-        sql_id=sql_id,
-        groundtruth_path=groundtruth_path,
+        jsonl_path=jsonl_path,
         schema_root=schema_root,
         sql_root=sql_root,
-        output_path=output_dir
+        output_dir=output_dir,
+        need_filter_errors=need_filter_errors
     )
+
+    # groundtruth_path = "Spider/Error_data/Table-related Errors/ground_truth_JOIN.json"
+    # sub_error_type = "Table Missing"
+    # sql_id = "bq396"  
+    # shrink_schema = True  # 是否对 schema 进行简化                         
+    # generate_prompt_from_groundtruth(
+    #     error_explanation_path=error_explanation_path,
+    #     category=category,
+    #     sub_error_type=sub_error_type,
+    #     sql_id=sql_id,
+    #     groundtruth_path=groundtruth_path,
+    #     schema_root=schema_root,
+    #     sql_root=sql_root,
+    #     output_path=output_dir,
+    #     shrink_schema=shrink_schema
+    # )

@@ -1,80 +1,144 @@
-Table: account
-- account_id [PK]
-- district_id
-- frequency
-- date
+Table: actor
+- actor_id [PK]
+- first_name
+- last_name
+- last_update
 
-Table: card
-- card_id [PK]
-- disp_id
-- type
-- issued
+Table: country
+- country_id [PK]
+- country
+- last_update
 
-Table: client
-- client_id [PK]
-- gender
-- birth_date
-- district_id
+Table: city
+- city_id [PK]
+- city
+- country_id
+- last_update
 
-Table: disp
-- disp_id [PK]
-- client_id
-- account_id
-- type
+Table: address
+- address_id [PK]
+- address
+- address2
+- district
+- city_id
+- postal_code
+- phone
+- last_update
 
-Table: district
-- district_id [PK]
-- A2
-- A3
-- A4
-- A5
-- A6
-- A7
-- A8
-- A9
-- A10
-- A11
-- A12
-- A13
-- A14
-- A15
-- A16
+Table: language
+- language_id [PK]
+- name
+- last_update
 
-Table: loan
-- loan_id [PK]
-- account_id
-- date
+Table: category
+- category_id [PK]
+- name
+- last_update
+
+Table: customer
+- customer_id [PK]
+- store_id
+- first_name
+- last_name
+- email
+- address_id
+- active
+- create_date
+- last_update
+
+Table: film
+- film_id [PK]
+- title
+- description
+- release_year
+- language_id
+- original_language_id
+- rental_duration
+- rental_rate
+- length
+- replacement_cost
+- rating
+- special_features
+- last_update
+
+Table: film_actor
+- actor_id [PK]
+- film_id [PK]
+- last_update
+
+Table: film_category
+- film_id [PK]
+- category_id [PK]
+- last_update
+
+Table: film_text
+- film_id [PK]
+- title
+- description
+
+Table: inventory
+- inventory_id [PK]
+- film_id
+- store_id
+- last_update
+
+Table: staff
+- staff_id [PK]
+- first_name
+- last_name
+- address_id
+- picture
+- email
+- store_id
+- active
+- username
+- password
+- last_update
+
+Table: store
+- store_id [PK]
+- manager_staff_id
+- address_id
+- last_update
+
+Table: payment
+- payment_id [PK]
+- customer_id
+- staff_id
+- rental_id
 - amount
-- duration
-- payments
-- status
+- payment_date
+- last_update
 
-Table: order
-- order_id [PK]
-- account_id
-- bank_to
-- account_to
-- amount
-- k_symbol
-
-Table: trans
-- trans_id [PK]
-- account_id
-- date
-- type
-- operation
-- amount
-- balance
-- k_symbol
-- bank
-- account
+Table: rental
+- rental_id [PK]
+- rental_date
+- inventory_id
+- customer_id
+- return_date
+- staff_id
+- last_update
 
 Foreign Keys:
-- account.district_id → district.district_id
-- card.disp_id → disp.disp_id
-- client.district_id → district.district_id
-- disp.client_id → client.client_id
-- disp.account_id → account.account_id
-- loan.account_id → account.account_id
-- order.account_id → account.account_id
-- trans.account_id → account.account_id
+- city.country_id → country.country_id
+- address.city_id → city.city_id
+- customer.address_id → address.address_id
+- customer.store_id → store.store_id
+- film.original_language_id → language.language_id
+- film.language_id → language.language_id
+- film_actor.film_id → film.film_id
+- film_actor.actor_id → actor.actor_id
+- film_category.category_id → category.category_id
+- film_category.film_id → film.film_id
+- inventory.film_id → film.film_id
+- inventory.store_id → store.store_id
+- staff.address_id → address.address_id
+- staff.store_id → store.store_id
+- store.address_id → address.address_id
+- store.manager_staff_id → staff.staff_id
+- payment.staff_id → staff.staff_id
+- payment.customer_id → customer.customer_id
+- payment.rental_id → rental.rental_id
+- rental.customer_id → customer.customer_id
+- rental.inventory_id → inventory.inventory_id
+- rental.staff_id → staff.staff_id

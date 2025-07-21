@@ -157,6 +157,53 @@
 
     -- remove ‘country_summary’
 
+- bq003_TableMissing.sql
+
+    -- remove ‘UNNEST (hits.product)’
+    -- Since the query specifically needs product revenue data from the hits.product array to classify sessions properly.
+
+
+- local199_TableMissing.sql
+
+    -- remove table 'STAFF'
+
+- bq397_TableMissing.sql
+
+    -- remove ’tmp1‘
+
+- sf_bq412_TableMissing.sql
+
+    -- remove "GOOGLE_ADS"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

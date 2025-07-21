@@ -5,8 +5,7 @@ WITH cte1 AS (
         SUM(totals.pageviews) / COUNT(DISTINCT fullVisitorId) AS avg_pageviews_non_purchase
     FROM
         `bigquery-public-data.google_analytics_sample.ga_sessions_2017*`,
-        UNNEST (hits) AS hits,
-        UNNEST (hits.product) AS product
+        UNNEST (hits) AS hits
     WHERE
         _table_suffix BETWEEN '0401' AND '0731'
         AND totals.transactions IS NULL
@@ -20,8 +19,7 @@ cte2 AS (
         SUM(totals.pageviews) / COUNT(DISTINCT fullVisitorId) AS avg_pageviews_purchase
     FROM
         `bigquery-public-data.google_analytics_sample.ga_sessions_2017*`,
-        UNNEST (hits) AS hits,
-        UNNEST (hits.product) AS product
+        UNNEST (hits) AS hits
     WHERE
         _table_suffix BETWEEN '0401' AND '0731'
         AND totals.transactions >= 1

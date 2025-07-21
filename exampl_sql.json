@@ -1,0 +1,10 @@
+{
+  "sql_id": "bq008", 
+  "db": "ga360", 
+  "question": "What is the total number of users who visited the site in the last month?", 
+  "label": true,
+  "error_types": []
+}
+
+
+

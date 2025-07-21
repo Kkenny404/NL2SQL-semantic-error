@@ -1,0 +1,262 @@
+[
+    {
+        "true_sql_id": "bq126",
+        "sql_id": "bq126_JoinTypeMismatch.sql",
+        "db": "the_met",
+        "question": "What are the titles, artist names, mediums, and original image URLs of objects with 'Photograph' in their names from the 'Photographs' department, created not by an unknown artist, with an object end date of 1839 or earlier?",
+        "error_types": [
+            {
+                "error_type": "Table-related Errors",
+                "sub_error_type": "Join Type Mismatch"
+            }
+        ],
+        "external_knowledge": null
+    },
+    {
+        "true_sql_id": "sf_bq091",
+        "sql_id": "sf_bq091_JoinTypeMismatch.sql",
+        "db": "PATENTS",
+        "question": "In which year did the assignee with the most applications in the patent category 'A61' file the most?",
+        "error_types": [
+            {
+                "error_type": "Table-related Errors",
+                "sub_error_type": "Join Type Mismatch"
+            }
+        ],
+        "external_knowledge": null
+    },
+    {
+        "true_sql_id": "bq308",
+        "sql_id": "bq308_JoinTypeMismatch.sql",
+        "db": "stackoverflow",
+        "question": "Show the number of Stack Overflow questions asked each day of the week in 2021, and find out how many and what percentage of those were answered within one hour.",
+        "error_types": [
+            {
+                "error_type": "Table-related Errors",
+                "sub_error_type": "Join Type Mismatch"
+            }
+        ],
+        "external_knowledge": null
+    },
+    {
+        "true_sql_id": "bq053",
+        "sql_id": "bq053_JoinTypeMismatch.sql",
+        "db": "new_york",
+        "question": "Calculate the change in the number of living trees of each fall color in New York City from 1995 to 2015 by computing, for each tree species, the difference between the number of trees not marked as dead in 1995 and the number of trees alive in 2015, matching species by the uppercase form of their scientific names from the tree_species table. Then, group the species by their fall color and sum these differences to determine the total change in the number of trees for each fall color.",
+        "error_types": [
+            {
+                "error_type": "Table-related Errors",
+                "sub_error_type": "Join Type Mismatch"
+            }
+        ],
+        "external_knowledge": null
+    },
+    {
+        "true_sql_id": "sf_bq248",
+        "sql_id": "sf_bq248_JoinTypeMismatch.sql",
+        "db": "GITHUB_REPOS",
+        "question": "Among all repositories that do not use any programming language whose name (case-insensitively) includes the substring \"python,\" what is the proportion of files whose paths include \"readme.md\" and whose contents contain the phrase \"Copyright (c)\"?",
+        "error_types": [
+            {
+                "error_type": "Table-related Errors",
+                "sub_error_type": "Join Type Mismatch"
+            }
+        ],
+        "external_knowledge": null
+    },
+    {
+        "true_sql_id": "sf_bq455",
+        "sql_id": "sf_bq455_JoinTypeMismatch.sql",
+        "db": "IDC",
+        "question": "Identify the top five CT scan series by size (in MiB), including their SeriesInstanceUID, series number, patient ID, and series size. These series must be from the CT modality and not part of the 'nlst' collection. Exclude any series where the ImageType is classified as 'LOCALIZER' or where the TransferSyntaxUID is either '1.2.840.10008.1.2.4.70' or '1.2.840.10008.1.2.4.51' (i.e., JPEG compressed). The selected series must have consistent slice intervals, exposure levels, image orientation (with only one unique ImageOrientationPatient value), pixel spacing, image positions (both z-axis and xy positions), and pixel dimensions (rows and columns). Ensure that the number of images matches the number of unique z-axis positions, indicating no duplicate slices. Additionally, the z-axis component of the cross product of the x and y direction cosines from ImageOrientationPatient must have an absolute value between 0.99 and 1.01, ensuring alignment with the expected imaging plane. Finally, order the results by series size in descending order and limit the output to the top five series satisfying these conditions.",
+        "error_types": [
+            {
+                "error_type": "Table-related Errors",
+                "sub_error_type": "Join Type Mismatch"
+            }
+        ],
+        "external_knowledge": null
+    },
+    {
+        "true_sql_id": "local038",
+        "sql_id": "local038_JoinTypeMismatch.sql",
+        "db": "Pagila",
+        "question": "Could you help me determine which actor starred most frequently in English-language children's category films that were rated either G or PG, had a running time of 120 minutes or less, and were released between 2000 and 2010? Please provide the actor's full name.",
+        "error_types": [
+            {
+                "error_type": "Table-related Errors",
+                "sub_error_type": "Join Type Mismatch"
+            }
+        ],
+        "external_knowledge": null
+    },
+    {
+        "true_sql_id": "bq021",
+        "sql_id": "bq021_JoinTypeMismatch.sql",
+        "db": "new_york",
+        "question": "For the top 20 Citi Bike routes in 2016, which route is faster than yellow taxis and among those, which one has the longest average bike duration? Please provide the start station name of this route. The coordinates are rounded to three decimals.",
+        "error_types": [
+            {
+                "error_type": "Table-related Errors",
+                "sub_error_type": "Join Type Mismatch"
+            }
+        ],
+        "external_knowledge": null
+    },
+    {
+        "true_sql_id": "bq109",
+        "sql_id": "bq109_JoinTypeMismatch.sql",
+        "db": "open_targets_genetics_1",
+        "question": "Find the average, variance, max-min difference, and the QTL source(right study) of the maximum log2(h4/h3) for data where right gene id is \"ENSG00000169174\", h4 > 0.8, h3 < 0.02, reported trait includes \"lesterol levels\", right biological feature is \"IPSC\", and the variant is '1_55029009_C_T'.",
+        "error_types": [
+            {
+                "error_type": "Table-related Errors",
+                "sub_error_type": "Join Type Mismatch"
+            }
+        ],
+        "external_knowledge": null
+    },
+    {
+        "true_sql_id": "bq025",
+        "sql_id": "bq025_JoinTypeMismatch.sql",
+        "db": "census_bureau_international",
+        "question": "Provide a list of the top 10 countries for the year 2020, ordered by the highest percentage of their population under 20 years old. For each country, include the total population under 20 years old, the total midyear population, and the percentage of the population that is under 20 years old.",
+        "error_types": [
+            {
+                "error_type": "Table-related Errors",
+                "sub_error_type": "Join Type Mismatch"
+            }
+        ],
+        "external_knowledge": null
+    },
+    {
+        "true_sql_id": "bq413",
+        "sql_id": "bq413_JoinConditionMismatch.sql",
+        "db": "dimensions_ai_covid19",
+        "question": "Retrieve the venue titles of publications that have a `date_inserted` from the year 2021 onwards and are associated with a grid whose address city is 'Qianjiang'. For each publication, prioritize the venue title by selecting the journal title first if it exists; if not, then the proceedings title; if that's also unavailable, then the book title; and finally, if none of those are available, the book series title.",
+        "error_types": [
+            {
+                "error_type": "Table-related Errors",
+                "sub_error_type": "Join Condition Mismatch"
+            }
+        ],
+        "external_knowledge": null
+    },
+    {
+        "true_sql_id": "bq039",
+        "sql_id": "bq039_JoinConditionMismatch.sql",
+        "db": "new_york_plus",
+        "question": "Find the top 10 taxi trips in New York City between July 1 and July 7, 2016 (ensuring both pickup and dropoff times fall within these dates) where the passenger count is greater than five, the trip distance is at least ten miles, and there are no negative fare-related amounts (including tip, tolls, mta tax, fare, and total costs). Exclude any trips where the dropoff time is not strictly after the pickup time, then sort the results by total fare amount in descending order. Finally, display each trip’s pickup zone, dropoff zone, trip duration in seconds, driving speed in miles per hour, and tip rate as a percentage of the total fare amount.",
+        "error_types": [
+            {
+                "error_type": "Table-related Errors",
+                "sub_error_type": "Join Condition Mismatch"
+            }
+        ],
+        "external_knowledge": null
+    },
+    {
+        "true_sql_id": "bq074",
+        "sql_id": "bq074_JoinConditionMismatch.sql",
+        "db": "sdoh",
+        "question": "Count the number of counties that experienced an increase in unemployment from 2015 to 2018, using 5-year ACS data, and a decrease in dual-eligible enrollee counts between December 1, 2015, and December 1, 2018.",
+        "error_types": [
+            {
+                "error_type": "Table-related Errors",
+                "sub_error_type": "Join Condition Mismatch"
+            }
+        ],
+        "external_knowledge": null
+    },
+    {
+        "true_sql_id": "sf_bq166",
+        "sql_id": "sf_bq166_JoinConditionMismatch.sql",
+        "db": "TCGA_MITELMAN",
+        "question": "Using segment-level copy number data from the copy_number_segment_allelic_hg38_gdc_r23 dataset restricted to 'TCGA-KIRC' samples, merge these segments with the cytogenetic band definitions in 'CytoBands_hg38' to identify each sample’s maximum copy number per cytoband. Classify these maximum copy numbers into amplifications (>3), gains (=3), homozygous deletions (=0), heterozygous deletions (=1), or normal (=2), then calculate the frequency of each subtype out of the total number of distinct cases, and finally present these frequencies as percentages sorted by chromosome and cytoband.",
+        "error_types": [
+            {
+                "error_type": "Table-related Errors",
+                "sub_error_type": "Join Condition Mismatch"
+            }
+        ],
+        "external_knowledge": "Comprehensive_Guide_to_Copy_Number_Variations_in_Cancer_Genomics.md"
+    },
+    {
+        "true_sql_id": "local008",
+        "sql_id": "local008_JoinConditionMismatch.sql",
+        "db": "Baseball",
+        "question": "I would like to know the given names of baseball players who have achieved the highest value of games played, runs, hits, and home runs, with their corresponding score values.",
+        "error_types": [
+            {
+                "error_type": "Table-related Errors",
+                "sub_error_type": "Join Condition Mismatch"
+            }
+        ],
+        "external_knowledge": null
+    },
+    {
+        "true_sql_id": "local017",
+        "sql_id": "local017_JoinConditionMismatch.sql",
+        "db": "California_Traffic_Collision",
+        "question": "In which year were the two most common causes of traffic accidents different from those in other years?",
+        "error_types": [
+            {
+                "error_type": "Table-related Errors",
+                "sub_error_type": "Join Condition Mismatch"
+            }
+        ],
+        "external_knowledge": null
+    },
+    {
+        "true_sql_id": "bq227",
+        "sql_id": "bq227_JoinConditionMismatch.sql",
+        "db": "london",
+        "question": "Could you provide the annual percentage shares, rounded to two decimal places, of the top 5 minor crime categories from 2008 in London's total crimes, with each year displayed in one row?",
+        "error_types": [
+            {
+                "error_type": "Table-related Errors",
+                "sub_error_type": "Join Condition Mismatch"
+            }
+        ],
+        "external_knowledge": null
+    },
+    {
+        "true_sql_id": "sf002",
+        "sql_id": "sf002_JoinConditionMismatch.sql",
+        "db": "FINANCE__ECONOMICS",
+        "question": "As of December 31, 2022, list the top 10 active banks with assets exceeding $10 billion, ranked by the highest percentage of uninsured assets, where the percentage is calculated as one minus the value of the '% Insured (Estimated)' variable from quarterly estimates. Provide the names of these banks and their respective percentages of uninsured assets.",
+        "error_types": [
+            {
+                "error_type": "Table-related Errors",
+                "sub_error_type": "Join Condition Mismatch"
+            }
+        ],
+        "external_knowledge": null
+    },
+    {
+        "true_sql_id": "sf_bq260",
+        "sql_id": "sf_bq260_JoinConditionMismatch.sql",
+        "db": "THELOOK_ECOMMERCE",
+        "question": "From January 1, 2019, to April 30, 2022, how many users are at the youngest age and how many users are at the oldest age for each gender in the e-commerce platform, counting both youngest and oldest users separately for each gender?",
+        "error_types": [
+            {
+                "error_type": "Table-related Errors",
+                "sub_error_type": "Join Condition Mismatch"
+            }
+        ],
+        "external_knowledge": null
+    },
+    {
+        "true_sql_id": "sf_bq182",
+        "sql_id": "sf_bq182_JoinConditionMismatch.sql",
+        "db": "GITHUB_REPOS_DATE",
+        "question": "Which primary programming languages, determined by the highest number of bytes in each repository, had at least 100 PullRequestEvents on January 18, 2023 across all their repositories?",
+        "error_types": [
+            {
+                "error_type": "Table-related Errors",
+                "sub_error_type": "Join Condition Mismatch"
+            }
+        ],
+        "external_knowledge": null
+    }
+]

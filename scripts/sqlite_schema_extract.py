@@ -67,7 +67,7 @@ def sqlite_schema_extract_format(db_path):
 
 
 if __name__ == "__main__":
-    db_path = "BIRD/dev_20240627/dev_databases/financial/financial.sqlite"
+    db_path = "spider2-lite/resource/databases/spider2-localdb/sqlite-sakila.sqlite"
     formatted = sqlite_schema_extract_format(db_path)
     print(formatted)
 

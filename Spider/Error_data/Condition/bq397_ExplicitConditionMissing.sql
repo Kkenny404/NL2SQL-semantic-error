@@ -1,6 +1,10 @@
-WITH tmp AS (
-  SELECT DISTINCT *
+WITH tmp1 AS (
+  SELECT 
+    channelGrouping,
+    geoNetwork_country,
+    SUM(totals_transactions) AS tt
   FROM `data-to-insights.ecommerce.rev_transactions`
+  GROUP BY 1, 2
 ),
 tmp2 AS (
   SELECT 

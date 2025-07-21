@@ -147,24 +147,24 @@ else:
 
 
 # 找出匹配的文件名
-# matched_file_names = sql_file_names & instance_ids
+matched_file_names = sql_file_names & instance_ids
 
-# # 打印结果
-# if matched_file_names:
-#     print("以下文件名匹配到 instance_id：")
-#     for file_name in matched_file_names:
-#         print(file_name)
-#     print(f"总共有 {len(matched_file_names)} 个文件名匹配到 instance_id。")
-# else:
-#     print("没有文件名匹配到 instance_id。")
+# 打印结果
+if matched_file_names:
+    print("以下文件名匹配到 instance_id：")
+    for file_name in matched_file_names:
+        print(file_name)
+    print(f"总共有 {len(matched_file_names)} 个文件名匹配到 instance_id。")
+else:
+    print("没有文件名匹配到 instance_id。")
 
 # 删除未匹配的文件
-if unmatched_file_names:
-    print("以下文件名没有匹配到 instance_id，将被删除：")
-    for file_name in unmatched_file_names:
-        file_path = os.path.join(sql_directory, f"{file_name}.sql")
-        if os.path.exists(file_path):
-            os.remove(file_path)
-            print(f"Deleted: {file_path}")
-else:
-    print("所有文件名都匹配到 instance_id，无需删除。")
+# if unmatched_file_names:
+#     print("以下文件名没有匹配到 instance_id，将被删除：")
+#     for file_name in unmatched_file_names:
+#         file_path = os.path.join(sql_directory, f"{file_name}.sql")
+#         if os.path.exists(file_path):
+#             os.remove(file_path)
+#             print(f"Deleted: {file_path}")
+# else:
+#     print("所有文件名都匹配到 instance_id，无需删除。")
