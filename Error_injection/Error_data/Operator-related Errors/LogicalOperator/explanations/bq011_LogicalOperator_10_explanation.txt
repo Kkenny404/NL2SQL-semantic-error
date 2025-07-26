@@ -1,0 +1,1 @@
+I changed the logical operator in the first subquery's WHERE clause from `AND` to `OR` between `event_params.key = 'engagement_time_msec'` and `event_params.value.int_value > 0`, causing the filter to select rows where either condition is true instead of both, thus misrepresenting the intended logic.

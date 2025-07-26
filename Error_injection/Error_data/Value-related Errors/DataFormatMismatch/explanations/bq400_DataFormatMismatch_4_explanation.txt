@@ -1,0 +1,1 @@
+I injected a data format mismatch by casting the TIME-typed `departure_time` and `arrival_time` columns to STRING in the SELECT, so the output is not in the proper TIME format but as strings, which may affect downstream processing or formatting expectations.

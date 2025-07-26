@@ -1,0 +1,1 @@
+I injected a data format mismatch by casting the `geo_id` fields (which are defined as STRING) to `INT64` in the join condition, which can cause incorrect or failed matches due to incompatible formats, but does not cause a syntax error.

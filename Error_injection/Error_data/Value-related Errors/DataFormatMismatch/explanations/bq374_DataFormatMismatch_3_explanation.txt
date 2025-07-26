@@ -1,0 +1,1 @@
+I changed the numeric literal `300` in the `WHERE s.totals.timeOnSite > 300` clause to the string `'300'`, causing a data format mismatch by comparing an INT64 field to a STRING literal.

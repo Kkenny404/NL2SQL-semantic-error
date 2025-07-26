@@ -1,0 +1,1 @@
+I changed the logical operator in the subquery from `AND country_code = 'RUS'` to `OR country_code = 'RUS'`, which causes the filter to include all rows (not just Russia), thus misinterpreting the intended logical relationship.

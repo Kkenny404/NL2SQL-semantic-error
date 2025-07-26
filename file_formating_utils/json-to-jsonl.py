@@ -1,8 +1,8 @@
 import json
 
 # 输入输出路径
-input_path = "Spider/Error_data/Table-related Errors/ground_truth.json"
-output_path = "Spider/Error_data/Table-related Errors/ground_truth.jsonl"
+input_path = "Error_injection/Error_data/Value-related Errors/ground_truth.json"
+output_path = "Error_injection/Error_data/Value-related Errors/ground_truth.jsonl"
 
 # 读取 JSON 文件
 with open(input_path, "r", encoding="utf-8") as f:

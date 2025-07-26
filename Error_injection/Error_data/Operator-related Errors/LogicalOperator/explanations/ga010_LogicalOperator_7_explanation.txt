@@ -1,0 +1,1 @@
+I changed the logical operator in the 'Paid Search' channel grouping from `AND` to `OR`, so now it classifies a session

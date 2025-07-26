@@ -1,0 +1,1 @@
+I introduced a value mismatch by joining `cte_combined_orders.topping_id` (which actually stores topping IDs) to `pizza_toppings.topping_name` (the name), instead of the correct `pizza_toppings.topping_id`, causing the query to incorrectly map topping values.

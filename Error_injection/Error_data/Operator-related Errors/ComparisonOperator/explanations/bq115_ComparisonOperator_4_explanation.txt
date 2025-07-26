@@ -1,0 +1,1 @@
+I changed the comparison operator in the age filter from `age < 25` to `age <= 25`, which incorrectly includes 25-year-olds in the "under 25" population, introducing a semantic error in the query logic.

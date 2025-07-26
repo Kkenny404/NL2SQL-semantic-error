@@ -1,0 +1,373 @@
+# SQL Semantic Error Injection Task
+
+You are an expert SQL developer tasked with injecting a SPECIFIC semantic error into a correct SQL query.
+
+## 🎯 Your Mission
+Take the provided correct SQL query and modify it to contain EXACTLY ONE semantic error of the specified type. The modified SQL should:
+- ✅ Have valid syntax (no syntax errors)
+- ✅ Be executable against the database
+- ❌ Contain the specified semantic error
+- ❌ NOT contain any other types of errors
+
+## 📋 Error Specification
+**Error Category:** Value-related Errors
+**Category Description:** Value-related Errors arise when NL2SQL models incorrectly parse or interpret the required attribute values from natural language expressions. These errors manifest in two primary forms.
+
+**Specific Error Type:** Data Format Mismatch
+**Error Description:** The model fails to properly format values according to the attribute's data type requirements, showing difficulties in handling type-specific representations.
+
+## 💡 Guidelines for Error Injection
+
+### DO:
+- Focus ONLY on the specified error type
+- Keep the query structure as similar as possible to the original
+- Ensure the modified SQL runs without syntax errors
+- Make the error subtle but semantically meaningful
+- Consider the business logic and question intent when injecting the error
+
+### DON'T:
+- Add syntax errors or typos
+- Introduce multiple different error types
+- Completely rewrite the query structure
+- Make obvious/trivial mistakes that wouldn't occur in real scenarios
+- Change unrelated parts of the query
+
+## 📊 Database Schema
+```sql
+CREATE TABLE `firebase-public-project.analytics_153293282.events_20180801` (
+    advertising_id STRING,
+    app_info STRUCT<id STRING,
+    city STRING>,
+    country STRING,
+    currency STRING>,
+    device STRUCT<category STRING,
+    double_value FLOAT64,
+    double_value FLOAT64>>>,
+    event_bundle_sequence_id INT64,
+    event_date STRING,
+    event_name STRING,
+    event_params ARRAY<STRUCT<key STRING,
+    event_previous_timestamp INT64,
+    event_server_timestamp_offset INT64,
+    event_timestamp INT64,
+    event_value_in_usd FLOAT64,
+    firebase_app_id STRING,
+    float_value FLOAT64,
+    float_value FLOAT64,
+    geo STRUCT<continent STRING,
+    install_source STRING>,
+    install_store STRING,
+    int_value INT64,
+    int_value INT64,
+    is_limited_ad_tracking STRING,
+    language STRING,
+    medium STRING,
+    mobile_brand_name STRING,
+    mobile_marketing_name STRING,
+    mobile_model_name STRING,
+    mobile_os_hardware_model STRING,
+    operating_system STRING,
+    operating_system_version STRING,
+    platform STRING,
+    region STRING,
+    set_timestamp_micros INT64>>>,
+    source STRING>,
+    stream_id STRING,
+    time_zone_offset_seconds INT64>,
+    traffic_source STRUCT<name STRING,
+    user_first_touch_timestamp INT64,
+    user_id STRING,
+    user_ltv STRUCT<revenue FLOAT64,
+    user_properties ARRAY<STRUCT<key STRING,
+    user_pseudo_id STRING,
+    value STRUCT<string_value STRING,
+    value STRUCT<string_value STRING,
+    vendor_id STRING,
+    version STRING
+);
+
+-- Tables with the same structure: firebase-public-project.analytics_153293282.events_20180814, firebase-public-project.analytics_153293282.events_20180716, firebase-public-project.analytics_153293282.events_20180724, firebase-public-project.analytics_153293282.events_20180807, firebase-public-project.analytics_153293282.events_20180710, firebase-public-project.analytics_153293282.events_20180808, firebase-public-project.analytics_153293282.events_20180702, firebase-public-project.analytics_153293282.events_20180719, firebase-public-project.analytics_153293282.events_20180728, firebase-public-project.analytics_153293282.events_20180817, firebase-public-project.analytics_153293282.events_20180704, firebase-public-project.analytics_153293282.events_20180711, firebase-public-project.analytics_153293282.events_20180720, firebase-public-project.analytics_153293282.events_20180706, firebase-public-project.analytics_153293282.events_20180731, firebase-public-project.analytics_153293282.events_20180804, firebase-public-project.analytics_153293282.events_20180715, firebase-public-project.analytics_153293282.events_20180709, firebase-public-project.analytics_153293282.events_20180818, firebase-public-project.analytics_153293282.events_20180820, firebase-public-project.analytics_153293282.events_20180707, firebase-public-project.analytics_153293282.events_20180821, firebase-public-project.analytics_153293282.events_20180812, firebase-public-project.analytics_153293282.events_20180708, firebase-public-project.analytics_153293282.events_20180713, firebase-public-project.analytics_153293282.events_20180811, firebase-public-project.analytics_153293282.events_20180717, firebase-public-project.analytics_153293282.events_20180806, firebase-public-project.analytics_153293282.events_20180721, firebase-public-project.analytics_153293282.events_20180725, firebase-public-project.analytics_153293282.events_20180824, firebase-public-project.analytics_153293282.events_20180726, firebase-public-project.analytics_153293282.events_20180729, firebase-public-project.analytics_153293282.events_20180722, firebase-public-project.analytics_153293282.events_20180730, firebase-public-project.analytics_153293282.events_20180810, firebase-public-project.analytics_153293282.events_20180822, firebase-public-project.analytics_153293282.events_20180819, firebase-public-project.analytics_153293282.events_20180816, firebase-public-project.analytics_153293282.events_20180802, firebase-public-project.analytics_153293282.events_20180826, firebase-public-project.analytics_153293282.events_20180714, firebase-public-project.analytics_153293282.events_20180809, firebase-public-project.analytics_153293282.events_20180703, firebase-public-project.analytics_153293282.events_20180827, firebase-public-project.analytics_153293282.events_20180805, firebase-public-project.analytics_153293282.events_20180825, firebase-public-project.analytics_153293282.events_20180705, firebase-public-project.analytics_153293282.events_20180727, firebase-public-project.analytics_153293282.events_20180813, firebase-public-project.analytics_153293282.events_20180712, firebase-public-project.analytics_153293282.events_20180718, firebase-public-project.analytics_153293282.events_20180815, firebase-public-project.analytics_153293282.events_20180803, firebase-public-project.analytics_153293282.events_20180823, firebase-public-project.analytics_153293282.events_20180723
+
+CREATE TABLE `firebase-public-project.analytics_153293282.events_20180621` (
+    advertising_id STRING,
+    app_info STRUCT<id STRING,
+    city STRING>,
+    country STRING,
+    currency STRING>,
+    device STRUCT<category STRING,
+    double_value FLOAT64,
+    double_value FLOAT64>>>,
+    event_date STRING,
+    event_name STRING,
+    event_params ARRAY<STRUCT<key STRING,
+    event_previous_timestamp INT64,
+    event_timestamp INT64,
+    firebase_app_id STRING,
+    float_value FLOAT64,
+    float_value FLOAT64,
+    geo STRUCT<continent STRING,
+    install_source STRING>,
+    install_store STRING,
+    int_value INT64,
+    int_value INT64,
+    is_limited_ad_tracking STRING,
+    language STRING,
+    medium STRING,
+    mobile_brand_name STRING,
+    mobile_marketing_name STRING,
+    mobile_model_name STRING,
+    mobile_os_hardware_model STRING,
+    operating_system STRING,
+    operating_system_version STRING,
+    platform STRING,
+    region STRING,
+    set_timestamp_micros INT64>>>,
+    source STRING>,
+    stream_id STRING,
+    time_zone_offset_seconds INT64>,
+    traffic_source STRUCT<name STRING,
+    user_first_touch_timestamp INT64,
+    user_id STRING,
+    user_ltv STRUCT<revenue FLOAT64,
+    user_properties ARRAY<STRUCT<key STRING,
+    user_pseudo_id STRING,
+    value STRUCT<string_value STRING,
+    value STRUCT<string_value STRING,
+    vendor_id STRING,
+    version STRING
+);
+
+-- Tables with the same structure: firebase-public-project.analytics_153293282.events_20180616, firebase-public-project.analytics_153293282.events_20180620, firebase-public-project.analytics_153293282.events_20180624, firebase-public-project.analytics_153293282.events_20180612, firebase-public-project.analytics_153293282.events_20180618, firebase-public-project.analytics_153293282.events_20180626, firebase-public-project.analytics_153293282.events_20180619, firebase-public-project.analytics_153293282.events_20180622, firebase-public-project.analytics_153293282.events_20180617, firebase-public-project.analytics_153293282.events_20180625, firebase-public-project.analytics_153293282.events_20180613, firebase-public-project.analytics_153293282.events_20180614, firebase-public-project.analytics_153293282.events_20180623, firebase-public-project.analytics_153293282.events_20180615
+
+CREATE TABLE `firebase-public-project.analytics_153293282.events_20180912` (
+    advertising_id STRING,
+    app_info STRUCT<id STRING,
+    browser STRING,
+    browser_version STRING>,
+    city STRING,
+    country STRING,
+    currency STRING>,
+    device STRUCT<category STRING,
+    double_value FLOAT64,
+    double_value FLOAT64>>>,
+    event_bundle_sequence_id INT64,
+    event_date STRING,
+    event_dimensions STRUCT<hostname STRING>,
+    event_name STRING,
+    event_params ARRAY<STRUCT<key STRING,
+    event_previous_timestamp INT64,
+    event_server_timestamp_offset INT64,
+    event_timestamp INT64,
+    event_value_in_usd FLOAT64,
+    firebase_app_id STRING,
+    float_value FLOAT64,
+    float_value FLOAT64,
+    geo STRUCT<continent STRING,
+    install_source STRING>,
+    install_store STRING,
+    int_value INT64,
+    int_value INT64,
+    is_limited_ad_tracking STRING,
+    language STRING,
+    medium STRING,
+    metro STRING>,
+    mobile_brand_name STRING,
+    mobile_marketing_name STRING,
+    mobile_model_name STRING,
+    mobile_os_hardware_model STRING,
+    operating_system STRING,
+    operating_system_version STRING,
+    platform STRING,
+    region STRING,
+    set_timestamp_micros INT64>>>,
+    source STRING>,
+    stream_id STRING,
+    sub_continent STRING,
+    time_zone_offset_seconds INT64,
+    traffic_source STRUCT<name STRING,
+    user_first_touch_timestamp INT64,
+    user_id STRING,
+    user_ltv STRUCT<revenue FLOAT64,
+    user_properties ARRAY<STRUCT<key STRING,
+    user_pseudo_id STRING,
+    value STRUCT<string_value STRING,
+    value STRUCT<string_value STRING,
+    vendor_id STRING,
+    version STRING
+);
+
+-- Tables with the same structure: firebase-public-project.analytics_153293282.events_20180918, firebase-public-project.analytics_153293282.events_20180911, firebase-public-project.analytics_153293282.events_20180914, firebase-public-project.analytics_153293282.events_20180913, firebase-public-project.analytics_153293282.events_20180915, firebase-public-project.analytics_153293282.events_20180906, firebase-public-project.analytics_153293282.events_20180920, firebase-public-project.analytics_153293282.events_20180904, firebase-public-project.analytics_153293282.events_20180903, firebase-public-project.analytics_153293282.events_20180830, firebase-public-project.analytics_153293282.events_20180908, firebase-public-project.analytics_153293282.events_20180910, firebase-public-project.analytics_153293282.events_20180828, firebase-public-project.analytics_153293282.events_20180831, firebase-public-project.analytics_153293282.events_20180921, firebase-public-project.analytics_153293282.events_20180905, firebase-public-project.analytics_153293282.events_20180901, firebase-public-project.analytics_153293282.events_20180916, firebase-public-project.analytics_153293282.events_20180902, firebase-public-project.analytics_153293282.events_20180919, firebase-public-project.analytics_153293282.events_20180917, firebase-public-project.analytics_153293282.events_20180907, firebase-public-project.analytics_153293282.events_20180909, firebase-public-project.analytics_153293282.events_20180829
+
+CREATE TABLE `firebase-public-project.analytics_153293282.events_20181003` (
+    advertising_id STRING,
+    app_info STRUCT<id STRING,
+    browser STRING,
+    browser_version STRING,
+    browser_version STRING,
+    city STRING,
+    country STRING,
+    currency STRING>,
+    device STRUCT<category STRING,
+    double_value FLOAT64,
+    double_value FLOAT64>>>,
+    event_bundle_sequence_id INT64,
+    event_date STRING,
+    event_dimensions STRUCT<hostname STRING>,
+    event_name STRING,
+    event_params ARRAY<STRUCT<key STRING,
+    event_previous_timestamp INT64,
+    event_server_timestamp_offset INT64,
+    event_timestamp INT64,
+    event_value_in_usd FLOAT64,
+    firebase_app_id STRING,
+    float_value FLOAT64,
+    float_value FLOAT64,
+    geo STRUCT<continent STRING,
+    hostname STRING>>,
+    install_source STRING>,
+    install_store STRING,
+    int_value INT64,
+    int_value INT64,
+    is_limited_ad_tracking STRING,
+    language STRING,
+    medium STRING,
+    metro STRING>,
+    mobile_brand_name STRING,
+    mobile_marketing_name STRING,
+    mobile_model_name STRING,
+    mobile_os_hardware_model STRING,
+    operating_system STRING,
+    operating_system_version STRING,
+    platform STRING,
+    region STRING,
+    set_timestamp_micros INT64>>>,
+    source STRING>,
+    stream_id STRING,
+    sub_continent STRING,
+    time_zone_offset_seconds INT64,
+    traffic_source STRUCT<name STRING,
+    user_first_touch_timestamp INT64,
+    user_id STRING,
+    user_ltv STRUCT<revenue FLOAT64,
+    user_properties ARRAY<STRUCT<key STRING,
+    user_pseudo_id STRING,
+    value STRUCT<string_value STRING,
+    value STRUCT<string_value STRING,
+    vendor_id STRING,
+    version STRING,
+    web_info STRUCT<browser STRING
+);
+
+-- Tables with the same structure: firebase-public-project.analytics_153293282.events_20180926, firebase-public-project.analytics_153293282.events_20180924, firebase-public-project.analytics_153293282.events_20180928, firebase-public-project.analytics_153293282.events_20180930, firebase-public-project.analytics_153293282.events_20180922, firebase-public-project.analytics_153293282.events_20181001, firebase-public-project.analytics_153293282.events_20180923, firebase-public-project.analytics_153293282.events_20180929, firebase-public-project.analytics_153293282.events_20180925, firebase-public-project.analytics_153293282.events_20180927, firebase-public-project.analytics_153293282.events_20181002
+
+CREATE TABLE `firebase-public-project.analytics_153293282.events_20180628` (
+    advertising_id STRING,
+    app_info STRUCT<id STRING,
+    city STRING>,
+    country STRING,
+    currency STRING>,
+    device STRUCT<category STRING,
+    double_value FLOAT64,
+    double_value FLOAT64>>>,
+    event_date STRING,
+    event_name STRING,
+    event_params ARRAY<STRUCT<key STRING,
+    event_previous_timestamp INT64,
+    event_timestamp INT64,
+    event_value_in_usd FLOAT64,
+    firebase_app_id STRING,
+    float_value FLOAT64,
+    float_value FLOAT64,
+    geo STRUCT<continent STRING,
+    install_source STRING>,
+    install_store STRING,
+    int_value INT64,
+    int_value INT64,
+    is_limited_ad_tracking STRING,
+    language STRING,
+    medium STRING,
+    mobile_brand_name STRING,
+    mobile_marketing_name STRING,
+    mobile_model_name STRING,
+    mobile_os_hardware_model STRING,
+    operating_system STRING,
+    operating_system_version STRING,
+    platform STRING,
+    region STRING,
+    set_timestamp_micros INT64>>>,
+    source STRING>,
+    stream_id STRING,
+    time_zone_offset_seconds INT64>,
+    traffic_source STRUCT<name STRING,
+    user_first_touch_timestamp INT64,
+    user_id STRING,
+    user_ltv STRUCT<revenue FLOAT64,
+    user_properties ARRAY<STRUCT<key STRING,
+    user_pseudo_id STRING,
+    value STRUCT<string_value STRING,
+    value STRUCT<string_value STRING,
+    vendor_id STRING,
+    version STRING
+);
+
+-- Tables with the same structure: firebase-public-project.analytics_153293282.events_20180627, firebase-public-project.analytics_153293282.events_20180630, firebase-public-project.analytics_153293282.events_20180701, firebase-public-project.analytics_153293282.events_20180629
+```
+
+## ❓ Natural Language Question
+"I'm trying to evaluate which board types were most effective on September 15, 2018. Can you find out the average scores for each board type from the quick play mode completions on that day?"
+
+## ✅ Correct SQL Query
+```sql
+WITH EventData AS (
+    SELECT 
+        user_pseudo_id, 
+        event_timestamp, 
+        param
+    FROM 
+        `firebase-public-project.analytics_153293282.events_20180915`,
+        UNNEST(event_params) AS param
+    WHERE 
+        event_name = "level_complete_quickplay"
+        AND (param.key = "value" OR param.key = "board")
+),
+ProcessedData AS (
+    SELECT 
+        user_pseudo_id, 
+        event_timestamp, 
+        MAX(IF(param.key = "value", param.value.int_value, NULL)) AS score,
+        MAX(IF(param.key = "board", param.value.string_value, NULL)) AS board_type
+    FROM 
+        EventData
+    GROUP BY 
+        user_pseudo_id, 
+        event_timestamp
+)
+SELECT 
+    ANY_VALUE(board_type) AS board, 
+    AVG(score) AS average_score
+FROM 
+    ProcessedData
+GROUP BY 
+    board_type
+
+```
+
+## 🔧 Your Task
+Analyze the correct SQL query above and modify it to introduce the specific error type: **Data Format Mismatch**.
+
+Think about:
+1. How this error typically manifests in real-world scenarios
+2. What parts of the query are most relevant to this error type
+3. How to make this data be meaningful for improving LLM SQL semantic detection area
+
+## 📤 Output Format
+Return your response in the following format:
+
+**Modified SQL Query:**
+```sql
+[Your modified SQL query here]
+```
+
+**Brief Explanation:**
+[A very brief explanation (1-2 sentences) of what specific change you made to inject the error]
+

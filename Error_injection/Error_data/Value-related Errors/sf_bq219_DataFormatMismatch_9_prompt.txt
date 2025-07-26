@@ -1,0 +1,164 @@
+# SQL Semantic Error Injection Task
+
+You are an expert SQL developer tasked with injecting a SPECIFIC semantic error into a correct SQL query.
+
+## 🎯 Your Mission
+Take the provided correct SQL query and modify it to contain EXACTLY ONE semantic error of the specified type. The modified SQL should:
+- ✅ Have valid syntax (no syntax errors)
+- ✅ Be executable against the database
+- ❌ Contain the specified semantic error
+- ❌ NOT contain any other types of errors
+
+## 📋 Error Specification
+**Error Category:** Value-related Errors
+**Category Description:** Value-related Errors arise when NL2SQL models incorrectly parse or interpret the required attribute values from natural language expressions. These errors manifest in two primary forms.
+
+**Specific Error Type:** Data Format Mismatch
+**Error Description:** The model fails to properly format values according to the attribute's data type requirements, showing difficulties in handling type-specific representations.
+
+## 💡 Guidelines for Error Injection
+
+### DO:
+- Focus ONLY on the specified error type
+- Keep the query structure as similar as possible to the original
+- Ensure the modified SQL runs without syntax errors
+- Make the error subtle but semantically meaningful
+- Consider the business logic and question intent when injecting the error
+
+### DON'T:
+- Add syntax errors or typos
+- Introduce multiple different error types
+- Completely rewrite the query structure
+- Make obvious/trivial mistakes that wouldn't occur in real scenarios
+- Change unrelated parts of the query
+
+## 📊 Database Schema
+```sql
+
+
+================================================================================-- Schema from: IOWA_LIQUOR_SALES/DDL.csv
+table_name,description,DDL
+SALES,,"create or replace TABLE SALES (
+	""invoice_and_item_number"" VARCHAR(16777216),
+	""date"" DATE,
+	""store_number"" VARCHAR(16777216),
+	""store_name"" VARCHAR(16777216),
+	""address"" VARCHAR(16777216),
+	""city"" VARCHAR(16777216),
+	""zip_code"" VARCHAR(16777216),
+	""store_location"" BINARY(8388608),
+	""county_number"" VARCHAR(16777216),
+	""county"" VARCHAR(16777216),
+	""category"" VARCHAR(16777216),
+	""category_name"" VARCHAR(16777216),
+	""vendor_number"" VARCHAR(16777216),
+	""vendor_name"" VARCHAR(16777216),
+	""item_number"" VARCHAR(16777216),
+	""item_description"" VARCHAR(16777216),
+	""pack"" NUMBER(38,0),
+	""bottle_volume_ml"" NUMBER(38,0),
+	""state_bottle_cost"" FLOAT,
+	""state_bottle_retail"" FLOAT,
+	""bottles_sold"" NUMBER(38,0),
+	""sale_dollars"" FLOAT,
+	""volume_sold_liters"" FLOAT,
+	""volume_sold_gallons"" FLOAT
+);"
+```
+
+## ❓ Natural Language Question
+"In the Iowa Liquor Sales dataset, starting from January 1, 2022 through the last fully completed month, which two liquor categories, each contributing an average of at least 1% to the monthly sales volume over at least 24 months of available data, have the lowest Pearson correlation coefficient when comparing their monthly percentages of total liquor sales across those months, and what are their names?"
+
+## ✅ Correct SQL Query
+```sql
+WITH
+MonthlyTotals AS
+(
+  SELECT
+    TO_CHAR("date", 'YYYY-MM') AS "month",
+    SUM("volume_sold_gallons") AS "total_monthly_volume"
+  FROM
+    IOWA_LIQUOR_SALES.IOWA_LIQUOR_SALES."SALES"
+  WHERE
+    "date" >= '2022-01-01' 
+    AND TO_CHAR("date", 'YYYY-MM') < TO_CHAR(CURRENT_DATE(), 'YYYY-MM')
+  GROUP BY
+    TO_CHAR("date", 'YYYY-MM')
+),
+
+MonthCategory AS
+(Category2."category"
+  SELECT
+    TO_CHAR("date", 'YYYY-MM') AS "month",
+    "category",
+    "category_name",
+    SUM("volume_sold_gallons") AS "category_monthly_volume",
+    CASE 
+      WHEN "total_monthly_volume" != 0 THEN (SUM("volume_sold_gallons") / "total_monthly_volume") * 100
+      ELSE NULL
+    END AS "category_pct_of_month_volume"
+  FROM
+    IOWA_LIQUOR_SALES.IOWA_LIQUOR_SALES."SALES" AS Sales
+  LEFT JOIN
+    MonthlyTotals ON TO_CHAR(Sales."date", 'YYYY-MM') = MonthlyTotals."month"
+  WHERE
+    Sales."date" >= '2022-01-01' 
+    AND TO_CHAR(Sales."date", 'YYYY-MM') < TO_CHAR(CURRENT_DATE(), 'YYYY-MM')
+  GROUP BY
+    TO_CHAR(Sales."date", 'YYYY-MM'), "category", "category_name", "total_monthly_volume"
+),
+
+middle_info AS 
+(
+  SELECT
+    Category1."category" AS "category1",
+    Category1."category_name" AS "category_name1",
+    Category2."category" AS "category2",
+    Category2."category_name" AS "category_name2",
+    COUNT(DISTINCT Category1."month") AS "num_months",
+    CORR(Category1."category_pct_of_month_volume", Category2."category_pct_of_month_volume") AS "category_corr_across_months",
+    AVG(Category1."category_pct_of_month_volume") AS "category1_avg_pct_of_month_volume",
+    AVG(Category2."category_pct_of_month_volume") AS "category2_avg_pct_of_month_volume"
+  FROM
+    MonthCategory Category1
+  INNER JOIN
+    MonthCategory Category2 
+    ON Category1."month" = Category2."month"
+  GROUP BY
+    Category1."category", Category1."category_name", Category2."category", Category2."category_name"
+  HAVING
+    "num_months" >= 24
+    AND "category1_avg_pct_of_month_volume" >= 1
+    AND "category2_avg_pct_of_month_volume" >= 1
+)
+
+SELECT 
+  "category_name1", 
+  "category_name2"
+FROM 
+  middle_info
+ORDER BY 
+  "category_corr_across_months"
+LIMIT 1;
+
+```
+
+## 🔧 Your Task
+Analyze the correct SQL query above and modify it to introduce the specific error type: **Data Format Mismatch**.
+
+Think about:
+1. How this error typically manifests in real-world scenarios
+2. What parts of the query are most relevant to this error type
+3. How to make this data be meaningful for improving LLM SQL semantic detection area
+
+## 📤 Output Format
+Return your response in the following format:
+
+**Modified SQL Query:**
+```sql
+[Your modified SQL query here]
+```
+
+**Brief Explanation:**
+[A very brief explanation (1-2 sentences) of what specific change you made to inject the error]
+

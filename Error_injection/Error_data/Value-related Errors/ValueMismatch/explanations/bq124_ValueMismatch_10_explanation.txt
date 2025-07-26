@@ -1,0 +1,1 @@
+I changed the value filter from `code.coding[safe_offset(0)].display = 'Diabetes'` to `code.coding[safe_offset(0)].display = 'Diabetes Mellitus'`, introducing a value mismatch error by using an incorrect value that likely does not match the database's actual representation.

@@ -1,0 +1,1 @@
+I changed the logical operator in the WHERE clause of the CTE `get_interest_rank` from `AND` (implicit in the original single condition) to `OR`, so now rows are included if either `month_year` or `composition` is not null, which broadens the result set incorrectly.

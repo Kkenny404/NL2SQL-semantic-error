@@ -1,0 +1,1 @@
+I changed the logical operator in the first WHERE clause from AND to OR between the country_code and the rest of the conditions, so now patents are included if they are US patents of any date or any country's patents granted between 2008 and 2018, which is a logical operator error.

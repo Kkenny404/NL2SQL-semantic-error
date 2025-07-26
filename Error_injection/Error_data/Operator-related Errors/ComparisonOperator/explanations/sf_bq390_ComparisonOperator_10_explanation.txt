@@ -1,0 +1,1 @@
+I changed the comparison operator in the condition `"segmentations"."SegmentedPropertyCategory":"CodeMeaning" = 'Anatomical Structure'` to `<>` (not equal), introducing a semantic error by selecting studies where the category is not "Anatomical Structure" instead of where it is.

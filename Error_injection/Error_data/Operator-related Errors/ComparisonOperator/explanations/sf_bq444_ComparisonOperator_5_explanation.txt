@@ -1,0 +1,1 @@
+I changed the comparison operator in the `parsed_burn_logs` CTE from `=` to `<>` for the burn event topic, so it now incorrectly excludes burn events instead of including them.

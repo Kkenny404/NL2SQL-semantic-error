@@ -1,0 +1,1 @@
+I changed the comparison operator in the WHERE clause from `LIKE 'a%'` to `= 'a%'`, which will incorrectly match only cities literally named "a%" instead of those starting with "A".

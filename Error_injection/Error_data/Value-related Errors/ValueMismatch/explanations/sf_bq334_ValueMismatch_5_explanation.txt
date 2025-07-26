@@ -1,0 +1,1 @@
+I changed the aggregation in the `average_transaction_values` CTE from `AVG("output_value")` to `AVG("input_value")`, causing a value mismatch by using the wrong field for the yearly average.

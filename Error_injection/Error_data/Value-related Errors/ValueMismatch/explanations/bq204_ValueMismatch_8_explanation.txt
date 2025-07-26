@@ -1,0 +1,1 @@
+I injected a value mismatch error by filtering for `user = 'admin'`, incorrectly assuming the top user is always 'admin', rather than dynamically determining the user with the highest total clicks.

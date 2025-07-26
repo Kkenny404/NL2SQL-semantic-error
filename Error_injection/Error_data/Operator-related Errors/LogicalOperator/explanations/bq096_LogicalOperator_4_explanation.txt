@@ -1,0 +1,1 @@
+I changed the logical operator in the WHERE clause from `AND decimallatitude > 40.0` to `OR decimallatitude > 40.0`, which alters the intended logic by including rows that match either the species or the latitude condition, rather than requiring both.

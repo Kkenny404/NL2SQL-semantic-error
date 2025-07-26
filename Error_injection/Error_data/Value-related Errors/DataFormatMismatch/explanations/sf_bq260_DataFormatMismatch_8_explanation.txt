@@ -1,0 +1,1 @@
+I changed the date literals in the WHERE clause from the correct 'YYYY-MM-DD' format to the mismatched 'DD-MM-YYYY' format, causing the query to filter users based on incorrect date values due to misunderstanding how dates are represented in the database.

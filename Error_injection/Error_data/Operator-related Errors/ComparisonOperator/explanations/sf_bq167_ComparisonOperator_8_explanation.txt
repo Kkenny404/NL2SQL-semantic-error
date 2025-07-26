@@ -1,0 +1,1 @@
+I changed the comparison operator in the `WHERE t."Rank" = 1` clause to `WHERE t."Rank" <> 1`, so instead of selecting the top pair, it now excludes it—demonstrating a comparison operator semantic error.

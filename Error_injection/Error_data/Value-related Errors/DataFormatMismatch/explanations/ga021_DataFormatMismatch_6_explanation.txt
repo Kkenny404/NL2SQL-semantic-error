@@ -1,0 +1,1 @@
+I changed `PARSE_DATE('%Y%m%d', event_date)` to just `event_date` (a STRING) in the `dates_active_table`, causing a data format mismatch when later used in date arithmetic (e.g., `DATE_DIFF`), which expects DATE types.

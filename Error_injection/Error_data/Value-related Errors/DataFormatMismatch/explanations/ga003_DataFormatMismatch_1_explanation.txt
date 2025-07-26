@@ -1,0 +1,1 @@
+I changed the extraction of `score` from `param.value.int_value` (an integer) to `param.value.string_value` (a string), causing a data format mismatch when calculating the average, as AVG expects numeric input.

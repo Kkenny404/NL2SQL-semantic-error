@@ -1,0 +1,1 @@
+I changed the `BETWEEN` operators in the `CASE WHEN` conditions to explicit comparisons, but incorrectly replaced `>=` with `>` and `<=` with `<` in some places (e.g., `delta_weeks BETWEEN 1 AND 4` became `delta_weeks > 0 AND delta_weeks <= 4`), causing the logic to exclude the boundary value that should be included, thus introducing a comparison operator semantic error.

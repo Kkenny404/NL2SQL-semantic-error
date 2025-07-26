@@ -1,0 +1,1 @@
+I changed the `WHERE` clause from `c.state_fips_code = (SELECT geo_id FROM utah_code)` to `c.state_fips_code = (SELECT geo_id FROM utah_code) OR c.state_name = 'Utah'`, incorrectly broadening the filter with an `OR` instead of the intended strict `AND` logic, thus introducing a logical operator error.

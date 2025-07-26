@@ -1,0 +1,703 @@
+# SQL Semantic Error Injection Task
+
+You are an expert SQL developer tasked with injecting a SPECIFIC semantic error into a correct SQL query.
+
+## 🎯 Your Mission
+Take the provided correct SQL query and modify it to contain EXACTLY ONE semantic error of the specified type. The modified SQL should:
+- ✅ Have valid syntax (no syntax errors)
+- ✅ Be executable against the database
+- ❌ Contain the specified semantic error
+- ❌ NOT contain any other types of errors
+
+## 📋 Error Specification
+**Error Category:** Operator-related Errors
+**Category Description:** Operator-related Errors occur when NL2SQL models fail to select appropriate operators for SQL conditions. These errors manifest in two primary forms.
+
+**Specific Error Type:** Comparison Operator
+**Error Description:** The model selects incorrect comparison operators in query conditions, such as using '>' when '>=' is required or confusing 'LIKE' with '=', indicating a semantic gap between natural language intent and SQL comparison operations.
+
+## 💡 Guidelines for Error Injection
+
+### DO:
+- Focus ONLY on the specified error type
+- Keep the query structure as similar as possible to the original
+- Ensure the modified SQL runs without syntax errors
+- Make the error subtle but semantically meaningful
+- Consider the business logic and question intent when injecting the error
+
+### DON'T:
+- Add syntax errors or typos
+- Introduce multiple different error types
+- Completely rewrite the query structure
+- Make obvious/trivial mistakes that wouldn't occur in real scenarios
+- Change unrelated parts of the query
+
+## 📊 Database Schema
+```sql
+
+
+================================================================================-- Schema from: CRYPTO_BAND/DDL.csv
+table_name,description,DDL
+BLOCKS,,"create or replace TABLE BLOCKS (
+	""block_height"" NUMBER(38,0),
+	""block_timestamp"" VARCHAR(16777216),
+	""block_timestamp_truncated"" NUMBER(38,0),
+	""block_hash"" VARCHAR(16777216),
+	""proposer_address"" VARCHAR(16777216),
+	""last_commit_hash"" VARCHAR(16777216),
+	""data_hash"" VARCHAR(16777216),
+	""validators_hash"" VARCHAR(16777216),
+	""next_validators_hash"" VARCHAR(16777216),
+	""consensus_hash"" VARCHAR(16777216),
+	""app_hash"" VARCHAR(16777216),
+	""last_results_hash"" VARCHAR(16777216),
+	""evidence_hash"" VARCHAR(16777216),
+	""signatures"" VARIANT
+);"
+ORACLE_REQUESTS,,"create or replace TABLE ORACLE_REQUESTS (
+	""block_height"" NUMBER(38,0),
+	""block_timestamp"" VARCHAR(16777216),
+	""block_timestamp_truncated"" NUMBER(38,0),
+	""oracle_request_id"" NUMBER(38,0),
+	""request"" VARIANT,
+	""reports"" VARIANT,
+	""result"" VARIANT,
+	""decoded_result"" VARIANT,
+	""oracle_script"" VARIANT
+);"
+ERRORS,,"create or replace TABLE ERRORS (
+	""tableRow"" VARCHAR(16777216),
+	""errors"" VARCHAR(16777216)
+);"
+LOGS,,"create or replace TABLE LOGS (
+	""block_height"" NUMBER(38,0),
+	""block_timestamp"" NUMBER(38,0),
+	""block_timestamp_truncated"" NUMBER(38,0),
+	""txhash"" VARCHAR(16777216),
+	""log_index"" NUMBER(38,0),
+	""msg_index"" NUMBER(38,0),
+	""log"" VARCHAR(16777216),
+	""events"" VARIANT
+);"
+MESSAGES,,"create or replace TABLE MESSAGES (
+	""block_height"" NUMBER(38,0),
+	""block_timestamp"" VARCHAR(16777216),
+	""block_timestamp_truncated"" NUMBER(38,0),
+	""txhash"" VARCHAR(16777216),
+	""message_type"" VARCHAR(16777216),
+	""oracle_Activate"" VARIANT,
+	""oracle_AddReporter"" VARIANT,
+	""oracle_CreateDataSource"" VARIANT,
+	""oracle_CreateOracleScript"" VARIANT,
+	""oracle_EditDataSource"" VARIANT,
+	""oracle_EditOracleScript"" VARIANT,
+	""oracle_Report"" VARIANT,
+	""oracle_Request"" VARIANT,
+	""cosmos_sdk_MsgDelegate"" VARIANT,
+	""cosmos_sdk_MsgEditValidator"" VARIANT,
+	""cosmos_sdk_MsgMultiSend"" VARIANT,
+	""cosmos_sdk_MsgSend"" VARIANT,
+	""oracle_RemoveReporter"" VARIANT,
+	""cosmos_sdk_MsgBeginRedelegate"" VARIANT,
+	""cosmos_sdk_MsgCreateValidator"" VARIANT,
+	""cosmos_sdk_MsgDeposit"" VARIANT,
+	""cosmos_sdk_MsgFundCommunityPool"" VARIANT,
+	""cosmos_sdk_MsgModifyWithdrawAddress"" VARIANT,
+	""cosmos_sdk_MsgSubmitEvidence"" VARIANT,
+	""cosmos_sdk_MsgSubmitProposal"" VARIANT,
+	""cosmos_sdk_MsgUndelegate"" VARIANT,
+	""cosmos_sdk_MsgUnjail"" VARIANT,
+	""cosmos_sdk_MsgVerifyInvariant"" VARIANT,
+	""cosmos_sdk_MsgVote"" VARIANT,
+	""cosmos_sdk_MsgWithdrawDelegationReward"" VARIANT,
+	""cosmos_sdk_MsgWithdrawValidatorCommission"" VARIANT
+);"
+BLOCK_EVENTS,,"create or replace TABLE BLOCK_EVENTS (
+	""block_height"" NUMBER(38,0),
+	""block_timestamp"" VARCHAR(16777216),
+	""block_timestamp_truncated"" NUMBER(38,0),
+	""event_type"" VARCHAR(16777216),
+	""block_event_type"" VARCHAR(16777216),
+	""attributes"" VARIANT
+);"
+TRANSACTIONS,,"create or replace TABLE TRANSACTIONS (
+	""block_height"" NUMBER(38,0),
+	""block_timestamp"" VARCHAR(16777216),
+	""block_timestamp_truncated"" NUMBER(38,0),
+	""txhash"" VARCHAR(16777216),
+	""transaction_type"" VARCHAR(16777216),
+	""gas_wanted"" NUMBER(38,9),
+	""gas_used"" NUMBER(38,9),
+	""sender"" VARCHAR(16777216),
+	""fee"" VARIANT,
+	""memo"" VARCHAR(16777216)
+);"
+
+-- Schema from: CRYPTO_BITCOIN/DDL.csv
+table_name,description,DDL
+OUTPUTS,,"create or replace TABLE OUTPUTS (
+	""transaction_hash"" VARCHAR(16777216),
+	""block_hash"" VARCHAR(16777216),
+	""block_number"" NUMBER(38,0),
+	""block_timestamp"" NUMBER(38,0),
+	""index"" NUMBER(38,0),
+	""script_asm"" VARCHAR(16777216),
+	""script_hex"" VARCHAR(16777216),
+	""required_signatures"" NUMBER(38,0),
+	""type"" VARCHAR(16777216),
+	""addresses"" VARIANT,
+	""value"" NUMBER(38,9)
+);"
+INPUTS,,"create or replace TABLE INPUTS (
+	""transaction_hash"" VARCHAR(16777216),
+	""block_hash"" VARCHAR(16777216),
+	""block_number"" NUMBER(38,0),
+	""block_timestamp"" NUMBER(38,0),
+	""index"" NUMBER(38,0),
+	""spent_transaction_hash"" VARCHAR(16777216),
+	""spent_output_index"" NUMBER(38,0),
+	""script_asm"" VARCHAR(16777216),
+	""script_hex"" VARCHAR(16777216),
+	""sequence"" NUMBER(38,0),
+	""required_signatures"" NUMBER(38,0),
+	""type"" VARCHAR(16777216),
+	""addresses"" VARIANT,
+	""value"" NUMBER(38,9)
+);"
+BLOCKS,,"create or replace TABLE BLOCKS (
+	""hash"" VARCHAR(16777216),
+	""size"" NUMBER(38,0),
+	""stripped_size"" NUMBER(38,0),
+	""weight"" NUMBER(38,0),
+	""number"" NUMBER(38,0),
+	""version"" NUMBER(38,0),
+	""merkle_root"" VARCHAR(16777216),
+	""timestamp"" NUMBER(38,0),
+	""timestamp_month"" DATE,
+	""nonce"" VARCHAR(16777216),
+	""bits"" VARCHAR(16777216),
+	""coinbase_param"" VARCHAR(16777216),
+	""transaction_count"" NUMBER(38,0)
+);"
+TRANSACTIONS,,"create or replace TABLE TRANSACTIONS (
+	""hash"" VARCHAR(16777216),
+	""size"" NUMBER(38,0),
+	""virtual_size"" NUMBER(38,0),
+	""version"" NUMBER(38,0),
+	""lock_time"" NUMBER(38,0),
+	""block_hash"" VARCHAR(16777216),
+	""block_number"" NUMBER(38,0),
+	""block_timestamp"" NUMBER(38,0),
+	""block_timestamp_month"" DATE,
+	""input_count"" NUMBER(38,0),
+	""output_count"" NUMBER(38,0),
+	""input_value"" NUMBER(38,9),
+	""output_value"" NUMBER(38,9),
+	""is_coinbase"" BOOLEAN,
+	""fee"" NUMBER(38,9),
+	""inputs"" VARIANT,
+	""outputs"" VARIANT
+);"
+
+-- Schema from: CRYPTO_BITCOIN_CASH/DDL.csv
+table_name,description,DDL
+OUTPUTS,,"create or replace TABLE OUTPUTS (
+	""transaction_hash"" VARCHAR(16777216),
+	""block_hash"" VARCHAR(16777216),
+	""block_number"" NUMBER(38,0),
+	""block_timestamp"" NUMBER(38,0),
+	""index"" NUMBER(38,0),
+	""script_asm"" VARCHAR(16777216),
+	""script_hex"" VARCHAR(16777216),
+	""required_signatures"" NUMBER(38,0),
+	""type"" VARCHAR(16777216),
+	""addresses"" VARIANT,
+	""value"" NUMBER(38,9)
+);"
+BLOCKS,,"create or replace TABLE BLOCKS (
+	""hash"" VARCHAR(16777216),
+	""size"" NUMBER(38,0),
+	""stripped_size"" NUMBER(38,0),
+	""weight"" NUMBER(38,0),
+	""number"" NUMBER(38,0),
+	""version"" NUMBER(38,0),
+	""merkle_root"" VARCHAR(16777216),
+	""timestamp"" NUMBER(38,0),
+	""timestamp_month"" DATE,
+	""nonce"" VARCHAR(16777216),
+	""bits"" VARCHAR(16777216),
+	""coinbase_param"" VARCHAR(16777216),
+	""transaction_count"" NUMBER(38,0)
+);"
+INPUTS,,"create or replace TABLE INPUTS (
+	""transaction_hash"" VARCHAR(16777216),
+	""block_hash"" VARCHAR(16777216),
+	""block_number"" NUMBER(38,0),
+	""block_timestamp"" NUMBER(38,0),
+	""index"" NUMBER(38,0),
+	""spent_transaction_hash"" VARCHAR(16777216),
+	""spent_output_index"" NUMBER(38,0),
+	""script_asm"" VARCHAR(16777216),
+	""script_hex"" VARCHAR(16777216),
+	""sequence"" NUMBER(38,0),
+	""required_signatures"" NUMBER(38,0),
+	""type"" VARCHAR(16777216),
+	""addresses"" VARIANT,
+	""value"" NUMBER(38,9)
+);"
+TRANSACTIONS,,"create or replace TABLE TRANSACTIONS (
+	""hash"" VARCHAR(16777216),
+	""size"" NUMBER(38,0),
+	""virtual_size"" NUMBER(38,0),
+	""version"" NUMBER(38,0),
+	""lock_time"" NUMBER(38,0),
+	""block_hash"" VARCHAR(16777216),
+	""block_number"" NUMBER(38,0),
+	""block_timestamp"" NUMBER(38,0),
+	""block_timestamp_month"" DATE,
+	""input_count"" NUMBER(38,0),
+	""output_count"" NUMBER(38,0),
+	""input_value"" NUMBER(38,9),
+	""output_value"" NUMBER(38,9),
+	""is_coinbase"" BOOLEAN,
+	""fee"" NUMBER(38,9),
+	""inputs"" VARIANT,
+	""outputs"" VARIANT
+);"
+
+-- Schema from: CRYPTO_DASH/DDL.csv
+table_name,description,DDL
+INPUTS,,"create or replace TABLE INPUTS (
+	""transaction_hash"" VARCHAR(16777216),
+	""block_hash"" VARCHAR(16777216),
+	""block_number"" NUMBER(38,0),
+	""block_timestamp"" NUMBER(38,0),
+	""index"" NUMBER(38,0),
+	""spent_transaction_hash"" VARCHAR(16777216),
+	""spent_output_index"" NUMBER(38,0),
+	""script_asm"" VARCHAR(16777216),
+	""script_hex"" VARCHAR(16777216),
+	""sequence"" NUMBER(38,0),
+	""required_signatures"" NUMBER(38,0),
+	""type"" VARCHAR(16777216),
+	""addresses"" VARIANT,
+	""value"" NUMBER(38,9)
+);"
+TRANSACTIONS,,"create or replace TABLE TRANSACTIONS (
+	""hash"" VARCHAR(16777216),
+	""size"" NUMBER(38,0),
+	""virtual_size"" NUMBER(38,0),
+	""version"" NUMBER(38,0),
+	""lock_time"" NUMBER(38,0),
+	""block_hash"" VARCHAR(16777216),
+	""block_number"" NUMBER(38,0),
+	""block_timestamp"" NUMBER(38,0),
+	""block_timestamp_month"" DATE,
+	""input_count"" NUMBER(38,0),
+	""output_count"" NUMBER(38,0),
+	""input_value"" NUMBER(38,9),
+	""output_value"" NUMBER(38,9),
+	""is_coinbase"" BOOLEAN,
+	""fee"" NUMBER(38,9),
+	""inputs"" VARIANT,
+	""outputs"" VARIANT
+);"
+BLOCKS,,"create or replace TABLE BLOCKS (
+	""hash"" VARCHAR(16777216),
+	""size"" NUMBER(38,0),
+	""stripped_size"" NUMBER(38,0),
+	""weight"" NUMBER(38,0),
+	""number"" NUMBER(38,0),
+	""version"" NUMBER(38,0),
+	""merkle_root"" VARCHAR(16777216),
+	""timestamp"" NUMBER(38,0),
+	""timestamp_month"" DATE,
+	""nonce"" VARCHAR(16777216),
+	""bits"" VARCHAR(16777216),
+	""coinbase_param"" VARCHAR(16777216),
+	""transaction_count"" NUMBER(38,0)
+);"
+OUTPUTS,,"create or replace TABLE OUTPUTS (
+	""transaction_hash"" VARCHAR(16777216),
+	""block_hash"" VARCHAR(16777216),
+	""block_number"" NUMBER(38,0),
+	""block_timestamp"" NUMBER(38,0),
+	""index"" NUMBER(38,0),
+	""script_asm"" VARCHAR(16777216),
+	""script_hex"" VARCHAR(16777216),
+	""required_signatures"" NUMBER(38,0),
+	""type"" VARCHAR(16777216),
+	""addresses"" VARIANT,
+	""value"" NUMBER(38,9)
+);"
+
+-- Schema from: CRYPTO_ETHEREUM/DDL.csv
+table_name,description,DDL
+BLOCKS,,"create or replace TABLE BLOCKS (
+	""timestamp"" NUMBER(38,0),
+	""number"" NUMBER(38,0),
+	""hash"" VARCHAR(16777216),
+	""parent_hash"" VARCHAR(16777216),
+	""nonce"" VARCHAR(16777216),
+	""sha3_uncles"" VARCHAR(16777216),
+	""logs_bloom"" VARCHAR(16777216),
+	""transactions_root"" VARCHAR(16777216),
+	""state_root"" VARCHAR(16777216),
+	""receipts_root"" VARCHAR(16777216),
+	""miner"" VARCHAR(16777216),
+	""difficulty"" NUMBER(38,9),
+	""total_difficulty"" NUMBER(38,9),
+	""size"" NUMBER(38,0),
+	""extra_data"" VARCHAR(16777216),
+	""gas_limit"" NUMBER(38,0),
+	""gas_used"" NUMBER(38,0),
+	""transaction_count"" NUMBER(38,0),
+	""base_fee_per_gas"" NUMBER(38,0),
+	""withdrawals_root"" VARCHAR(16777216),
+	""withdrawals"" VARIANT,
+	""blob_gas_used"" NUMBER(38,0),
+	""excess_blob_gas"" NUMBER(38,0)
+);"
+LOGS,,"create or replace TABLE LOGS (
+	""log_index"" NUMBER(38,0),
+	""transaction_hash"" VARCHAR(16777216),
+	""transaction_index"" NUMBER(38,0),
+	""address"" VARCHAR(16777216),
+	""data"" VARCHAR(16777216),
+	""topics"" VARIANT,
+	""block_timestamp"" NUMBER(38,0),
+	""block_number"" NUMBER(38,0),
+	""block_hash"" VARCHAR(16777216)
+);"
+TRACES,,"create or replace TABLE TRACES (
+	""transaction_hash"" VARCHAR(16777216),
+	""transaction_index"" NUMBER(38,0),
+	""from_address"" VARCHAR(16777216),
+	""to_address"" VARCHAR(16777216),
+	""value"" NUMBER(38,9),
+	""input"" VARCHAR(16777216),
+	""output"" VARCHAR(16777216),
+	""trace_type"" VARCHAR(16777216),
+	""call_type"" VARCHAR(16777216),
+	""reward_type"" VARCHAR(16777216),
+	""gas"" NUMBER(38,0),
+	""gas_used"" NUMBER(38,0),
+	""subtraces"" NUMBER(38,0),
+	""trace_address"" VARCHAR(16777216),
+	""error"" VARCHAR(16777216),
+	""status"" NUMBER(38,0),
+	""block_timestamp"" NUMBER(38,0),
+	""block_number"" NUMBER(38,0),
+	""block_hash"" VARCHAR(16777216),
+	""trace_id"" VARCHAR(16777216)
+);"
+TRANSACTIONS,,"create or replace TABLE TRANSACTIONS (
+	""hash"" VARCHAR(16777216),
+	""nonce"" NUMBER(38,0),
+	""transaction_index"" NUMBER(38,0),
+	""from_address"" VARCHAR(16777216),
+	""to_address"" VARCHAR(16777216),
+	""value"" NUMBER(38,9),
+	""gas"" NUMBER(38,0),
+	""gas_price"" NUMBER(38,0),
+	""input"" VARCHAR(16777216),
+	""receipt_cumulative_gas_used"" NUMBER(38,0),
+	""receipt_gas_used"" NUMBER(38,0),
+	""receipt_contract_address"" VARCHAR(16777216),
+	""receipt_root"" VARCHAR(16777216),
+	""receipt_status"" NUMBER(38,0),
+	""block_timestamp"" NUMBER(38,0),
+	""block_number"" NUMBER(38,0),
+	""block_hash"" VARCHAR(16777216),
+	""max_fee_per_gas"" NUMBER(38,0),
+	""max_priority_fee_per_gas"" NUMBER(38,0),
+	""transaction_type"" NUMBER(38,0),
+	""receipt_effective_gas_price"" NUMBER(38,0),
+	""max_fee_per_blob_gas"" NUMBER(38,0),
+	""blob_versioned_hashes"" VARIANT,
+	""receipt_blob_gas_price"" NUMBER(38,0),
+	""receipt_blob_gas_used"" NUMBER(38,0)
+);"
+CONTRACTS,,"create or replace TABLE CONTRACTS (
+	""address"" VARCHAR(16777216),
+	""bytecode"" VARCHAR(16777216),
+	""function_sighashes"" VARIANT,
+	""is_erc20"" BOOLEAN,
+	""is_erc721"" BOOLEAN,
+	""block_timestamp"" NUMBER(38,0),
+	""block_number"" NUMBER(38,0),
+	""block_hash"" VARCHAR(16777216)
+);"
+TOKEN_TRANSFERS,,"create or replace TABLE TOKEN_TRANSFERS (
+	""token_address"" VARCHAR(16777216),
+	""from_address"" VARCHAR(16777216),
+	""to_address"" VARCHAR(16777216),
+	""value"" VARCHAR(16777216),
+	""transaction_hash"" VARCHAR(16777216),
+	""log_index"" NUMBER(38,0),
+	""block_timestamp"" NUMBER(38,0),
+	""block_number"" NUMBER(38,0),
+	""block_hash"" VARCHAR(16777216)
+);"
+
+-- Schema from: CRYPTO_ETHEREUM_CLASSIC/DDL.csv
+table_name,description,DDL
+BLOCKS,,"create or replace TABLE BLOCKS (
+	""timestamp"" NUMBER(38,0),
+	""number"" NUMBER(38,0),
+	""hash"" VARCHAR(16777216),
+	""parent_hash"" VARCHAR(16777216),
+	""nonce"" VARCHAR(16777216),
+	""sha3_uncles"" VARCHAR(16777216),
+	""logs_bloom"" VARCHAR(16777216),
+	""transactions_root"" VARCHAR(16777216),
+	""state_root"" VARCHAR(16777216),
+	""receipts_root"" VARCHAR(16777216),
+	""miner"" VARCHAR(16777216),
+	""difficulty"" NUMBER(38,9),
+	""total_difficulty"" NUMBER(38,9),
+	""size"" NUMBER(38,0),
+	""extra_data"" VARCHAR(16777216),
+	""gas_limit"" NUMBER(38,0),
+	""gas_used"" NUMBER(38,0),
+	""transaction_count"" NUMBER(38,0)
+);"
+CONTRACTS,,"create or replace TABLE CONTRACTS (
+	""address"" VARCHAR(16777216),
+	""bytecode"" VARCHAR(16777216),
+	""function_sighashes"" VARIANT,
+	""is_erc20"" BOOLEAN,
+	""is_erc721"" BOOLEAN,
+	""block_timestamp"" NUMBER(38,0),
+	""block_number"" NUMBER(38,0),
+	""block_hash"" VARCHAR(16777216)
+);"
+TRACES,,"create or replace TABLE TRACES (
+	""transaction_hash"" VARCHAR(16777216),
+	""transaction_index"" NUMBER(38,0),
+	""from_address"" VARCHAR(16777216),
+	""to_address"" VARCHAR(16777216),
+	""value"" NUMBER(38,9),
+	""input"" VARCHAR(16777216),
+	""output"" VARCHAR(16777216),
+	""trace_type"" VARCHAR(16777216),
+	""call_type"" VARCHAR(16777216),
+	""reward_type"" VARCHAR(16777216),
+	""gas"" NUMBER(38,0),
+	""gas_used"" NUMBER(38,0),
+	""subtraces"" NUMBER(38,0),
+	""trace_address"" VARCHAR(16777216),
+	""error"" VARCHAR(16777216),
+	""status"" NUMBER(38,0),
+	""block_timestamp"" NUMBER(38,0),
+	""block_number"" NUMBER(38,0),
+	""block_hash"" VARCHAR(16777216),
+	""trace_id"" VARCHAR(16777216)
+);"
+TOKENS,,"create or replace TABLE TOKENS (
+	""address"" VARCHAR(16777216),
+	""symbol"" VARCHAR(16777216),
+	""name"" VARCHAR(16777216),
+	""decimals"" VARCHAR(16777216),
+	""total_supply"" VARCHAR(16777216),
+	""block_timestamp"" NUMBER(38,0),
+	""block_number"" NUMBER(38,0),
+	""block_hash"" VARCHAR(16777216)
+);"
+TOKEN_TRANSFERS,,"create or replace TABLE TOKEN_TRANSFERS (
+	""token_address"" VARCHAR(16777216),
+	""from_address"" VARCHAR(16777216),
+	""to_address"" VARCHAR(16777216),
+	""value"" VARCHAR(16777216),
+	""transaction_hash"" VARCHAR(16777216),
+	""log_index"" NUMBER(38,0),
+	""block_timestamp"" NUMBER(38,0),
+	""block_number"" NUMBER(38,0),
+	""block_hash"" VARCHAR(16777216)
+);"
+BALANCES,,"create or replace TABLE BALANCES (
+	""address"" VARCHAR(16777216),
+	""eth_balance"" NUMBER(38,9)
+);"
+LOGS,,"create or replace TABLE LOGS (
+	""log_index"" NUMBER(38,0),
+	""transaction_hash"" VARCHAR(16777216),
+	""transaction_index"" NUMBER(38,0),
+	""address"" VARCHAR(16777216),
+	""data"" VARCHAR(16777216),
+	""topics"" VARIANT,
+	""block_timestamp"" NUMBER(38,0),
+	""block_number"" NUMBER(38,0),
+	""block_hash"" VARCHAR(16777216)
+);"
+TRANSACTIONS,,"create or replace TABLE TRANSACTIONS (
+	""hash"" VARCHAR(16777216),
+	""nonce"" NUMBER(38,0),
+	""transaction_index"" NUMBER(38,0),
+	""from_address"" VARCHAR(16777216),
+	""to_address"" VARCHAR(16777216),
+	""value"" NUMBER(38,9),
+	""gas"" NUMBER(38,0),
+	""gas_price"" NUMBER(38,0),
+	""input"" VARCHAR(16777216),
+	""receipt_cumulative_gas_used"" NUMBER(38,0),
+	""receipt_gas_used"" NUMBER(38,0),
+	""receipt_contract_address"" VARCHAR(16777216),
+	""receipt_root"" VARCHAR(16777216),
+	""receipt_status"" NUMBER(38,0),
+	""block_timestamp"" NUMBER(38,0),
+	""block_number"" NUMBER(38,0),
+	""block_hash"" VARCHAR(16777216)
+);"
+
+-- Schema from: CRYPTO_ZILLIQA/DDL.csv
+table_name,description,DDL
+EVENT_LOGS,,"create or replace TABLE EVENT_LOGS (
+	""block_number"" NUMBER(38,0),
+	""block_timestamp"" NUMBER(38,0),
+	""transaction_id"" VARCHAR(16777216),
+	""index"" NUMBER(38,0),
+	""address"" VARCHAR(16777216),
+	""event_name"" VARCHAR(16777216),
+	""params"" VARIANT
+);"
+TX_BLOCKS,,"create or replace TABLE TX_BLOCKS (
+	""number"" NUMBER(38,0),
+	""ds_block_number"" NUMBER(38,0),
+	""timestamp"" NUMBER(38,0),
+	""version"" NUMBER(38,0),
+	""gas_limit"" NUMBER(38,0),
+	""gas_used"" NUMBER(38,0),
+	""mb_info_hash"" VARCHAR(16777216),
+	""tx_leader_pub_key"" VARCHAR(16777216),
+	""tx_leader_address"" VARCHAR(16777216),
+	""num_micro_blocks"" NUMBER(38,0),
+	""num_transactions"" NUMBER(38,0),
+	""num_present_transactions"" NUMBER(38,0),
+	""prev_block_hash"" VARCHAR(16777216),
+	""rewards"" NUMBER(38,0),
+	""state_delta_hash"" VARCHAR(16777216),
+	""state_root_hash"" VARCHAR(16777216),
+	""header_signature"" BINARY(8388608)
+);"
+EXCEPTIONS,,"create or replace TABLE EXCEPTIONS (
+	""block_number"" NUMBER(38,0),
+	""block_timestamp"" NUMBER(38,0),
+	""transaction_id"" VARCHAR(16777216),
+	""index"" NUMBER(38,0),
+	""line"" NUMBER(38,0),
+	""message"" VARCHAR(16777216)
+);"
+TRANSACTIONS,,"create or replace TABLE TRANSACTIONS (
+	""id"" VARCHAR(16777216),
+	""block_number"" NUMBER(38,0),
+	""block_timestamp"" NUMBER(38,0),
+	""amount"" NUMBER(38,9),
+	""code"" VARCHAR(16777216),
+	""data"" VARCHAR(16777216),
+	""gas_limit"" NUMBER(38,0),
+	""gas_price"" NUMBER(38,0),
+	""sender_pub_key"" VARCHAR(16777216),
+	""sender"" VARCHAR(16777216),
+	""signature"" BINARY(8388608),
+	""to_addr"" VARCHAR(16777216),
+	""version"" NUMBER(38,0),
+	""accepted"" BOOLEAN,
+	""success"" BOOLEAN,
+	""cumulative_gas"" NUMBER(38,0),
+	""epoch_num"" NUMBER(38,0)
+);"
+TRANSITIONS,,"create or replace TABLE TRANSITIONS (
+	""block_number"" NUMBER(38,0),
+	""block_timestamp"" NUMBER(38,0),
+	""transaction_id"" VARCHAR(16777216),
+	""index"" NUMBER(38,0),
+	""accepted"" BOOLEAN,
+	""addr"" VARCHAR(16777216),
+	""depth"" NUMBER(38,0),
+	""amount"" NUMBER(38,9),
+	""recipient"" VARCHAR(16777216),
+	""tag"" VARCHAR(16777216),
+	""params"" VARIANT
+);"
+DS_BLOCKS,,"create or replace TABLE DS_BLOCKS (
+	""number"" NUMBER(38,0),
+	""timestamp"" NUMBER(38,0),
+	""difficulty"" NUMBER(38,0),
+	""difficulty_ds"" NUMBER(38,0),
+	""gas_price"" NUMBER(38,0),
+	""ds_leader_pub_key"" VARCHAR(16777216),
+	""ds_leader_address"" VARCHAR(16777216),
+	""prev_hash"" VARCHAR(16777216),
+	""signature"" BINARY(8388608)
+);"
+```
+
+## ❓ Natural Language Question
+"Can you pull the blockchain timestamp, block number, and transaction hash for the first five mint and burn events from Ethereum logs for the address '0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8'? Please include mint events identified by the topic '0x7a53080ba414158be7ec69b987b5fb7d07dee101fe85488f0853ae16239d0bde' and burn events by '0x0c396cd989a39f4459b5fa1aed6a9a8dcdbc45908acfd67e028cd568da98982c', and order them by block timestamp from the oldest to the newest."
+
+## ✅ Correct SQL Query
+```sql
+WITH parsed_burn_logs AS (
+  SELECT
+    logs."block_timestamp" AS block_timestamp,
+    logs."block_number" AS block_number,
+    logs."transaction_hash" AS transaction_hash,
+    logs."log_index" AS log_index,
+    PARSE_JSON(logs."data") AS data,
+    logs."topics"
+  FROM CRYPTO.CRYPTO_ETHEREUM.LOGS AS logs
+  WHERE logs."address" = '0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8'
+    AND logs."topics"[0] = '0x0c396cd989a39f4459b5fa1aed6a9a8dcdbc45908acfd67e028cd568da98982c'
+),
+parsed_mint_logs AS (
+  SELECT
+    logs."block_timestamp" AS block_timestamp,
+    logs."block_number" AS block_number,
+    logs."transaction_hash" AS transaction_hash,
+    logs."log_index" AS log_index,
+    PARSE_JSON(logs."data") AS data,
+    logs."topics"
+  FROM CRYPTO.CRYPTO_ETHEREUM.LOGS AS logs
+  WHERE logs."address" = '0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8'
+    AND logs."topics"[0] = '0x7a53080ba414158be7ec69b987b5fb7d07dee101fe85488f0853ae16239d0bde'
+)
+
+SELECT
+    block_timestamp,
+    block_number,
+    transaction_hash
+FROM parsed_mint_logs
+
+UNION ALL
+
+SELECT
+    block_timestamp,
+    block_number,
+    transaction_hash
+FROM parsed_burn_logs
+
+ORDER BY block_timestamp
+LIMIT 5;
+
+```
+
+## 🔧 Your Task
+Analyze the correct SQL query above and modify it to introduce the specific error type: **Comparison Operator**.
+
+Think about:
+1. How this error typically manifests in real-world scenarios
+2. What parts of the query are most relevant to this error type
+3. How to make this data be meaningful for improving LLM SQL semantic detection area
+
+## 📤 Output Format
+Return your response in the following format:
+
+**Modified SQL Query:**
+```sql
+[Your modified SQL query here]
+```
+
+**Brief Explanation:**
+[A very brief explanation (1-2 sentences) of what specific change you made to inject the error]
+

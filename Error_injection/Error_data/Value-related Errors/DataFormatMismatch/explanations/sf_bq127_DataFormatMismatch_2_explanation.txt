@@ -1,0 +1,1 @@
+I changed the numeric filter values in the WHERE clause (`20150101` and `20150131`) to string literals (`'20150101'` and `'20150131'`), causing a data format mismatch since "publication_date" is a NUMBER type, but the query now compares it to strings.

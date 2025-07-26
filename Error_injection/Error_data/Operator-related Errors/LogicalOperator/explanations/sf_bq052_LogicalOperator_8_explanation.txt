@@ -1,0 +1,1 @@
+I changed the logical operator in the filter `(b."bkwdCitations_1" > 0 OR f."fwrdCitations_1" > 0)` to `AND`, so now only patents with both at least one backward and one forward citation are included, instead of patents with at least one of either—this is a classic logical operator misinterpretation.

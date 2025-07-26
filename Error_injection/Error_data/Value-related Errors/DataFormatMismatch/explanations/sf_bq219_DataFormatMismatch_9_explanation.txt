@@ -1,0 +1,1 @@
+I injected a data format mismatch by comparing the numeric column "category1_avg_pct_of_month_volume" to the string literal '1' (instead of the numeric 1) in the HAVING clause, which may cause implicit conversion or unexpected results.

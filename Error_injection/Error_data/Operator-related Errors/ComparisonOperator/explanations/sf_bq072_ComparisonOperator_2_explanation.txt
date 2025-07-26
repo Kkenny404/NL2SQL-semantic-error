@@ -1,0 +1,1 @@
+I changed the comparison operators in the WHERE clause from `BETWEEN 12 AND 18` (inclusive) to `> 12 AND < 18` (exclusive), so ages 12 and 18 are now incorrectly excluded—this is a classic comparison operator semantic error.

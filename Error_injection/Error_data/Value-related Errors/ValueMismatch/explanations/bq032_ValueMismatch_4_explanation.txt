@@ -1,0 +1,1 @@
+I changed the filter from `name != 'NOT NAMED'` to `name != 'UNNAMED'`, introducing a value mismatch error by using an incorrect value that does not match how unnamed hurricanes are actually labeled in the database.

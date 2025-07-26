@@ -1,0 +1,1 @@
+I replaced `income_15000_19999` with `income_20000_24999` in the calculation of households earning under $20,000, causing a value mismatch by incorrectly including households earning $20,000–$24,999 and omitting those earning $15,000–$19,999.

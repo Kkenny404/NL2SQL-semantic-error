@@ -1,0 +1,1 @@
+I replaced the correct logical operator in the WHERE clause (`layer."layer_code" IN (2110, 2120)`) with an incorrect use of `OR` inside the `IN` clause (`layer."layer_code" IN (2110 OR 2120)`), which changes the intended logic and may result in incorrect filtering of hospital layers.

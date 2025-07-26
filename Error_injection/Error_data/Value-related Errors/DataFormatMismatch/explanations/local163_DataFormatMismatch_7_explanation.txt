@@ -1,0 +1,1 @@
+I injected a data format mismatch by comparing the numeric column `s.Salary` to the string literal `'90000'` (with quotes), which may cause implicit conversion or incorrect results depending on the SQL dialect.

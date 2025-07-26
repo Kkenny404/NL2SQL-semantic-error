@@ -1,0 +1,1 @@
+I changed the value filter from `a.gender = 'F'` to `a.gender = 'Female'`, introducing a value mismatch since the database stores gender as `'F'` or `'M'`, not `'Female'`.

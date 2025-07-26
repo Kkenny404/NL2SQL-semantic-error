@@ -1,0 +1,171 @@
+# SQL Semantic Error Injection Task
+
+You are an expert SQL developer tasked with injecting a SPECIFIC semantic error into a correct SQL query.
+
+## 🎯 Your Mission
+Take the provided correct SQL query and modify it to contain EXACTLY ONE semantic error of the specified type. The modified SQL should:
+- ✅ Have valid syntax (no syntax errors)
+- ✅ Be executable against the database
+- ❌ Contain the specified semantic error
+- ❌ NOT contain any other types of errors
+
+## 📋 Error Specification
+**Error Category:** Value-related Errors
+**Category Description:** Value-related Errors arise when NL2SQL models incorrectly parse or interpret the required attribute values from natural language expressions. These errors manifest in two primary forms.
+
+**Specific Error Type:** Value Mismatch
+**Error Description:** The model fails to map values from natural language descriptions to their actual representations in the database, occurring frequently and reflecting a misunderstanding of how values are actually stored in the database.
+
+## 💡 Guidelines for Error Injection
+
+### DO:
+- Focus ONLY on the specified error type
+- Keep the query structure as similar as possible to the original
+- Ensure the modified SQL runs without syntax errors
+- Make the error subtle but semantically meaningful
+- Consider the business logic and question intent when injecting the error
+
+### DON'T:
+- Add syntax errors or typos
+- Introduce multiple different error types
+- Completely rewrite the query structure
+- Make obvious/trivial mistakes that wouldn't occur in real scenarios
+- Change unrelated parts of the query
+
+## 📊 Database Schema
+```sql
+
+
+================================================================================-- Schema from: bigquery-public-data.the_met/DDL.csv
+table_name,ddl
+images,"CREATE TABLE `bigquery-public-data.the_met.images`
+(
+  object_id INT64,
+  public_caption STRING,
+  title STRING,
+  original_image_url STRING,
+  caption STRING,
+  is_oasc BOOL,
+  gcs_url STRING
+);"
+objects,"CREATE TABLE `bigquery-public-data.the_met.objects`
+(
+  object_number STRING,
+  is_highlight BOOL,
+  is_public_domain BOOL,
+  object_id INT64,
+  department STRING,
+  object_name STRING,
+  title STRING,
+  culture STRING,
+  period STRING,
+  dynasty STRING,
+  reign STRING,
+  portfolio STRING,
+  artist_role STRING,
+  artist_prefix STRING,
+  artist_display_name STRING,
+  artist_display_bio STRING,
+  artist_suffix STRING,
+  artist_alpha_sort STRING,
+  artist_nationality STRING,
+  artist_begin_date STRING,
+  artist_end_date STRING,
+  object_date STRING,
+  object_begin_date INT64,
+  object_end_date INT64,
+  medium STRING,
+  dimensions STRING,
+  credit_line STRING,
+  geography_type STRING,
+  city STRING,
+  state STRING,
+  county STRING,
+  country STRING,
+  region STRING,
+  subregion STRING,
+  locale STRING,
+  locus STRING,
+  excavation STRING,
+  river STRING,
+  classification STRING,
+  rights_and_reproduction STRING,
+  link_resource STRING,
+  metadata_date TIMESTAMP,
+  repository STRING
+);"
+vision_api_data,"CREATE TABLE `bigquery-public-data.the_met.vision_api_data`
+(
+  object_id INT64,
+  faceAnnotations ARRAY<STRUCT<headwearLikelihood STRING, underExposedLikelihood STRING, surpriseLikelihood STRING, boundingPoly STRUCT<vertices ARRAY<STRUCT<y INT64, x INT64>>>, fdBoundingPoly STRUCT<vertices ARRAY<STRUCT<y INT64, x INT64>>>, rollAngle FLOAT64, sorrowLikelihood STRING, panAngle FLOAT64, blurredLikelihood STRING, landmarks ARRAY<STRUCT<position STRUCT<z FLOAT64, y FLOAT64, x FLOAT64>, type STRING>>, detectionConfidence FLOAT64, angerLikelihood STRING, landmarkingConfidence FLOAT64, tiltAngle FLOAT64, joyLikelihood STRING>>,
+  landmarkAnnotations ARRAY<STRUCT<properties ARRAY<STRING>, locations ARRAY<STRUCT<latLng STRUCT<longitude FLOAT64, latitude FLOAT64>>>, boundingPoly STRUCT<vertices ARRAY<STRUCT<y INT64, x INT64>>>, topicality INT64, confidence INT64, score FLOAT64, description STRING, locale STRING, mid STRING>>,
+  cropHintsAnnotation STRUCT<cropHints ARRAY<STRUCT<importanceFraction FLOAT64, confidence FLOAT64, boundingPoly STRUCT<vertices ARRAY<STRUCT<y INT64, x INT64>>>>>>,
+  logoAnnotations ARRAY<STRING>,
+  labelAnnotations ARRAY<STRUCT<properties ARRAY<STRING>, locations ARRAY<STRING>, boundingPoly STRING, topicality INT64, confidence INT64, score FLOAT64, description STRING, locale STRING, mid STRING>>,
+  textAnnotations ARRAY<STRING>,
+  fullTextAnnotation STRING,
+  imagePropertiesAnnotation STRUCT<dominantColors STRUCT<colors ARRAY<STRUCT<pixelFraction FLOAT64, score FLOAT64, color STRUCT<alpha STRING, blue INT64, green INT64, red INT64>>>>>,
+  safeSearchAnnotation STRING,
+  webDetection STRUCT<partialMatchingImages ARRAY<STRUCT<score INT64, url STRING>>, pagesWithMatchingImages ARRAY<STRUCT<score INT64, url STRING>>, fullMatchingImages ARRAY<STRUCT<score INT64, url STRING>>, webEntities ARRAY<STRUCT<description STRING, score FLOAT64, entityId STRING>>>
+);"
+```
+
+## ❓ Natural Language Question
+"What are the titles, artist names, mediums, and original image URLs of objects with 'Photograph' in their names from the 'Photographs' department, created not by an unknown artist, with an object end date of 1839 or earlier?"
+
+## ✅ Correct SQL Query
+```sql
+SELECT
+  o.artist_display_name,
+  o.title,
+  o.object_end_date,
+  o.medium,
+  i.original_image_url
+FROM (
+  SELECT
+    object_id,
+    title,
+    artist_display_name,
+    object_end_date,
+    medium
+  FROM
+    `bigquery-public-data.the_met.objects`
+  WHERE
+    department = "Photographs"
+    AND object_name LIKE "%Photograph%"
+    AND artist_display_name != "Unknown"
+    AND object_end_date <= 1839
+) o
+INNER JOIN (
+  SELECT
+    original_image_url,
+    object_id
+  FROM
+    `bigquery-public-data.the_met.images`
+) i
+ON
+  o.object_id = i.object_id
+ORDER BY
+  o.object_end_date
+;
+```
+
+## 🔧 Your Task
+Analyze the correct SQL query above and modify it to introduce the specific error type: **Value Mismatch**.
+
+Think about:
+1. How this error typically manifests in real-world scenarios
+2. What parts of the query are most relevant to this error type
+3. How to make this data be meaningful for improving LLM SQL semantic detection area
+
+## 📤 Output Format
+Return your response in the following format:
+
+**Modified SQL Query:**
+```sql
+[Your modified SQL query here]
+```
+
+**Brief Explanation:**
+[A very brief explanation (1-2 sentences) of what specific change you made to inject the error]
+

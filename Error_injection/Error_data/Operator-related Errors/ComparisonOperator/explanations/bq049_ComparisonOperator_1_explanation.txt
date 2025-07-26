@@ -1,0 +1,1 @@
+I changed the comparison operator in the DUBUQUE_POPULATION_CTE from `minimum_age >= 21` to `minimum_age > 21`, which incorrectly excludes people who are exactly 21 years old from the population denominator.

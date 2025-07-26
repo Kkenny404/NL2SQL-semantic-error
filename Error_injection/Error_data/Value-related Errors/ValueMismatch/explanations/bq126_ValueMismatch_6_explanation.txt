@@ -1,0 +1,1 @@
+I changed the value in the `department` filter from `"Photographs"` (the correct value) to `"Photography"`, introducing a value mismatch error where the query will not match the intended department as stored in the database.

@@ -1,0 +1,1 @@
+I changed the value extraction for gene symbols from `annot.symbol` (the correct gene symbol field) to `annot.gene` (the Ensembl gene ID), causing a value mismatch between the expected gene symbol and the actual value returned.

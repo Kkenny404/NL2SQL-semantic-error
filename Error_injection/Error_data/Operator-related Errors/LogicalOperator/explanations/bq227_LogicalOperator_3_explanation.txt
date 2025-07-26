@@ -1,0 +1,1 @@
+I injected a logical operator error by using `OR` in the first `CASE` statement, causing `Category 1` to aggregate values for two categories instead of one, thus misrepresenting the logical relationship intended by the original query.

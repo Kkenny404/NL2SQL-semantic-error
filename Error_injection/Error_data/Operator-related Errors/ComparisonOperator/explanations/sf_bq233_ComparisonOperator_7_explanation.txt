@@ -1,0 +1,1 @@
+Changed the comparison operator in the WHERE clause for R files from `"line_" LIKE 'library%('` to `"line_" = 'library%('`, incorrectly using `=` instead of `LIKE` for pattern matching, which is a classic comparison operator semantic error.

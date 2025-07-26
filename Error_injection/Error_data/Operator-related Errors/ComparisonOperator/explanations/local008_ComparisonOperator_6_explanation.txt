@@ -1,0 +1,1 @@
+I changed the comparison operator in the first SELECT's WHERE clause from `=` to `>=`, so it now incorrectly includes all players with games played equal to or greater than the maximum, instead of only those with the maximum value.

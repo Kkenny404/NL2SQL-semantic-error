@@ -1,0 +1,1 @@
+I changed the value for `reference_bases` from `"C"` to `"G"`, introducing a value mismatch error where the query now looks for the wrong reference base compared to the user's intent.

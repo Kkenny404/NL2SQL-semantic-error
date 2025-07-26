@@ -1,0 +1,1 @@
+I changed the numeric literal `100` in the `HAVING` clause to the string `'100'`, causing a data format mismatch by comparing an integer column to a string value.

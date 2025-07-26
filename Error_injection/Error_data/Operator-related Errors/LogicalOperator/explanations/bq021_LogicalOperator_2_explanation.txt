@@ -1,0 +1,1 @@
+I changed the logical operator in the WHERE clause of the inner bike trips query from `AND` to `OR`, so now routes are included if they are from 2016 **or** if the start and end station names differ, instead of requiring both conditions. This introduces a logical operator error.
