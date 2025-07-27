@@ -1,0 +1,1 @@
+I changed the JOIN condition from `q.id = a.parent_id` (correct: question to its answers) to `q.id = a.id` (incorrect: question joined to answer with the same id), introducing a join condition mismatch between unrelated attributes.

@@ -1,0 +1,1 @@
+I added the unnecessary attribute `p.median_income` to the SELECT and GROUP BY clauses in the CTE, even though median income is not mentioned or required by the question, introducing attribute redundancy.

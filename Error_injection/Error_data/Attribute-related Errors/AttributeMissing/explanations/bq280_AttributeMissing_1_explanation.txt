@@ -1,0 +1,1 @@
+I removed the `reputation` attribute from the `DetailedUsers` CTE and its associated filter, so the query no longer restricts users to those with reputation greater than 10—thus missing an essential attribute required by the question.

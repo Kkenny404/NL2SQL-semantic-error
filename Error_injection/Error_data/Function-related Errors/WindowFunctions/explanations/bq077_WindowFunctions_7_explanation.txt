@@ -1,0 +1,6 @@
+I removed the PARTITION BY year clause from the RANK() window function, causing the ranking to be computed over all years together instead of separately for each year.
+Window Function Misuse vs. Explicit Condition Mismatch
+
+Window Function Misuse: The error occurs inside the window function itself, such as removing or wrongly modifying PARTITION BY or ORDER BY. This changes how the function (e.g., RANK()) operates, even if the query still runs.
+
+Explicit Condition Mismatch: The error is about the condition not matching the natural language intent (e.g., missing “per year” ranking), regardless of whether a function is involved.

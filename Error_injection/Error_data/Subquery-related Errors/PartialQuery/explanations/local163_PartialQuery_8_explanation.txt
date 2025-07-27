@@ -1,0 +1,1 @@
+I stopped at the SalaryDifferences CTE and selected all rows from it, omitting the final step that filters for faculty with the minimum difference per rank—thus returning only a partial result set that does not fully answer the question.

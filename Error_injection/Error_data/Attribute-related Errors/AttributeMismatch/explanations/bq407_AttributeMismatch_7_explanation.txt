@@ -1,0 +1,1 @@
+I swapped the numerator and denominator in the case fatality rate calculation, using `(covid.total_cases / covid.total_deaths * 100)` instead of the correct `(covid.total_deaths / covid.total_cases * 100)`, thus mismatching the intended attribute mapping for the case fatality rate.

@@ -1,0 +1,140 @@
+# SQL Semantic Error Injection Task
+
+You are an expert SQL developer tasked with injecting a SPECIFIC semantic error into a correct SQL query.
+
+## 🎯 Your Mission
+Take the provided correct SQL query and modify it to contain EXACTLY ONE semantic error of the specified type. The modified SQL should:
+- ✅ Have valid syntax (no syntax errors)
+- ✅ Be executable against the database
+- ❌ Contain the specified semantic error
+- ❌ NOT contain any other types of errors
+
+## 📋 Error Specification
+**Error Category:** Clause-related Errors
+**Category Description:** Clause-related Errors occur when NL2SQL models fail to correctly include, omit, or structure SQL clauses. These errors primarily involve mishandling GROUP BY, ORDER BY, and HAVING clauses, which are crucial for aggregation, sorting, and filtering grouped results. The errors manifest in two main categories.
+
+**Specific Error Type:** Clause Redundancy
+**Error Description:** The model includes extraneous clauses like GROUP BY, ORDER BY, or HAVING that are not required by the natural language query, indicating an over-interpretation or misunderstanding of the input requirements.
+
+## 💡 Guidelines for Error Injection
+
+### DO:
+- Focus ONLY on the specified error type
+- Keep the query structure as similar as possible to the original
+- Ensure the modified SQL runs without syntax errors
+- Make the error subtle but semantically meaningful
+- Consider the business logic and question intent when injecting the error
+
+### DON'T:
+- Add syntax errors or typos
+- Introduce multiple different error types
+- Completely rewrite the query structure
+- Make obvious/trivial mistakes that wouldn't occur in real scenarios
+- Change unrelated parts of the query
+
+## 📊 Database Schema
+```sql
+
+
+================================================================================-- Schema from: GITHUB_REPOS/DDL.csv
+table_name,description,DDL
+SAMPLE_FILES,,"create or replace TABLE SAMPLE_FILES (
+	""repo_name"" VARCHAR(16777216),
+	""ref"" VARCHAR(16777216),
+	""path"" VARCHAR(16777216),
+	""mode"" NUMBER(38,0),
+	""id"" VARCHAR(16777216),
+	""symlink_target"" VARCHAR(16777216)
+);"
+LANGUAGES,,"create or replace TABLE LANGUAGES (
+	""repo_name"" VARCHAR(16777216),
+	""language"" VARIANT
+);"
+LICENSES,,"create or replace TABLE LICENSES (
+	""repo_name"" VARCHAR(16777216),
+	""license"" VARCHAR(16777216)
+);"
+SAMPLE_COMMITS,,"create or replace TABLE SAMPLE_COMMITS (
+	""commit"" VARCHAR(16777216),
+	""tree"" VARCHAR(16777216),
+	""parent"" VARIANT,
+	""author"" VARIANT,
+	""committer"" VARIANT,
+	""subject"" VARCHAR(16777216),
+	""message"" VARCHAR(16777216),
+	""trailer"" VARIANT,
+	""difference"" VARIANT,
+	""difference_truncated"" BOOLEAN,
+	""repo_name"" VARCHAR(16777216),
+	""encoding"" VARCHAR(16777216)
+);"
+SAMPLE_CONTENTS,,"create or replace TABLE SAMPLE_CONTENTS (
+	""id"" VARCHAR(16777216),
+	""size"" NUMBER(38,0),
+	""content"" VARCHAR(16777216),
+	""binary"" BOOLEAN,
+	""copies"" NUMBER(38,0),
+	""sample_repo_name"" VARCHAR(16777216),
+	""sample_ref"" VARCHAR(16777216),
+	""sample_path"" VARCHAR(16777216),
+	""sample_mode"" NUMBER(38,0),
+	""sample_symlink_target"" VARCHAR(16777216)
+);"
+SAMPLE_REPOS,,"create or replace TABLE SAMPLE_REPOS (
+	""repo_name"" VARCHAR(16777216),
+	""watch_count"" NUMBER(38,0)
+);"
+```
+
+## ❓ Natural Language Question
+"Extract and count the frequency of all package names listed in the require section of JSON-formatted content"
+
+## ✅ Correct SQL Query
+```sql
+WITH json_files AS (
+  SELECT
+    c."id",
+    TRY_PARSE_JSON(c."content"):"require" AS "dependencies"
+  FROM
+    GITHUB_REPOS.GITHUB_REPOS.SAMPLE_CONTENTS c
+),
+package_names AS (
+  SELECT
+    f.key AS "package_name"
+  FROM
+    json_files,
+    LATERAL FLATTEN(input => "dependencies") AS f
+)
+SELECT
+  "package_name",
+  COUNT(*) AS "count"
+FROM
+  package_names
+WHERE
+  "package_name" IS NOT NULL
+GROUP BY
+  "package_name"
+ORDER BY
+  "count" DESC;
+
+```
+
+## 🔧 Your Task
+Analyze the correct SQL query above and modify it to introduce the specific error type: **Clause Redundancy**.
+
+Think about:
+1. How this error typically manifests in real-world scenarios
+2. What parts of the query are most relevant to this error type
+3. How to make this data be meaningful for improving LLM SQL semantic detection area
+
+## 📤 Output Format
+Return your response in the following format:
+
+**Modified SQL Query:**
+```sql
+[Your modified SQL query here]
+```
+
+**Brief Explanation:**
+[A very brief explanation (1-2 sentences) of what specific change you made to inject the error]
+

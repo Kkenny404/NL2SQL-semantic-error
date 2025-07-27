@@ -1,0 +1,1 @@
+I replaced the selection of the `title` attribute with `body` in both the CTE and final SELECT, causing the query to return the question body instead of its title—an attribute mismatch error.

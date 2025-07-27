@@ -1,0 +1,1 @@
+I changed the aggregate function from COUNT(*) to SUM(*) in the forward citations subquery, which is incorrect because SUM requires a numeric column argument, not the wildcard (*) used for counting rows.

@@ -1,0 +1,1 @@
+I introduced an attribute mismatch by selecting `questions.answer_count` as `q_comment_count` instead of the correct `questions.comment_count`, thus returning the answer count in place of the question's comment count.

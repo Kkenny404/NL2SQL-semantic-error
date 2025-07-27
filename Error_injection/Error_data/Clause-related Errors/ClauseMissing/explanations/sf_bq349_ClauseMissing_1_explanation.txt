@@ -1,0 +1,1 @@
+I removed the necessary `GROUP BY ba."osm_id"` clause from the `poi_counts` CTE, so the aggregation is now semantically incorrect but the query remains syntactically valid.

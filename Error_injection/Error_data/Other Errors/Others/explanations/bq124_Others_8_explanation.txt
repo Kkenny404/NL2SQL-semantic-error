@@ -1,0 +1,1 @@
+I rewrote the query to simply count all patients with at least one active medication request, completely ignoring the requirements for diagnosis (Diabetes/Hypertension), alive status, and the threshold of seven distinct medications—thus introducing a severe semantic deviation as required.

@@ -1,0 +1,1 @@
+I injected the semantic error by adding an unnecessary `DISTINCT` to the final `SELECT`, which could incorrectly deduplicate rows when multiple months have the same maximum rentals for a store, thus potentially omitting valid results.

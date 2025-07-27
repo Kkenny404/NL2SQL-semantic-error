@@ -1,0 +1,1 @@
+I removed the explicit condition `provider_business_practice_location_address_state_name = "CA"` from the WHERE clause, so the query no longer restricts results to providers in California, missing an explicit user requirement.

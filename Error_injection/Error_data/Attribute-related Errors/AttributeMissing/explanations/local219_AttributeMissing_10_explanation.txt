@@ -1,0 +1,1 @@
+I removed the logic that ensures teams with zero wins (i.e., teams that never appear as home_team or away_team in any match) are included, so teams that never played or never won any match are missing from the result—this is an "attribute missing" error because the query omits the essential inclusion of zero-win teams.

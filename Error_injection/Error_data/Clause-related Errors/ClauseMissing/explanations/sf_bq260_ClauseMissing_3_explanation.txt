@@ -1,0 +1,1 @@
+I removed the necessary `GROUP BY "tag", "gender"` clause from the final SELECT, so the query now aggregates incorrectly and does not provide counts per tag and gender as intended.

@@ -1,0 +1,275 @@
+# SQL Semantic Error Injection Task
+
+You are an expert SQL developer tasked with injecting a SPECIFIC semantic error into a correct SQL query.
+
+## 🎯 Your Mission
+Take the provided correct SQL query and modify it to contain EXACTLY ONE semantic error of the specified type. The modified SQL should:
+- ✅ Have valid syntax (no syntax errors)
+- ✅ Be executable against the database
+- ❌ Contain the specified semantic error
+- ❌ NOT contain any other types of errors
+
+## 📋 Error Specification
+**Error Category:** Clause-related Errors
+**Category Description:** Clause-related Errors occur when NL2SQL models fail to correctly include, omit, or structure SQL clauses. These errors primarily involve mishandling GROUP BY, ORDER BY, and HAVING clauses, which are crucial for aggregation, sorting, and filtering grouped results. The errors manifest in two main categories.
+
+**Specific Error Type:** Clause Redundancy
+**Error Description:** The model includes extraneous clauses like GROUP BY, ORDER BY, or HAVING that are not required by the natural language query, indicating an over-interpretation or misunderstanding of the input requirements.
+
+## 💡 Guidelines for Error Injection
+
+### DO:
+- Focus ONLY on the specified error type
+- Keep the query structure as similar as possible to the original
+- Ensure the modified SQL runs without syntax errors
+- Make the error subtle but semantically meaningful
+- Consider the business logic and question intent when injecting the error
+
+### DON'T:
+- Add syntax errors or typos
+- Introduce multiple different error types
+- Completely rewrite the query structure
+- Make obvious/trivial mistakes that wouldn't occur in real scenarios
+- Change unrelated parts of the query
+
+## 📊 Database Schema
+```sql
+
+
+================================================================================-- Schema from: bigquery-public-data.austin_311/DDL.csv
+table_name,ddl
+311_service_requests,"CREATE TABLE `bigquery-public-data.austin_311.311_service_requests`
+(
+  unique_key STRING OPTIONS(description=""The service request tracking number.""),
+  complaint_description STRING OPTIONS(description=""Service request type""),
+  source STRING OPTIONS(description=""Contact method Service request was received from. Mass entry requests are submitted by dept. in groups after work is completed.""),
+  status STRING OPTIONS(description=""Service request status. Duplicate statuses indicate that issue had previously been reported recently.""),
+  status_change_date TIMESTAMP OPTIONS(description=""Date of last Service request status change. Status changes occur when service request moves from one status to another. I.E. new to open, open to closed.""),
+  created_date TIMESTAMP OPTIONS(description=""Date Service request was created.""),
+  last_update_date TIMESTAMP OPTIONS(description=""Date Service request was updated. Last date Service request received updates. Updates may include creation, status changes, or changes to data in Service request.""),
+  close_date TIMESTAMP OPTIONS(description=""Date Service request was closed.""),
+  incident_address STRING OPTIONS(description=""Service location of Service request.""),
+  street_number STRING OPTIONS(description=""Parsed location information. Street number.""),
+  street_name STRING OPTIONS(description=""Parsed location information. Street name.""),
+  city STRING OPTIONS(description=""Parsed location information. City.""),
+  incident_zip INT64 OPTIONS(description=""Parsed location information. Zip code.""),
+  county STRING OPTIONS(description=""Parsed location information. County.""),
+  state_plane_x_coordinate STRING OPTIONS(description=""State plane X coordinate.""),
+  state_plane_y_coordinate FLOAT64 OPTIONS(description=""State plane Y coordinate.""),
+  latitude FLOAT64 OPTIONS(description=""Service request location latitude coordinate.""),
+  longitude FLOAT64 OPTIONS(description=""Service request location longitude coordinate.""),
+  location STRING OPTIONS(description=""Service request location latitude and longitude coordinates.""),
+  council_district_code INT64 OPTIONS(description=""Council district corresponding to Service request location. Locations outside of the City of Austin jurisdiction will not have a council district.""),
+  map_page STRING OPTIONS(description=""Service request location corresponding map page.""),
+  map_tile STRING OPTIONS(description=""Service request location corresponding map tile."")
+);"
+
+-- Schema from: bigquery-public-data.austin_bikeshare/DDL.csv
+table_name,ddl
+bikeshare_stations,"CREATE TABLE `bigquery-public-data.austin_bikeshare.bikeshare_stations`
+(
+  station_id INT64,
+  name STRING,
+  status STRING,
+  address STRING,
+  alternate_name STRING,
+  city_asset_number INT64,
+  property_type STRING,
+  number_of_docks INT64,
+  power_type STRING,
+  footprint_length INT64,
+  footprint_width FLOAT64,
+  notes STRING,
+  council_district INT64,
+  modified_date TIMESTAMP
+)
+OPTIONS(
+  description=""Austin Bikeshare Stations table""
+);"
+bikeshare_trips,"CREATE TABLE `bigquery-public-data.austin_bikeshare.bikeshare_trips`
+(
+  trip_id STRING OPTIONS(description=""Numeric ID of bike trip""),
+  subscriber_type STRING OPTIONS(description=""Type of the Subscriber""),
+  bike_id STRING OPTIONS(description=""ID of bike used""),
+  bike_type STRING OPTIONS(description=""Type of bike used""),
+  start_time TIMESTAMP OPTIONS(description=""Start timestamp of trip""),
+  start_station_id INT64 OPTIONS(description=""Numeric reference for start station""),
+  start_station_name STRING OPTIONS(description=""Station name for start station""),
+  end_station_id STRING OPTIONS(description=""Numeric reference for end station""),
+  end_station_name STRING OPTIONS(description=""Station name for end station""),
+  duration_minutes INT64 OPTIONS(description=""Time of trip in minutes"")
+);"
+
+-- Schema from: bigquery-public-data.austin_crime/DDL.csv
+table_name,ddl
+crime,"CREATE TABLE `bigquery-public-data.austin_crime.crime`
+(
+  unique_key INT64 OPTIONS(description=""Unique identifier for the record.""),
+  address STRING OPTIONS(description=""Full address where the incident occurred.""),
+  census_tract FLOAT64 OPTIONS(description=""""),
+  clearance_date TIMESTAMP OPTIONS(description=""""),
+  clearance_status STRING OPTIONS(description=""""),
+  council_district_code INT64 OPTIONS(description=""Indicates the council district code where the incident occurred.""),
+  description STRING OPTIONS(description=""The subcategory of the primary description.""),
+  district STRING OPTIONS(description=""Indicates the police district where the incident occurred.""),
+  latitude FLOAT64 OPTIONS(description=""""),
+  longitude FLOAT64 OPTIONS(description=""""),
+  location STRING OPTIONS(description=""""),
+  location_description STRING OPTIONS(description=""Description of the location where the incident occurred.""),
+  primary_type STRING OPTIONS(description=""The primary description of the NIBRS/UCR code.""),
+  timestamp TIMESTAMP OPTIONS(description=""Time when the incident occurred. This is sometimes a best estimate.""),
+  x_coordinate INT64 OPTIONS(description=""The x coordinate of the location where the incident occurred""),
+  y_coordinate INT64 OPTIONS(description=""The y coordinate of the location where the incident occurred""),
+  year INT64 OPTIONS(description=""Indicates the year in which the incident occurred.""),
+  zipcode STRING OPTIONS(description=""Indicates the zipcode where the incident occurred."")
+)
+OPTIONS(
+  description=""Austin Crime table""
+);"
+
+-- Schema from: bigquery-public-data.austin_incidents/DDL.csv
+table_name,ddl
+incidents_2011,"CREATE TABLE `bigquery-public-data.austin_incidents.incidents_2011`
+(
+  unique_key INT64 OPTIONS(description=""The unique incident number for this accident.""),
+  descript STRING OPTIONS(description=""""),
+  date DATE OPTIONS(description=""""),
+  time TIME OPTIONS(description=""""),
+  address STRING OPTIONS(description=""""),
+  longitude FLOAT64 OPTIONS(description=""""),
+  latitude FLOAT64 OPTIONS(description=""""),
+  location STRING OPTIONS(description=""Latitude/Longitude""),
+  timestamp TIMESTAMP OPTIONS(description="""")
+);"
+incidents_2008,"CREATE TABLE `bigquery-public-data.austin_incidents.incidents_2008`
+(
+  unique_key INT64 OPTIONS(description=""The unique incident number for this accident.""),
+  descript STRING OPTIONS(description=""""),
+  date DATE OPTIONS(description=""""),
+  time TIME OPTIONS(description=""""),
+  address STRING OPTIONS(description=""""),
+  longitude FLOAT64 OPTIONS(description=""""),
+  latitude FLOAT64 OPTIONS(description=""""),
+  location STRING OPTIONS(description=""Latitude/Longitude""),
+  timestamp TIMESTAMP OPTIONS(description="""")
+);"
+incidents_2016,"CREATE TABLE `bigquery-public-data.austin_incidents.incidents_2016`
+(
+  unique_key INT64 OPTIONS(description=""The unique incident number for this accident.""),
+  descript STRING OPTIONS(description=""""),
+  date DATE OPTIONS(description=""""),
+  time TIME OPTIONS(description=""""),
+  address STRING OPTIONS(description=""""),
+  longitude FLOAT64 OPTIONS(description=""""),
+  latitude FLOAT64 OPTIONS(description=""""),
+  location STRING OPTIONS(description=""Latitude/Longitude""),
+  timestamp TIMESTAMP OPTIONS(description="""")
+);"
+incidents_2009,"CREATE TABLE `bigquery-public-data.austin_incidents.incidents_2009`
+(
+  unique_key INT64 OPTIONS(description=""The unique incident number for this accident.""),
+  descript STRING OPTIONS(description=""""),
+  date DATE OPTIONS(description=""""),
+  time TIME OPTIONS(description=""""),
+  address STRING OPTIONS(description=""""),
+  longitude FLOAT64 OPTIONS(description=""""),
+  latitude FLOAT64 OPTIONS(description=""""),
+  location STRING OPTIONS(description=""Latitude/Longitude""),
+  timestamp TIMESTAMP OPTIONS(description="""")
+);"
+incidents_2010,"CREATE TABLE `bigquery-public-data.austin_incidents.incidents_2010`
+(
+  unique_key INT64 OPTIONS(description=""The unique incident number for this accident.""),
+  descript STRING OPTIONS(description=""""),
+  date DATE OPTIONS(description=""""),
+  time TIME OPTIONS(description=""""),
+  address STRING OPTIONS(description=""""),
+  longitude FLOAT64 OPTIONS(description=""""),
+  latitude FLOAT64 OPTIONS(description=""""),
+  location STRING OPTIONS(description=""Latitude/Longitude""),
+  timestamp TIMESTAMP OPTIONS(description="""")
+);"
+
+-- Schema from: bigquery-public-data.austin_waste/DDL.csv
+table_name,ddl
+waste_and_diversion,"CREATE TABLE `bigquery-public-data.austin_waste.waste_and_diversion`
+(
+  load_id INT64,
+  report_date DATE,
+  load_type STRING,
+  load_time TIMESTAMP,
+  load_weight FLOAT64,
+  dropoff_site STRING,
+  route_type STRING,
+  route_number STRING
+)
+OPTIONS(
+  description=""Austin waste and diversion""
+);"
+```
+
+## ❓ Natural Language Question
+"What is the date with the second highest Z-score for daily counts of 'PUBLIC INTOXICATION' incidents in Austin for the year 2016? List the date in the format of '2016-xx-xx'."
+
+## ✅ Correct SQL Query
+```sql
+WITH incident_stats AS (
+  SELECT 
+    COUNT(descript) AS total_pub_intox
+  FROM 
+    `bigquery-public-data.austin_incidents.incidents_2016` 
+  WHERE 
+    descript = 'PUBLIC INTOXICATION' 
+  GROUP BY 
+    date
+),
+average_and_stddev AS (
+  SELECT 
+    AVG(total_pub_intox) AS avg, 
+    STDDEV(total_pub_intox) AS stddev 
+  FROM 
+    incident_stats
+),
+daily_z_scores AS (
+  SELECT 
+    date, 
+    COUNT(descript) AS total_pub_intox, 
+    ROUND((COUNT(descript) - a.avg) / a.stddev, 2) AS z_score
+  FROM 
+    `bigquery-public-data.austin_incidents.incidents_2016`,
+    (SELECT avg, stddev FROM average_and_stddev) AS a
+  WHERE 
+    descript = 'PUBLIC INTOXICATION'
+  GROUP BY 
+    date, avg, stddev
+)
+
+SELECT 
+  date
+FROM 
+  daily_z_scores
+ORDER BY 
+  z_score DESC
+LIMIT 1
+OFFSET 1
+```
+
+## 🔧 Your Task
+Analyze the correct SQL query above and modify it to introduce the specific error type: **Clause Redundancy**.
+
+Think about:
+1. How this error typically manifests in real-world scenarios
+2. What parts of the query are most relevant to this error type
+3. How to make this data be meaningful for improving LLM SQL semantic detection area
+
+## 📤 Output Format
+Return your response in the following format:
+
+**Modified SQL Query:**
+```sql
+[Your modified SQL query here]
+```
+
+**Brief Explanation:**
+[A very brief explanation (1-2 sentences) of what specific change you made to inject the error]
+

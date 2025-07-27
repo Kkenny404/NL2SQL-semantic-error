@@ -1,0 +1,1 @@
+I removed the implicit condition `layer."layer_code" IN (2110, 2120)` from the `hospitals` CTE, so the query now incorrectly includes all features in the PLANET_LAYERS table as hospitals, not just those representing hospitals.

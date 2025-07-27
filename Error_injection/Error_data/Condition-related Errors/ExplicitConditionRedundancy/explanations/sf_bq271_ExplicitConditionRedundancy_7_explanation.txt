@@ -1,0 +1,1 @@
+I added an explicit redundant condition `AND orders."status" = 'Complete'` in the first CTE, restricting to only completed orders, even though the natural language question did not specify any order status requirement.

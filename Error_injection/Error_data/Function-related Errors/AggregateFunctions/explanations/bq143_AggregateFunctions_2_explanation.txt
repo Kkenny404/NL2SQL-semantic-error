@@ -1,0 +1,1 @@
+I replaced the correlation function CORR(protein_abundance_log2ratio, HTSeq__FPKM) with SUM(protein_abundance_log2ratio, HTSeq__FPKM), which is incorrect because SUM only takes one argument, not two, and SUM doesn't calculate correlation.

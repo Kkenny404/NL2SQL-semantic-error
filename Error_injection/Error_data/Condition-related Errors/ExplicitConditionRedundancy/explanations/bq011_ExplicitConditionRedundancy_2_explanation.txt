@@ -1,0 +1,1 @@
+I added the explicit redundant condition `AND country = 'United States'` to both subqueries, restricting results to US users even though the natural language question does not specify any country filter.

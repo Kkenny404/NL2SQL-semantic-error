@@ -1,0 +1,1 @@
+I changed the `JOIN` between `covid_data` and `population_data` from an `INNER JOIN` to a `LEFT JOIN`, which can include counties with COVID data but missing population data, resulting in NULLs and potentially misleading results—this is a classic join type mismatch for the question's intent.

@@ -1,0 +1,1 @@
+I stopped at the intermediate `similarities` CTE and output all its rows, rather than wrapping it in a final query to select only the top five most similar patents, thus producing only a partial query that does not fully answer the original question.

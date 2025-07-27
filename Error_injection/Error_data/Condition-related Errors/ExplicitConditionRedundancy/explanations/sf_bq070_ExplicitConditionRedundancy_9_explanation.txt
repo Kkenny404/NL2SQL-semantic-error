@@ -1,0 +1,1 @@
+I added the redundant condition `AND a."width" > 0` to the WHERE clause, which is not required by the natural language question and thus constitutes explicit condition redundancy.

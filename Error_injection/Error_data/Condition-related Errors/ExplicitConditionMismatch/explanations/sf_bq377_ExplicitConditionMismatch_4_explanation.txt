@@ -1,0 +1,1 @@
+I changed the condition from filtering out NULL package names (`"package_name" IS NOT NULL`) to only including empty string package names (`"package_name" = ''`), and also extracted the value instead of the key from the JSON, thus mismatching both the attribute and value/operator in the condition.

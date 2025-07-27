@@ -1,0 +1,1 @@
+I removed the implicit condition that should filter out faculty members with NULL salaries (i.e., missing `WHERE facsalary IS NOT NULL` in the relevant subqueries), so the query may include incomplete or invalid records, which is a common implicit business logic expectation.

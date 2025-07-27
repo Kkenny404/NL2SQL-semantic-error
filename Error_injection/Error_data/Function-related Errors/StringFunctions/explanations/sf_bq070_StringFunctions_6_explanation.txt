@@ -1,0 +1,1 @@
+I replaced the correct use of nested REPLACE to map collection IDs to cancer subtypes with an incorrect use of `SUBSTR(a."collection_id", 1, 4)`, which simply takes the first four characters of the collection ID, resulting in meaningless values like "tcga" instead of the intended "luad" or "lscc".

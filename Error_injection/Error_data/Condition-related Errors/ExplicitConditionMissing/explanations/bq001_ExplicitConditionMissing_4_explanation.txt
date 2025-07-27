@@ -1,0 +1,1 @@
+I removed the explicit date range condition (`AND _TABLE_SUFFIX BETWEEN start_date AND end_date`) from the `transactions` CTE, so transactions from outside February 2017 may be included, violating the explicit requirement that both visits and transactions must be in February 2017.

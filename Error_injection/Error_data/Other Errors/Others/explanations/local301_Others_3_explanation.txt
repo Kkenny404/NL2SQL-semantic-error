@@ -1,0 +1,1 @@
+Instead of calculating the percentage change in sales before and after June 15 for each year as requested, this query simply aggregates total and average sales per year, fundamentally deviating from the original intent and requiring a complete rewrite to achieve the expected results.

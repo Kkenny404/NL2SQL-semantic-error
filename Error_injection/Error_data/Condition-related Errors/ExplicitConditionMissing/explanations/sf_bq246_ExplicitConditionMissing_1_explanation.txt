@@ -1,0 +1,1 @@
+I removed the explicit condition apps."country" = 'US' from both subqueries, so the query no longer restricts results to U.S. patents as explicitly stated in the natural language requirement "Retrieve U.S. patents".

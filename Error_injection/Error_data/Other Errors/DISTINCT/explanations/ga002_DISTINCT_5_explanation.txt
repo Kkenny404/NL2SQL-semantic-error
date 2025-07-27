@@ -1,0 +1,1 @@
+I incorrectly added a `DISTINCT` keyword to the final `SELECT`, which is unnecessary because the query logic already ensures uniqueness per period; this could cause unnecessary deduplication and performance issues.

@@ -1,0 +1,1 @@
+I changed the `ORDER BY avg_birth_rate DESC` to `ORDER BY avg_birth_rate ASC` in the window function, which now ranks countries with the **lowest** (instead of highest) average birth rate as rank 1 in each region—thus reversing the intended order.

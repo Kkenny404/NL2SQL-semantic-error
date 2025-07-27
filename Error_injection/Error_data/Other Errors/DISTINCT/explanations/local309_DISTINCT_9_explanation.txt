@@ -1,0 +1,1 @@
+I removed the DISTINCT keyword from the final SELECT (which should have been present to deduplicate rows when multiple drivers or constructors tie for most points), causing potential duplicate rows in the output.

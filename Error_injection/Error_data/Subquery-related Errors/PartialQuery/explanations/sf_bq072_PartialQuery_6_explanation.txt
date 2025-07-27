@@ -1,0 +1,1 @@
+I injected the "Partial Query" error by providing only the subquery that returns vehicle-related deaths by age and race, omitting the firearm-related part and the final combination step, so the query is only a part of the full answer required by the natural language question.

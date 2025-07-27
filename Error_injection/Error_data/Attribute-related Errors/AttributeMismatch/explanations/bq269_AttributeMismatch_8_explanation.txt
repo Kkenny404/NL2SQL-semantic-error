@@ -1,0 +1,1 @@
+I replaced `SUM(totals.pageviews)` with `SUM(totals.visits)`, incorrectly aggregating the number of visits instead of pageviews, which is an attribute mismatch error.

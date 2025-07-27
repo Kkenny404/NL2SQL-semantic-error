@@ -1,0 +1,1 @@
+I injected a string function error by changing the WHERE clause to use `SUBSTR(tag, 2)` instead of `tag`, which incorrectly skips the first character of each tag and thus fails to correctly match 'python'.

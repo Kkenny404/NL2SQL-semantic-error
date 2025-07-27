@@ -1,0 +1,1 @@
+I added the unnecessary "email" attribute to the SELECT and GROUP BY clauses in both the youngest and oldest CTEs, even though the NLQ does not require or mention user emails, thus introducing attribute redundancy.

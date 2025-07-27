@@ -1,0 +1,1 @@
+I omitted the attributes for the 2019 and 2020 average per-liter retail prices from the final SELECT, so the output only includes the 2021 values, missing essential attributes required by the question.

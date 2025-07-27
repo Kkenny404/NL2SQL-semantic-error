@@ -1,0 +1,1 @@
+I replaced COUNT(DISTINCT "ForumMessageVotes"."Id") with SUM(DISTINCT "ForumMessageVotes"."Id"). This is a function misuse error—using SUM instead of COUNT for counting upvotes—changing the aggregation semantics without altering syntax or clauses.

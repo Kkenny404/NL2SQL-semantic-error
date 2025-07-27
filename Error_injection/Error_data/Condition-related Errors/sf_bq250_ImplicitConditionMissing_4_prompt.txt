@@ -1,0 +1,251 @@
+# SQL Semantic Error Injection Task
+
+You are an expert SQL developer tasked with injecting a SPECIFIC semantic error into a correct SQL query.
+
+## 🎯 Your Mission
+Take the provided correct SQL query and modify it to contain EXACTLY ONE semantic error of the specified type. The modified SQL should:
+- ✅ Have valid syntax (no syntax errors)
+- ✅ Be executable against the database
+- ❌ Contain the specified semantic error
+- ❌ NOT contain any other types of errors
+
+## 📋 Error Specification
+**Error Category:** Condition-related Errors
+**Category Description:** Condition-related Errors occur when NL2SQL models fail to properly handle query conditions, particularly in cases where multiple condition-related issues co-exist. These errors are categorized into explicit and implicit conditions.
+
+**Specific Error Type:** Implicit Condition Missing
+**Error Description:** The model fails to include necessary conditions that are implied but not explicitly stated in the natural language query. These implicit conditions are often domain-specific business logic or data integrity requirements that experienced users would naturally assume. Common examples include: (1) NULL value handling: When querying student grades, the model should automatically filter out incomplete records (e.g., adding 'grade IS NOT NULL'); (2) Valid status filtering: When asking for 'active employees,' the model should include 'status = active' even if not explicitly mentioned; (3) Date range constraints: When querying 'recent orders,' the model should infer appropriate time boundaries; (4) Default exclusions: Automatically excluding deleted, archived, or test records that shouldn't appear in normal business queries; (5) Referential integrity: Ensuring proper joins that exclude orphaned records when the relationship is contextually implied.
+
+## 💡 Guidelines for Error Injection
+
+### DO:
+- Focus ONLY on the specified error type
+- Keep the query structure as similar as possible to the original
+- Ensure the modified SQL runs without syntax errors
+- Make the error subtle but semantically meaningful
+- Consider the business logic and question intent when injecting the error
+
+### DON'T:
+- Add syntax errors or typos
+- Introduce multiple different error types
+- Completely rewrite the query structure
+- Make obvious/trivial mistakes that wouldn't occur in real scenarios
+- Change unrelated parts of the query
+
+## 📊 Database Schema
+```sql
+
+
+================================================================================-- Schema from: GEO_OPENSTREETMAP/DDL.csv
+table_name,description,DDL
+HISTORY_CHANGESETS,,"create or replace TABLE HISTORY_CHANGESETS (
+	""id"" NUMBER(38,0),
+	""osm_timestamp_min"" NUMBER(38,0),
+	""osm_timestamp_max"" NUMBER(38,0),
+	""relations"" VARIANT,
+	""ways"" VARIANT,
+	""nodes"" VARIANT
+);"
+HISTORY_NODES,,"create or replace TABLE HISTORY_NODES (
+	""id"" NUMBER(38,0),
+	""version"" NUMBER(38,0),
+	""username"" VARCHAR(16777216),
+	""changeset"" NUMBER(38,0),
+	""visible"" BOOLEAN,
+	""osm_timestamp"" NUMBER(38,0),
+	""geometry"" BINARY(8388608),
+	""all_tags"" VARIANT,
+	""latitude"" NUMBER(38,9),
+	""longitude"" NUMBER(38,9)
+);"
+PLANET_FEATURES_POINTS,,"create or replace TABLE PLANET_FEATURES_POINTS (
+	""osm_id"" NUMBER(38,0),
+	""osm_version"" NUMBER(38,0),
+	""osm_way_id"" NUMBER(38,0),
+	""osm_timestamp"" NUMBER(38,0),
+	""geometry"" BINARY(8388608),
+	""all_tags"" VARIANT
+);"
+PLANET_FEATURES,,"create or replace TABLE PLANET_FEATURES (
+	""feature_type"" VARCHAR(16777216),
+	""osm_id"" NUMBER(38,0),
+	""osm_way_id"" NUMBER(38,0),
+	""osm_version"" NUMBER(38,0),
+	""osm_timestamp"" NUMBER(38,0),
+	""all_tags"" VARIANT,
+	""geometry"" BINARY(8388608)
+);"
+PLANET_NODES,,"create or replace TABLE PLANET_NODES (
+	""id"" NUMBER(38,0),
+	""version"" NUMBER(38,0),
+	""username"" VARCHAR(16777216),
+	""changeset"" NUMBER(38,0),
+	""visible"" BOOLEAN,
+	""osm_timestamp"" NUMBER(38,0),
+	""geometry"" BINARY(8388608),
+	""all_tags"" VARIANT,
+	""latitude"" NUMBER(38,9),
+	""longitude"" NUMBER(38,9)
+);"
+PLANET_RELATIONS,,"create or replace TABLE PLANET_RELATIONS (
+	""id"" NUMBER(38,0),
+	""version"" NUMBER(38,0),
+	""username"" VARCHAR(16777216),
+	""changeset"" NUMBER(38,0),
+	""visible"" BOOLEAN,
+	""osm_timestamp"" NUMBER(38,0),
+	""geometry"" BINARY(8388608),
+	""all_tags"" VARIANT,
+	""members"" VARIANT
+);"
+HISTORY_LAYERS,,"create or replace TABLE HISTORY_LAYERS (
+	""layer_code"" NUMBER(38,0),
+	""layer_class"" VARCHAR(16777216),
+	""layer_name"" VARCHAR(16777216),
+	""osm_id"" NUMBER(38,0),
+	""osm_way_id"" NUMBER(38,0),
+	""osm_timestamp"" NUMBER(38,0),
+	""osm_version"" NUMBER(38,0),
+	""all_tags"" VARIANT,
+	""geometry"" BINARY(8388608),
+	""gdal_type"" VARCHAR(16777216)
+);"
+HISTORY_RELATIONS,,"create or replace TABLE HISTORY_RELATIONS (
+	""id"" NUMBER(38,0),
+	""version"" NUMBER(38,0),
+	""username"" VARCHAR(16777216),
+	""changeset"" NUMBER(38,0),
+	""visible"" BOOLEAN,
+	""osm_timestamp"" NUMBER(38,0),
+	""geometry"" BINARY(8388608),
+	""members"" VARIANT,
+	""all_tags"" VARIANT
+);"
+PLANET_WAYS,,"create or replace TABLE PLANET_WAYS (
+	""id"" NUMBER(38,0),
+	""version"" NUMBER(38,0),
+	""username"" VARCHAR(16777216),
+	""changeset"" NUMBER(38,0),
+	""visible"" BOOLEAN,
+	""osm_timestamp"" NUMBER(38,0),
+	""geometry"" BINARY(8388608),
+	""all_tags"" VARIANT,
+	""nodes"" VARIANT
+);"
+PLANET_LAYERS,,"create or replace TABLE PLANET_LAYERS (
+	""layer_code"" NUMBER(38,0),
+	""layer_class"" VARCHAR(16777216),
+	""layer_name"" VARCHAR(16777216),
+	""gdal_type"" VARCHAR(16777216),
+	""osm_id"" NUMBER(38,0),
+	""osm_way_id"" NUMBER(38,0),
+	""osm_timestamp"" NUMBER(38,0),
+	""osm_version"" NUMBER(38,0),
+	""all_tags"" VARIANT,
+	""geometry"" BINARY(8388608)
+);"
+
+-- Schema from: WORLDPOP/DDL.csv
+table_name,description,DDL
+POPULATION_GRID_1KM,,"create or replace TABLE POPULATION_GRID_1KM (
+	""country_name"" VARCHAR(16777216),
+	""geo_id"" VARCHAR(16777216),
+	""population"" FLOAT,
+	""longitude_centroid"" FLOAT,
+	""latitude_centroid"" FLOAT,
+	""alpha_3_code"" VARCHAR(16777216),
+	""geog"" BINARY(8388608),
+	""last_updated"" DATE
+);"
+```
+
+## ❓ Natural Language Question
+"Based on the most recent 1km population grid data in Singapore before January 2023, using ST_CONVEXHULL to aggregate all population grid centroids into a bounding region and ST_INTERSECTS to identify hospitals from OpenStreetMap’s planet layer (layer_code in (2110, 2120)) that fall within this region, then calculating the distance from each grid cell to its nearest hospital, what is the total population of the grid cell that is farthest from any hospital?"
+
+## ✅ Correct SQL Query
+```sql
+WITH country_name AS (
+  SELECT 'Singapore' AS value
+),
+
+last_updated AS (
+  SELECT
+    MAX("last_updated") AS value
+  FROM GEO_OPENSTREETMAP_WORLDPOP.WORLDPOP.POPULATION_GRID_1KM AS pop
+    INNER JOIN country_name ON (pop."country_name" = country_name.value)
+  WHERE "last_updated" < '2023-01-01'
+),
+
+aggregated_population AS (
+  SELECT
+    "geo_id",
+    SUM("population") AS sum_population,
+    ST_POINT("longitude_centroid", "latitude_centroid") AS centr  -- 计算每个 geo_id 的中心点
+  FROM
+    GEO_OPENSTREETMAP_WORLDPOP.WORLDPOP.POPULATION_GRID_1KM AS pop
+    INNER JOIN country_name ON (pop."country_name" = country_name.value)
+    INNER JOIN last_updated ON (pop."last_updated" = last_updated.value)
+  GROUP BY "geo_id", "longitude_centroid", "latitude_centroid"
+),
+
+population AS (
+  SELECT
+    SUM(sum_population) AS sum_population,
+    ST_ENVELOPE(ST_UNION_AGG(centr)) AS boundingbox  -- 使用 ST_ENVELOPE 来代替 ST_CONVEXHULL
+  FROM aggregated_population
+),
+
+hospitals AS (
+  SELECT
+    layer."geometry"
+  FROM
+    GEO_OPENSTREETMAP_WORLDPOP.GEO_OPENSTREETMAP.PLANET_LAYERS AS layer
+    INNER JOIN population ON ST_INTERSECTS(population.boundingbox, ST_GEOGFROMWKB(layer."geometry"))
+  WHERE
+    layer."layer_code" IN (2110, 2120)
+),
+
+distances AS (
+  SELECT
+    pop."geo_id",
+    pop."population",
+    MIN(ST_DISTANCE(ST_GEOGFROMWKB(pop."geog"), ST_GEOGFROMWKB(hospitals."geometry"))) AS distance
+  FROM
+    GEO_OPENSTREETMAP_WORLDPOP.WORLDPOP.POPULATION_GRID_1KM AS pop
+    INNER JOIN country_name ON pop."country_name" = country_name.value
+    INNER JOIN last_updated ON pop."last_updated" = last_updated.value
+    CROSS JOIN hospitals
+  WHERE pop."population" > 0
+  GROUP BY "geo_id", "population"
+)
+
+SELECT
+  SUM(pd."population") AS population
+FROM
+  distances pd
+CROSS JOIN population p
+GROUP BY distance
+ORDER BY distance DESC
+LIMIT 1;
+
+```
+
+## 🔧 Your Task
+Analyze the correct SQL query above and modify it to introduce the specific error type: **Implicit Condition Missing**.
+
+Think about:
+1. How this error typically manifests in real-world scenarios
+2. What parts of the query are most relevant to this error type
+3. How to make this data be meaningful for improving LLM SQL semantic detection area
+
+## 📤 Output Format
+Return your response in the following format:
+
+**Modified SQL Query:**
+```sql
+[Your modified SQL query here]
+```
+
+**Brief Explanation:**
+[A very brief explanation (1-2 sentences) of what specific change you made to inject the error]
+

@@ -1,0 +1,1 @@
+I replaced the aggregation SUM(C."Num_Commuters_1Hr_Travel_Time") with a window function SUM(C."Num_Commuters_1Hr_Travel_Time") OVER (), which computes the sum over all rows instead of per ZIP code, thus misusing the window function and producing incorrect results for the intended query.

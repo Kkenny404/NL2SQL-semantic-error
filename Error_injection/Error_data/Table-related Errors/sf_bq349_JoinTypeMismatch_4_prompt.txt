@@ -1,0 +1,231 @@
+# SQL Semantic Error Injection Task
+
+You are an expert SQL developer tasked with injecting a SPECIFIC semantic error into a correct SQL query.
+
+## 🎯 Your Mission
+Take the provided correct SQL query and modify it to contain EXACTLY ONE semantic error of the specified type. The modified SQL should:
+- ✅ Have valid syntax (no syntax errors)
+- ✅ Be executable against the database
+- ❌ Contain the specified semantic error
+- ❌ NOT contain any other types of errors
+
+## 📋 Error Specification
+**Error Category:** Table-related Errors
+**Category Description:** Table-related Errors occur when NL2SQL models fail to correctly identify, link, or utilize the required tables from the database schema. These errors encompass both basic table selection issues and more complex JOIN operations.
+
+**Specific Error Type:** Join Type Mismatch
+**Error Description:** The model selects inappropriate JOIN types (e.g., LEFT JOIN, INNER JOIN) that do not align with the natural language query intent, showing a misinterpretation of the desired data inclusion/exclusion patterns.
+
+## 💡 Guidelines for Error Injection
+
+### DO:
+- Focus ONLY on the specified error type
+- Keep the query structure as similar as possible to the original
+- Ensure the modified SQL runs without syntax errors
+- Make the error subtle but semantically meaningful
+- Consider the business logic and question intent when injecting the error
+
+### DON'T:
+- Add syntax errors or typos
+- Introduce multiple different error types
+- Completely rewrite the query structure
+- Make obvious/trivial mistakes that wouldn't occur in real scenarios
+- Change unrelated parts of the query
+
+## 📊 Database Schema
+```sql
+
+
+================================================================================-- Schema from: GEO_OPENSTREETMAP/DDL.csv
+table_name,description,DDL
+HISTORY_RELATIONS,,"create or replace TABLE HISTORY_RELATIONS (
+	""id"" NUMBER(38,0),
+	""version"" NUMBER(38,0),
+	""username"" VARCHAR(16777216),
+	""changeset"" NUMBER(38,0),
+	""visible"" BOOLEAN,
+	""osm_timestamp"" NUMBER(38,0),
+	""geometry"" BINARY(8388608),
+	""members"" VARIANT,
+	""all_tags"" VARIANT
+);"
+HISTORY_CHANGESETS,,"create or replace TABLE HISTORY_CHANGESETS (
+	""id"" NUMBER(38,0),
+	""osm_timestamp_min"" NUMBER(38,0),
+	""osm_timestamp_max"" NUMBER(38,0),
+	""relations"" VARIANT,
+	""ways"" VARIANT,
+	""nodes"" VARIANT
+);"
+PLANET_FEATURES,,"create or replace TABLE PLANET_FEATURES (
+	""feature_type"" VARCHAR(16777216),
+	""osm_id"" NUMBER(38,0),
+	""osm_way_id"" NUMBER(38,0),
+	""osm_version"" NUMBER(38,0),
+	""osm_timestamp"" NUMBER(38,0),
+	""all_tags"" VARIANT,
+	""geometry"" BINARY(8388608)
+);"
+PLANET_FEATURES_POINTS,,"create or replace TABLE PLANET_FEATURES_POINTS (
+	""osm_id"" NUMBER(38,0),
+	""osm_version"" NUMBER(38,0),
+	""osm_way_id"" NUMBER(38,0),
+	""osm_timestamp"" NUMBER(38,0),
+	""geometry"" BINARY(8388608),
+	""all_tags"" VARIANT
+);"
+HISTORY_LAYERS,,"create or replace TABLE HISTORY_LAYERS (
+	""layer_code"" NUMBER(38,0),
+	""layer_class"" VARCHAR(16777216),
+	""layer_name"" VARCHAR(16777216),
+	""osm_id"" NUMBER(38,0),
+	""osm_way_id"" NUMBER(38,0),
+	""osm_timestamp"" NUMBER(38,0),
+	""osm_version"" NUMBER(38,0),
+	""all_tags"" VARIANT,
+	""geometry"" BINARY(8388608),
+	""gdal_type"" VARCHAR(16777216)
+);"
+PLANET_WAYS,,"create or replace TABLE PLANET_WAYS (
+	""id"" NUMBER(38,0),
+	""version"" NUMBER(38,0),
+	""username"" VARCHAR(16777216),
+	""changeset"" NUMBER(38,0),
+	""visible"" BOOLEAN,
+	""osm_timestamp"" NUMBER(38,0),
+	""geometry"" BINARY(8388608),
+	""all_tags"" VARIANT,
+	""nodes"" VARIANT
+);"
+HISTORY_NODES,,"create or replace TABLE HISTORY_NODES (
+	""id"" NUMBER(38,0),
+	""version"" NUMBER(38,0),
+	""username"" VARCHAR(16777216),
+	""changeset"" NUMBER(38,0),
+	""visible"" BOOLEAN,
+	""osm_timestamp"" NUMBER(38,0),
+	""geometry"" BINARY(8388608),
+	""all_tags"" VARIANT,
+	""latitude"" NUMBER(38,9),
+	""longitude"" NUMBER(38,9)
+);"
+PLANET_NODES,,"create or replace TABLE PLANET_NODES (
+	""id"" NUMBER(38,0),
+	""version"" NUMBER(38,0),
+	""username"" VARCHAR(16777216),
+	""changeset"" NUMBER(38,0),
+	""visible"" BOOLEAN,
+	""osm_timestamp"" NUMBER(38,0),
+	""geometry"" BINARY(8388608),
+	""all_tags"" VARIANT,
+	""latitude"" NUMBER(38,9),
+	""longitude"" NUMBER(38,9)
+);"
+PLANET_RELATIONS,,"create or replace TABLE PLANET_RELATIONS (
+	""id"" NUMBER(38,0),
+	""version"" NUMBER(38,0),
+	""username"" VARCHAR(16777216),
+	""changeset"" NUMBER(38,0),
+	""visible"" BOOLEAN,
+	""osm_timestamp"" NUMBER(38,0),
+	""geometry"" BINARY(8388608),
+	""all_tags"" VARIANT,
+	""members"" VARIANT
+);"
+PLANET_LAYERS,,"create or replace TABLE PLANET_LAYERS (
+	""layer_code"" NUMBER(38,0),
+	""layer_class"" VARCHAR(16777216),
+	""layer_name"" VARCHAR(16777216),
+	""gdal_type"" VARCHAR(16777216),
+	""osm_id"" NUMBER(38,0),
+	""osm_way_id"" NUMBER(38,0),
+	""osm_timestamp"" NUMBER(38,0),
+	""osm_version"" NUMBER(38,0),
+	""all_tags"" VARIANT,
+	""geometry"" BINARY(8388608)
+);"
+```
+
+## ❓ Natural Language Question
+"Which OpenStreetMap ID from the planet features table corresponds to an administrative boundary, represented as multipolygons, whose total number of 'amenity'-tagged Points of Interest (POIs), as derived from the planet nodes table, is closest to the median count among all such boundaries?"
+
+## ✅ Correct SQL Query
+```sql
+WITH bounding_area AS (
+    SELECT 
+        "osm_id",
+        "geometry" AS geometry,
+        ST_AREA(ST_GEOGRAPHYFROMWKB("geometry")) AS area
+    FROM GEO_OPENSTREETMAP.GEO_OPENSTREETMAP.PLANET_FEATURES,
+    LATERAL FLATTEN(INPUT => PLANET_FEATURES."all_tags") AS "tag"
+    WHERE 
+        "feature_type" = 'multipolygons'
+        AND "tag".value:"key" = 'boundary'
+        AND "tag".value:"value" = 'administrative'
+),
+
+poi AS (
+    SELECT 
+        nodes."id" AS poi_id,
+        nodes."geometry" AS poi_geometry,
+        tags.value:"value" AS poitype
+    FROM GEO_OPENSTREETMAP.GEO_OPENSTREETMAP.PLANET_NODES AS nodes,
+    LATERAL FLATTEN(INPUT => nodes."all_tags") AS tags
+    WHERE tags.value:"key" = 'amenity'
+),
+
+poi_counts AS (
+    SELECT
+        ba."osm_id",
+        COUNT(poi.poi_id) AS total_pois
+    FROM bounding_area ba
+    JOIN poi
+    ON ST_DWITHIN(
+        ST_GEOGRAPHYFROMWKB(ba.geometry), 
+        ST_GEOGRAPHYFROMWKB(poi.poi_geometry), 
+        0.0
+    )
+    GROUP BY ba."osm_id"
+),
+
+median_value AS (
+    SELECT 
+        PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY total_pois) AS median_pois
+    FROM poi_counts
+),
+
+closest_to_median AS (
+    SELECT
+        "osm_id",
+        total_pois,
+        ABS(total_pois - (SELECT median_pois FROM median_value)) AS diff_from_median
+    FROM poi_counts
+)
+
+SELECT
+    "osm_id"
+FROM closest_to_median
+ORDER BY diff_from_median
+LIMIT 1;
+
+```
+
+## 🔧 Your Task
+Analyze the correct SQL query above and modify it to introduce the specific error type: **Join Type Mismatch**.
+
+Think about:
+1. How this error typically manifests in real-world scenarios
+2. What parts of the query are most relevant to this error type
+3. How to make this data be meaningful for improving LLM SQL semantic detection area
+
+## 📤 Output Format
+Return your response in the following format:
+
+**Modified SQL Query:**
+```sql
+[Your modified SQL query here]
+```
+
+**Brief Explanation:**
+[A very brief explanation (1-2 sentences) of what specific change you made to inject the error]
+

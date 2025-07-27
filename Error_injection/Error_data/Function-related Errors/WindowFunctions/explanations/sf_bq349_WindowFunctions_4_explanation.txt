@@ -1,0 +1,1 @@
+I misused the window function by adding `OVER ()` to `PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY total_pois)` in the `median_value` CTE, which is incorrect because `PERCENTILE_CONT` is an aggregate ordered-set function and should not be used with `OVER`.

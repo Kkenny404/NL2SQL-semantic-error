@@ -1,0 +1,217 @@
+# SQL Semantic Error Injection Task
+
+You are an expert SQL developer tasked with injecting a SPECIFIC semantic error into a correct SQL query.
+
+## 🎯 Your Mission
+Take the provided correct SQL query and modify it to contain EXACTLY ONE semantic error of the specified type. The modified SQL should:
+- ✅ Have valid syntax (no syntax errors)
+- ✅ Be executable against the database
+- ❌ Contain the specified semantic error
+- ❌ NOT contain any other types of errors
+
+## 📋 Error Specification
+**Error Category:** Subquery-related Errors
+**Category Description:** Subquery-related Errors occur when NL2SQL models fail to correctly use or generate subqueries. These errors manifest in three distinct categories.
+
+**Specific Error Type:** Subquery Missing
+**Error Description:** The model fails to generate a necessary subquery, leading to an incomplete or incorrect SQL statement.
+
+## 💡 Guidelines for Error Injection
+
+### DO:
+- Focus ONLY on the specified error type
+- Keep the query structure as similar as possible to the original
+- Ensure the modified SQL runs without syntax errors
+- Make the error subtle but semantically meaningful
+- Consider the business logic and question intent when injecting the error
+
+### DON'T:
+- Add syntax errors or typos
+- Introduce multiple different error types
+- Completely rewrite the query structure
+- Make obvious/trivial mistakes that wouldn't occur in real scenarios
+- Change unrelated parts of the query
+
+## 📊 Database Schema
+```sql
+
+
+================================================================================-- Schema from: bigquery-public-data.census_bureau_usa/DDL.csv
+table_name,ddl
+population_by_zip_2010,"CREATE TABLE `bigquery-public-data.census_bureau_usa.population_by_zip_2010`
+(
+  geo_id STRING OPTIONS(description=""Geo code""),
+  zipcode STRING NOT NULL OPTIONS(description=""Five digit ZIP Code Tabulation Area Census Code""),
+  population INT64 OPTIONS(description=""The total count of the population for this segment.""),
+  minimum_age INT64 OPTIONS(description=""The minimum age in the age range. If null, this indicates the row as a total for male, female, or overall population.""),
+  maximum_age INT64 OPTIONS(description=""The maximum age in the age range. If null, this indicates the row as having no maximum (such as 85 and over) or the row is a total of the male, female, or overall population.""),
+  gender STRING OPTIONS(description=""male or female. If empty, the row is a total population summary."")
+)
+OPTIONS(
+  labels=[(""freebqcovid"", """")]
+);"
+population_by_zip_2000,"CREATE TABLE `bigquery-public-data.census_bureau_usa.population_by_zip_2000`
+(
+  zipcode STRING NOT NULL OPTIONS(description=""Five digit ZIP Code Tabulation Area Census Code""),
+  geo_id STRING OPTIONS(description=""Geo code""),
+  minimum_age INT64 OPTIONS(description=""The minimum age in the age range. If null, this indicates the row as a total for male, female, or overall population.""),
+  maximum_age INT64 OPTIONS(description=""The maximum age in the age range. If null, this indicates the row as having no maximum (such as 85 and over) or the row is a total of the male, female, or overall population.""),
+  gender STRING OPTIONS(description=""male or female. If empty, the row is a total population summary.""),
+  population INT64 OPTIONS(description=""The total count of the population for this segment."")
+)
+OPTIONS(
+  labels=[(""freebqcovid"", """")]
+);"
+
+-- Schema from: bigquery-public-data.iowa_liquor_sales/DDL.csv
+table_name,ddl
+sales,"CREATE TABLE `bigquery-public-data.iowa_liquor_sales.sales`
+(
+  invoice_and_item_number STRING OPTIONS(description=""Concatenated invoice and line number associated with the liquor order. This provides a unique identifier for the individual liquor products included in the store order.""),
+  date DATE OPTIONS(description=""Date of order""),
+  store_number STRING OPTIONS(description=""Unique number assigned to the store who ordered the liquor.""),
+  store_name STRING OPTIONS(description=""Name of store who ordered the liquor.""),
+  address STRING OPTIONS(description=""Address of store who ordered the liquor.""),
+  city STRING OPTIONS(description=""City where the store who ordered the liquor is located""),
+  zip_code STRING OPTIONS(description=""Zip code where the store who ordered the liquor is located""),
+  store_location GEOGRAPHY OPTIONS(description=""Location of store who ordered the liquor. The Address, City, State and Zip Code are geocoded to provide geographic coordinates. Accuracy of geocoding is dependent on how well the address is interpreted and the completeness of the reference data used.""),
+  county_number STRING OPTIONS(description=""Iowa county number for the county where store who ordered the liquor is located""),
+  county STRING OPTIONS(description=""County where the store who ordered the liquor is located""),
+  category STRING OPTIONS(description=""Category code associated with the liquor ordered""),
+  category_name STRING OPTIONS(description=""Category of the liquor ordered.""),
+  vendor_number STRING OPTIONS(description=""The vendor number of the company for the brand of liquor ordered""),
+  vendor_name STRING OPTIONS(description=""The vendor name of the company for the brand of liquor ordered""),
+  item_number STRING OPTIONS(description=""Item number for the individual liquor product ordered.""),
+  item_description STRING OPTIONS(description=""Description of the individual liquor product ordered.""),
+  pack INT64 OPTIONS(description=""The number of bottles in a case for the liquor ordered""),
+  bottle_volume_ml INT64 OPTIONS(description=""Volume of each liquor bottle ordered in milliliters.""),
+  state_bottle_cost FLOAT64 OPTIONS(description=""The amount that Alcoholic Beverages Division paid for each bottle of liquor ordered""),
+  state_bottle_retail FLOAT64 OPTIONS(description=""The amount the store paid for each bottle of liquor ordered""),
+  bottles_sold INT64 OPTIONS(description=""The number of bottles of liquor ordered by the store""),
+  sale_dollars FLOAT64 OPTIONS(description=""Total cost of liquor order (number of bottles multiplied by the state bottle retail)""),
+  volume_sold_liters FLOAT64 OPTIONS(description=""Total volume of liquor ordered in liters. (i.e. (Bottle Volume (ml) x Bottles Sold)/1,000)\""""),
+  volume_sold_gallons FLOAT64 OPTIONS(description=""Total volume of liquor ordered in gallons. (i.e. (Bottle Volume (ml) x Bottles Sold)/3785.411784)\"""")
+)
+OPTIONS(
+  description=""Sales Dataset""
+);"
+```
+
+## ❓ Natural Language Question
+"Please show the monthly per capita Bourbon Whiskey sales during 2022 in Dubuque County for the zip code that ranks third in total Bourbon Whiskey sales, using only the population aged 21 and older."
+
+## ✅ Correct SQL Query
+```sql
+WITH DUBUQUE_LIQUOR_CTE AS (
+SELECT
+  CASE
+      WHEN UPPER(category_name) LIKE 'BUTTERSCOTCH SCHNAPPS' THEN 'All Other' --Edge case is not a scotch
+      WHEN UPPER(category_name) LIKE '%WHISKIES' 
+            AND UPPER(category_name) NOT LIKE '%RYE%'
+            AND UPPER(category_name) NOT LIKE '%BOURBON%'
+            AND UPPER(category_name) NOT LIKE '%SCOTCH%'     THEN 'Other Whiskey'
+      WHEN UPPER(category_name) LIKE '%RYE%'                 THEN 'Rye Whiskey'
+      WHEN UPPER(category_name) LIKE '%BOURBON%'             THEN 'Bourbon Whiskey'
+      WHEN UPPER(category_name) LIKE '%SCOTCH%'              THEN 'Scotch Whiskey'
+      ELSE 'All Other'
+  END                              AS category_group,
+  EXTRACT(MONTH FROM date)         AS month,    -- At the time of this query, there is only data until month 6.
+  LEFT(CAST(zip_code AS string),5) AS zip_code, -- Casting to string necessary because zip_code has a mix of int & str types.
+  ROUND(SUM(sale_dollars), 2)      AS sale_dollars_sum,
+
+FROM 
+  bigquery-public-data.iowa_liquor_sales.sales
+
+WHERE
+  UPPER(county)               = 'DUBUQUE'
+  AND EXTRACT(YEAR FROM date) = 2022
+
+GROUP BY
+  category_group,
+  month,
+  zip_code
+  
+ORDER BY 
+  category_group,
+  month,
+  zip_code
+),
+
+DUBUQUE_POPULATION_CTE AS (
+SELECT
+  zipcode,
+  SUM(population) AS population_sum
+FROM bigquery-public-data.census_bureau_usa.population_by_zip_2010
+WHERE 
+  minimum_age >= 21
+GROUP BY 
+  zipcode
+),
+MONTH_INFO AS (
+SELECT 
+  l.month,
+  l.zip_code,
+  l.sale_dollars_sum,
+  ROUND(sale_dollars_sum/p.population_sum, 2) AS dollars_per_capita
+FROM 
+  DUBUQUE_LIQUOR_CTE AS l
+  LEFT JOIN 
+  DUBUQUE_POPULATION_CTE AS p
+  ON l.zip_code = p.zipcode
+WHERE
+  category_group = 'Bourbon Whiskey'
+GROUP BY 
+  category_group,
+  zip_code,
+  month,
+  sale_dollars_sum,
+  zipcode,
+  population_sum
+ORDER BY
+  zip_code,
+  month
+),
+zip_code_sales AS (
+    SELECT
+        zip_code,
+        SUM(sale_dollars_sum) AS total_sale_dollars_sum
+    FROM MONTH_INFO
+    GROUP BY zip_code
+),
+ranked_zip_codes AS (
+    SELECT
+        zip_code,
+        total_sale_dollars_sum,
+        ROW_NUMBER() OVER (ORDER BY total_sale_dollars_sum DESC) AS rank
+    FROM zip_code_sales
+)
+SELECT
+    t.month,
+    t.zip_code,
+    t.dollars_per_capita
+FROM MONTH_INFO t
+JOIN ranked_zip_codes r
+ON t.zip_code = r.zip_code
+WHERE r.rank = 3
+ORDER BY t.month;
+```
+
+## 🔧 Your Task
+Analyze the correct SQL query above and modify it to introduce the specific error type: **Subquery Missing**.
+
+Think about:
+1. How this error typically manifests in real-world scenarios
+2. What parts of the query are most relevant to this error type
+3. How to make this data be meaningful for improving LLM SQL semantic detection area
+
+## 📤 Output Format
+Return your response in the following format:
+
+**Modified SQL Query:**
+```sql
+[Your modified SQL query here]
+```
+
+**Brief Explanation:**
+[A very brief explanation (1-2 sentences) of what specific change you made to inject the error]
+

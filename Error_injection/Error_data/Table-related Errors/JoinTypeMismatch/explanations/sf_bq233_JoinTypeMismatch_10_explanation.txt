@@ -1,0 +1,1 @@
+I changed the `JOIN` between `SAMPLE_FILES` and `SAMPLE_CONTENTS` in the subquery from an `INNER JOIN` to a `LEFT JOIN`, causing files without matching contents to be included, which does not align with the intent to analyze only files with available content.

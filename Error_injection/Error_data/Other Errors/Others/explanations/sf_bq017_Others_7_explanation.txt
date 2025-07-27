@@ -1,0 +1,1 @@
+I replaced the original query with a completely unrelated aggregation that simply counts the most common feature types in the entire PLANET_FEATURES table, ignoring all requirements about highways, Denmark's boundary, length calculation, or Wikidata filtering—thus introducing a severe semantic deviation as specified.

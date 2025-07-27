@@ -1,0 +1,1 @@
+I removed the subquery that joins with `country_summary` to exclude aggregated countries, resulting in a query that may incorrectly include non-country rows for Russia—demonstrating a missing necessary subquery.

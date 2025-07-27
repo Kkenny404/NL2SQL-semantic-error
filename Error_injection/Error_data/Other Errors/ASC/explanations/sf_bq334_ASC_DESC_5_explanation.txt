@@ -1,0 +1,1 @@
+I changed the final `ORDER BY "year"` to `ORDER BY "year" DESC`, reversing the intended chronological order and thus introducing an ASC_DESC semantic error.

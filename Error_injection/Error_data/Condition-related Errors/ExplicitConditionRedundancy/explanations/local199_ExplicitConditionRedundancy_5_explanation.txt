@@ -1,0 +1,1 @@
+I added the explicit condition `WHERE ST.ACTIVE = 1` to the first CTE, unnecessarily restricting results to only active staff, even though the natural language question did not specify this requirement.

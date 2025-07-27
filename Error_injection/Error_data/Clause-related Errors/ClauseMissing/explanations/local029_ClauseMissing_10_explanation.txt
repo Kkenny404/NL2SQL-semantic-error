@@ -1,0 +1,1 @@
+I removed the necessary `GROUP BY` clause from the CTE, so the aggregations (COUNT, AVG) are now performed over the entire result set instead of per customer, city, and state.

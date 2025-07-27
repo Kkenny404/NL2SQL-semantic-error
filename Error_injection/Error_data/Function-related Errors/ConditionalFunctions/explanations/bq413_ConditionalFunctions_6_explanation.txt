@@ -1,0 +1,1 @@
+I swapped the order of `p.journal.title` and `p.proceedings_title.preferred` in the `COALESCE` function, so the query now incorrectly prioritizes the proceedings title over the journal title, misusing the conditional logic of the function.

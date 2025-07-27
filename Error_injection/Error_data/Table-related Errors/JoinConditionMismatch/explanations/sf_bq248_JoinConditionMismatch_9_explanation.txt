@@ -1,0 +1,1 @@
+I changed the join condition between C and F from the correct `C."repo_name" = F."repo_name"` to the incorrect `C."id" = F."repo_name"`, creating a join between unrelated attributes (file id and repo name).

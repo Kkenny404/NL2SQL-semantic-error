@@ -1,0 +1,132 @@
+# SQL Semantic Error Injection Task
+
+You are an expert SQL developer tasked with injecting a SPECIFIC semantic error into a correct SQL query.
+
+## 🎯 Your Mission
+Take the provided correct SQL query and modify it to contain EXACTLY ONE semantic error of the specified type. The modified SQL should:
+- ✅ Have valid syntax (no syntax errors)
+- ✅ Be executable against the database
+- ❌ Contain the specified semantic error
+- ❌ NOT contain any other types of errors
+
+## 📋 Error Specification
+**Error Category:** Table-related Errors
+**Category Description:** Table-related Errors occur when NL2SQL models fail to correctly identify, link, or utilize the required tables from the database schema. These errors encompass both basic table selection issues and more complex JOIN operations.
+
+**Specific Error Type:** Join Condition Mismatch
+**Error Description:** The model exhibits errors in constructing JOIN conditions between tables, creating invalid JOINs between unrelated attributes. This demonstrates difficulties in understanding the relationships between tables in the database.
+
+## 💡 Guidelines for Error Injection
+
+### DO:
+- Focus ONLY on the specified error type
+- Keep the query structure as similar as possible to the original
+- Ensure the modified SQL runs without syntax errors
+- Make the error subtle but semantically meaningful
+- Consider the business logic and question intent when injecting the error
+
+### DON'T:
+- Add syntax errors or typos
+- Introduce multiple different error types
+- Completely rewrite the query structure
+- Make obvious/trivial mistakes that wouldn't occur in real scenarios
+- Change unrelated parts of the query
+
+## 📊 Database Schema
+```sql
+
+```
+
+## ❓ Natural Language Question
+"Which primary programming languages, determined by the highest number of bytes in each repository, had at least 100 PullRequestEvents on January 18, 2023 across all their repositories?"
+
+## ✅ Correct SQL Query
+```sql
+WITH
+  event_data AS (
+    SELECT
+      "type",
+      EXTRACT(YEAR FROM TO_TIMESTAMP("created_at" / 1000000)) AS "year",
+      EXTRACT(QUARTER FROM TO_TIMESTAMP("created_at" / 1000000)) AS "quarter",
+      REGEXP_REPLACE(
+        "repo"::variant:"url"::string,
+        'https:\\/\\/github\\.com\\/|https:\\/\\/api\\.github\\.com\\/repos\\/',
+        ''
+      ) AS "name"
+    FROM GITHUB_REPOS_DATE.DAY._20230118
+  ),
+
+  repo_languages AS (
+    SELECT
+      "repo_name" AS "name",
+      "lang"
+    FROM (
+      SELECT
+        "repo_name",
+        FIRST_VALUE("language") OVER (
+          PARTITION BY "repo_name" ORDER BY "bytes" DESC
+        ) AS "lang"
+      FROM (
+        SELECT
+          "repo_name",
+          "language".value:"name" AS "language",
+          "language".value:"bytes" AS "bytes"
+        FROM GITHUB_REPOS_DATE.GITHUB_REPOS.LANGUAGES,
+        LATERAL FLATTEN(INPUT => "language") AS "language"
+      )
+    )
+    WHERE "lang" IS NOT NULL
+    GROUP BY "repo_name", "lang"
+  ),
+
+  joined_data AS (
+    SELECT
+      a."type" AS "type",
+      b."lang" AS "language",
+      a."year" AS "year",
+      a."quarter" AS "quarter"
+    FROM event_data a
+    JOIN repo_languages b
+      ON a."name" = b."name"
+  ),
+
+  count_data AS (
+    SELECT
+      "language",
+      "year",
+      "quarter",
+      "type",
+      COUNT(*) AS "count"
+    FROM joined_data
+    GROUP BY "type", "language", "year", "quarter"
+    ORDER BY "year", "quarter", "count" DESC
+  )
+
+SELECT
+  REPLACE("language", '"', '') AS "language_name",
+  "count"
+FROM count_data
+WHERE "count" >= 5
+  AND "type" = 'PullRequestEvent';
+
+```
+
+## 🔧 Your Task
+Analyze the correct SQL query above and modify it to introduce the specific error type: **Join Condition Mismatch**.
+
+Think about:
+1. How this error typically manifests in real-world scenarios
+2. What parts of the query are most relevant to this error type
+3. How to make this data be meaningful for improving LLM SQL semantic detection area
+
+## 📤 Output Format
+Return your response in the following format:
+
+**Modified SQL Query:**
+```sql
+[Your modified SQL query here]
+```
+
+**Brief Explanation:**
+[A very brief explanation (1-2 sentences) of what specific change you made to inject the error]
+

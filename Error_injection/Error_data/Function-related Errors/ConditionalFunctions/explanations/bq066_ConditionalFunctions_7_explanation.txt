@@ -1,0 +1,2 @@
+I changed the conditional in the `CASE WHEN` from `n.Maternal_Morbidity_YN = 0` (correct: births without morbidity) to `n.Maternal_Morbidity_YN = 1` (incorrect: births with morbidity), thus misusing the conditional logic in the function.
+Same here， in the future, we can also include operation-realted/Explicit Mismatch error, but for the datset designm and it's happening in CASE WHEN, we only keep the conditional function error here. 

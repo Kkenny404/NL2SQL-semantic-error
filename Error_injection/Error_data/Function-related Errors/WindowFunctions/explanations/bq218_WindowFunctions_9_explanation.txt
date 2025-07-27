@@ -1,0 +1,1 @@
+I removed the `PARTITION BY curr.item_description` clause from the `LAG()` window functions, causing the previous year's sales revenue to be computed across all items rather than per item, which is a misuse of window function partitioning.

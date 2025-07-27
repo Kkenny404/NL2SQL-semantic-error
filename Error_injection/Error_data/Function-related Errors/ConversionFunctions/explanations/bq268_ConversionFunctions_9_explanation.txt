@@ -1,0 +1,2 @@
+I replaced the correct use of `PARSE_DATE('%Y%m%d', ...)` (which converts a string in 'YYYYMMDD' format to a DATE) with `CAST(... AS DATE)`, which will not correctly convert the 'YYYYMMDD' string to a DATE and may result in incorrect or NULL results, thus introducing a conversion function semantic error.
+For saying, this is also looks like a value realted error -- value format mismatch, but considering keep the most realted type, conversion function is more appropriate. 

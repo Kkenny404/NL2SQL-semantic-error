@@ -1,0 +1,1 @@
+I provided only the inner query that selects unique StudyInstanceUIDs matching the criteria, omitting the outer COUNT(*) aggregation—thus returning a partial result rather than the requested count.

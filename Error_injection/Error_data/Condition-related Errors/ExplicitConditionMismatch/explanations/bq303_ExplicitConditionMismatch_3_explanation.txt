@@ -1,0 +1,1 @@
+I changed the user ID condition from `BETWEEN 16712208 AND 18712208` to `>= 16712208` (attribute and value mismatch), and the date condition from `BETWEEN '2019-07-01' AND '2019-12-31'` to `> '2019-07-01'` (operator and value mismatch), thus altering two components in each condition and creating an explicit condition mismatch.

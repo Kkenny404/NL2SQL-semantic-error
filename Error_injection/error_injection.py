@@ -772,11 +772,20 @@ class LLMErrorInjector:
             filename = os.path.basename(prompt_file)
             # 从文件名提取错误类型（假设格式为：instanceid_ErrorType_num_prompt.txt）
             parts = filename.replace("_prompt.txt", "").split("_")
-            if len(parts) >= 2:
-                error_type = parts[1]  # 获取错误类型部分
-                if error_type not in error_type_groups:
-                    error_type_groups[error_type] = []
-                error_type_groups[error_type].append(prompt_file)
+            if filename.startswith("sf_") and len(parts) >= 3:  # sf_bq_123_ErrorType_num_prompt.txt
+                error_type = parts[2]
+
+            elif len(parts) >= 2 :
+                error_type = parts[1]
+            else:
+                error_type = "Unknown"
+
+            # if len(parts) >= 2:
+            #     error_type = parts[1]  # 获取错误类型部分
+            
+            if error_type not in error_type_groups:
+                error_type_groups[error_type] = []
+            error_type_groups[error_type].append(prompt_file)
         
         all_generated_records = []
         

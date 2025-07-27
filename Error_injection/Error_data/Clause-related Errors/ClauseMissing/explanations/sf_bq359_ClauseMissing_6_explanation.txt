@@ -1,0 +1,1 @@
+I removed the necessary `GROUP BY sc."repo_name"` clause, so the aggregation in the SELECT statement is now invalid semantically, but the query remains syntactically correct.

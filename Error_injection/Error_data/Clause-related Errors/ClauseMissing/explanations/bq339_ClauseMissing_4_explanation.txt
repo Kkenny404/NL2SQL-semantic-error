@@ -1,0 +1,1 @@
+I removed the necessary `GROUP BY end_month` clause from the `monthly_totals` CTE, so the aggregation is performed over the entire year instead of per month, introducing a clause-missing semantic error.

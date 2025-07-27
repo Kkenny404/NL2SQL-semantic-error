@@ -1,0 +1,1 @@
+I added the unnecessary attribute "score" to the SELECT clause in the final query, even though the natural language question only asks for the "term", thus introducing attribute redundancy.

@@ -1,0 +1,9 @@
+I injected a DateTime function error by changing the format string in the first `PARSE_DATE` from `'%Y%m%d'` to the incorrect `'%d%m%Y'`, which will misinterpret the date string and produce incorrect results.
+
+Why is this a Date/Time Function error and not a Conversion error?
+
+A Conversion Function error occurs when a value is simply cast between types (e.g., CAST('20250127' AS DATE)), without interpreting its format or semantics.
+In contrast, a Date/Time Function error involves misuse of specialized date/time functions (e.g., PARSE_DATE, DATE_ADD) that require correct format strings or temporal logic.
+In this case, changing PARSE_DATE('%Y%m%d', …) to PARSE_DATE('%d%m%Y', …) misinterprets the date string, making it a Date/Time Function–related error.
+
+Thus: valide

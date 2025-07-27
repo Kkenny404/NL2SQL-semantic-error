@@ -1,0 +1,1 @@
+I removed the necessary subquery that restricts patients to those with CDKN2A mutations, so the query now returns all bladder cancer patients instead of only those with the mutation.

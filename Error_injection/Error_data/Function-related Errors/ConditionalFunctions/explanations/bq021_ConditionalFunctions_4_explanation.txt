@@ -1,0 +1,5 @@
+I injected a function-related error by reversing the condition logic in the CASE WHEN statement: it now selects routes where bike duration is greater (slower) than taxi duration, instead of less (faster), which is a misuse of conditional functions.
+Condition logic reversed; also involves operator direction change. --> Operation related error
+Also might include in Explicit Condition Mismatch, but due to the design of the dataset + this do happen in CASE WHEN 
+That's the reason why this data node is undering Condition Function Error 
+

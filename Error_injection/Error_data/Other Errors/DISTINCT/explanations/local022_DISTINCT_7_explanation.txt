@@ -1,0 +1,1 @@
+I removed the DISTINCT keyword from the final SELECT statement, which can result in duplicate player names if a player meets the criteria in multiple matches, thus introducing a semantic error related to deduplication.

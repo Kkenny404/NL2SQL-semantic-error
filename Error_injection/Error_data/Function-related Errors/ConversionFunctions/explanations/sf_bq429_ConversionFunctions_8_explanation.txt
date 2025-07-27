@@ -1,0 +1,1 @@
+I changed the conversion in the JOIN from `CAST(census."geo_id" AS STRING)` to `CAST(census."geo_id" AS INT)`, which is a misuse of the conversion function and may cause type mismatches or incorrect joins if `"geo_id"` is not an integer.

@@ -1,0 +1,1 @@
+I injected a window function misuse by replacing the aggregate `COUNT(DISTINCT d.id)` in the `badge_counts` CTE with `COUNT(DISTINCT d.id) OVER ()`, which computes the total number of distinct badges across all users for every user, instead of the correct per-user badge count.

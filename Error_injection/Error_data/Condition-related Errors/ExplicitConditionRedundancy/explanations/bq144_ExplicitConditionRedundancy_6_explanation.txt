@@ -1,0 +1,1 @@
+I added an explicit redundant condition `WHERE team.pace_rank IS NOT NULL` to the final SELECT, which restricts the results to only those with a non-null pace_rank for the team, even though the natural language question did not require filtering out teams with missing metrics.

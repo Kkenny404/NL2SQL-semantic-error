@@ -1,0 +1,86 @@
+# SQL Semantic Error Injection Task
+
+You are an expert SQL developer tasked with injecting a SPECIFIC semantic error into a correct SQL query.
+
+## 🎯 Your Mission
+Take the provided correct SQL query and modify it to contain EXACTLY ONE semantic error of the specified type. The modified SQL should:
+- ✅ Have valid syntax (no syntax errors)
+- ✅ Be executable against the database
+- ❌ Contain the specified semantic error
+- ❌ NOT contain any other types of errors
+
+## 📋 Error Specification
+**Error Category:** Condition-related Errors
+**Category Description:** Condition-related Errors occur when NL2SQL models fail to properly handle query conditions, particularly in cases where multiple condition-related issues co-exist. These errors are categorized into explicit and implicit conditions.
+
+**Specific Error Type:** Explicit Condition Redundancy
+**Error Description:** The model adds unnecessary conditions not mentioned in the natural language query, suggesting an over-interpretation of the query requirements.
+
+## 💡 Guidelines for Error Injection
+
+### DO:
+- Focus ONLY on the specified error type
+- Keep the query structure as similar as possible to the original
+- Ensure the modified SQL runs without syntax errors
+- Make the error subtle but semantically meaningful
+- Consider the business logic and question intent when injecting the error
+
+### DON'T:
+- Add syntax errors or typos
+- Introduce multiple different error types
+- Completely rewrite the query structure
+- Make obvious/trivial mistakes that wouldn't occur in real scenarios
+- Change unrelated parts of the query
+
+## 📊 Database Schema
+```sql
+
+```
+
+## ❓ Natural Language Question
+"What was the percentage change in post-market close prices for the Magnificent 7 tech companies from January 1 to June 30, 2024?"
+
+## ✅ Correct SQL Query
+```sql
+WITH ytd_performance AS (
+  SELECT
+    ticker,
+    MIN(date) OVER (PARTITION BY ticker) AS start_of_year_date,
+    FIRST_VALUE(value) OVER (PARTITION BY ticker ORDER BY date ASC ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING) AS start_of_year_price,
+    MAX(date) OVER (PARTITION BY ticker) AS latest_date,
+    LAST_VALUE(value) OVER (PARTITION BY ticker ORDER BY date ASC ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING) AS latest_price
+  FROM FINANCE__ECONOMICS.CYBERSYN.stock_price_timeseries
+  WHERE
+    ticker IN ('AAPL', 'MSFT', 'AMZN', 'GOOGL', 'META', 'TSLA', 'NVDA')
+    AND date BETWEEN DATE '2024-01-01' AND DATE '2024-06-30'  -- Adjusted to cover only from the start of 2024 to the end of June 2024
+    AND variable_name = 'Post-Market Close'
+)
+SELECT
+  ticker,
+  (latest_price - start_of_year_price) / start_of_year_price * 100 AS percentage_change_ytd
+FROM
+  ytd_performance
+GROUP BY
+  ticker, start_of_year_date, start_of_year_price, latest_date, latest_price
+ORDER BY percentage_change_ytd DESC;
+```
+
+## 🔧 Your Task
+Analyze the correct SQL query above and modify it to introduce the specific error type: **Explicit Condition Redundancy**.
+
+Think about:
+1. How this error typically manifests in real-world scenarios
+2. What parts of the query are most relevant to this error type
+3. How to make this data be meaningful for improving LLM SQL semantic detection area
+
+## 📤 Output Format
+Return your response in the following format:
+
+**Modified SQL Query:**
+```sql
+[Your modified SQL query here]
+```
+
+**Brief Explanation:**
+[A very brief explanation (1-2 sentences) of what specific change you made to inject the error]
+

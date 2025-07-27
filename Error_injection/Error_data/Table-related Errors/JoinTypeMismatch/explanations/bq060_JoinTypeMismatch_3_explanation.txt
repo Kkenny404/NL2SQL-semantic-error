@@ -1,0 +1,1 @@
+I changed the `INNER JOIN` to a `LEFT JOIN`, which could include countries from `birth_death_growth_rates` that do not have a matching area over 500 sq km, thus not aligning with the intent to restrict results only to countries with area > 500.

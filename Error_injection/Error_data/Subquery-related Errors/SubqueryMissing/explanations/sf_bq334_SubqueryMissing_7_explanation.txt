@@ -1,0 +1,1 @@
+I removed the necessary `filtered_transactions` subquery and instead performed its logic directly in `average_output_values`, thus omitting the intended subquery layer and introducing a "subquery missing" error.

@@ -1,0 +1,1 @@
+I injected a function-related math error by using `ROUND(..., 0)` to round the chi-squared statistic to the nearest integer, which is inappropriate for this statistical value that should retain its decimal precision.

@@ -1,0 +1,1 @@
+I removed the `AVG(fare) AS average_fare` attribute from the SELECT clause, omitting an essential attribute required by the query intent.

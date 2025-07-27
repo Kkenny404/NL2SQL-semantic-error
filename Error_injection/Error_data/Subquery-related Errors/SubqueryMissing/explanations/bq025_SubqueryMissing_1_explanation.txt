@@ -1,0 +1,1 @@
+I removed the necessary subqueries that filtered the data before joining, instead applying all filters in the WHERE clause; this can lead to incorrect aggregation if there are multiple population records per country, as the subqueries were needed to ensure correct grouping and joining.

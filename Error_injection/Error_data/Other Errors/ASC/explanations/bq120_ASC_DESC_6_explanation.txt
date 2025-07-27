@@ -1,0 +1,1 @@
+I changed the `ORDER BY` clause from `DESC` (descending) to `ASC` (ascending), which will now return the 10 counties with the lowest, rather than the highest, SNAP-participating households—thus reversing the intended result ordering.

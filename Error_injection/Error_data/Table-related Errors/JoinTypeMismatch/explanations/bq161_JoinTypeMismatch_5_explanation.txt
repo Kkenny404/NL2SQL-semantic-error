@@ -1,0 +1,1 @@
+I changed the `INNER JOIN` between `table1` and `table2` in the `INFO` CTE to a `LEFT JOIN`, introducing a join type mismatch that may include patients present in `table1` but not in `table2`, which is not semantically correct for the intent of comparing both sets.

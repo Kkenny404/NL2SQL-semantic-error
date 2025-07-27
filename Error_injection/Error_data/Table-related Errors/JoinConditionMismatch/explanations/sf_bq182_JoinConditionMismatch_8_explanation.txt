@@ -1,0 +1,1 @@
+I modified the JOIN condition in the `joined_data` CTE from `a."name" = b."name"` (correct repository name join) to `a."type" = b."name"`, creating a join between unrelated attributes (event type and repository name), which is a classic join condition mismatch.

@@ -1,0 +1,1 @@
+I modified the TotalPLPViews subquery to count PDP views instead of PLP views, creating a subquery mismatch where the denominator no longer aligns with the intended percentage calculation of PLP-to-PDP transitions.

@@ -1,0 +1,1 @@
+I injected a math function error by wrapping the trip duration calculation in `CEIL()`, which inappropriately rounds up each trip's duration before averaging, instead of averaging the precise durations.

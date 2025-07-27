@@ -1,0 +1,1 @@
+I changed the selected attribute in `device_transactions` from `device.deviceCategory` (which gives the device type, e.g., 'mobile', 'desktop') to `device.browser` (which gives the browser name, e.g., 'Chrome'), thus introducing an attribute mismatch error.

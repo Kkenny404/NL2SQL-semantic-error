@@ -1,0 +1,1 @@
+I changed the aggregate function from MIN("publication_date") to COUNT("publication_date"), which incorrectly counts the number of publication dates instead of finding the earliest publication date as required.

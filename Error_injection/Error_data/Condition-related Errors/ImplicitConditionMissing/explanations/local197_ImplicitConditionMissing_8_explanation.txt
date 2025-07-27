@@ -1,0 +1,1 @@
+I removed the implicit condition that should filter only active customers (e.g., `customer.active = 1`), so the query may include inactive customers in the top 10, which is a common implicit business rule omission.

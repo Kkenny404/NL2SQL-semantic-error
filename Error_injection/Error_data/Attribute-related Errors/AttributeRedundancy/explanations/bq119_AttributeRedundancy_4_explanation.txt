@@ -1,0 +1,1 @@
+I added the `name` column to the final SELECT list, which is not requested or implied by the natural language question, thus introducing attribute redundancy.

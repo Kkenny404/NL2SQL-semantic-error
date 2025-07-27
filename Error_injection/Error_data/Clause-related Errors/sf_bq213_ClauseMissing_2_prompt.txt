@@ -1,0 +1,176 @@
+# SQL Semantic Error Injection Task
+
+You are an expert SQL developer tasked with injecting a SPECIFIC semantic error into a correct SQL query.
+
+## 🎯 Your Mission
+Take the provided correct SQL query and modify it to contain EXACTLY ONE semantic error of the specified type. The modified SQL should:
+- ✅ Have valid syntax (no syntax errors)
+- ✅ Be executable against the database
+- ❌ Contain the specified semantic error
+- ❌ NOT contain any other types of errors
+
+## 📋 Error Specification
+**Error Category:** Clause-related Errors
+**Category Description:** Clause-related Errors occur when NL2SQL models fail to correctly include, omit, or structure SQL clauses. These errors primarily involve mishandling GROUP BY, ORDER BY, and HAVING clauses, which are crucial for aggregation, sorting, and filtering grouped results. The errors manifest in two main categories.
+
+**Specific Error Type:** Clause Missing
+**Error Description:** The model fails to include necessary clauses such as GROUP BY, ORDER BY, or HAVING, resulting in incomplete or incorrect SQL queries that do not fully capture the intent of the natural language.
+
+## 💡 Guidelines for Error Injection
+
+### DO:
+- Focus ONLY on the specified error type
+- Keep the query structure as similar as possible to the original
+- Ensure the modified SQL runs without syntax errors
+- Make the error subtle but semantically meaningful
+- Consider the business logic and question intent when injecting the error
+
+### DON'T:
+- Add syntax errors or typos
+- Introduce multiple different error types
+- Completely rewrite the query structure
+- Make obvious/trivial mistakes that wouldn't occur in real scenarios
+- Change unrelated parts of the query
+
+## 📊 Database Schema
+```sql
+
+
+================================================================================-- Schema from: PATENTS/DDL.csv
+table_name,description,DDL
+DISCLOSURES_13,,"create or replace TABLE DISCLOSURES_13 (
+	""family_id"" VARCHAR(16777216),
+	""record_id"" VARCHAR(16777216),
+	""disclosure_event"" VARCHAR(16777216),
+	""sso"" VARCHAR(16777216),
+	""patent_owner_harmonized"" VARCHAR(16777216),
+	""patent_owner_unharmonized"" VARCHAR(16777216),
+	""date"" NUMBER(38,0),
+	""standard"" VARCHAR(16777216),
+	""committee_project"" VARCHAR(16777216),
+	""tc_name"" VARCHAR(16777216),
+	""sc_name"" VARCHAR(16777216),
+	""wg_name"" VARCHAR(16777216),
+	""licensing_commitment"" VARCHAR(16777216),
+	""copyright"" VARCHAR(16777216),
+	""blanket_type"" VARCHAR(16777216),
+	""blanket_scope"" VARCHAR(16777216),
+	""third_party"" VARCHAR(16777216),
+	""reciprocity"" VARCHAR(16777216),
+	""serial_cleaned"" VARCHAR(16777216),
+	""pub_cleaned"" VARCHAR(16777216)
+);"
+PUBLICATIONS,,"create or replace TABLE PUBLICATIONS (
+	""publication_number"" VARCHAR(16777216),
+	""application_number"" VARCHAR(16777216),
+	""country_code"" VARCHAR(16777216),
+	""kind_code"" VARCHAR(16777216),
+	""application_kind"" VARCHAR(16777216),
+	""application_number_formatted"" VARCHAR(16777216),
+	""pct_number"" VARCHAR(16777216),
+	""family_id"" VARCHAR(16777216),
+	""spif_publication_number"" VARCHAR(16777216),
+	""spif_application_number"" VARCHAR(16777216),
+	""title_localized"" VARIANT,
+	""abstract_localized"" VARIANT,
+	""claims_localized"" VARIANT,
+	""claims_localized_html"" VARIANT,
+	""description_localized"" VARIANT,
+	""description_localized_html"" VARIANT,
+	""publication_date"" NUMBER(38,0),
+	""filing_date"" NUMBER(38,0),
+	""grant_date"" NUMBER(38,0),
+	""priority_date"" NUMBER(38,0),
+	""priority_claim"" VARIANT,
+	""inventor"" VARIANT,
+	""inventor_harmonized"" VARIANT,
+	""assignee"" VARIANT,
+	""assignee_harmonized"" VARIANT,
+	""examiner"" VARIANT,
+	""uspc"" VARIANT,
+	""ipc"" VARIANT,
+	""cpc"" VARIANT,
+	""fi"" VARIANT,
+	""fterm"" VARIANT,
+	""locarno"" VARIANT,
+	""citation"" VARIANT,
+	""parent"" VARIANT,
+	""child"" VARIANT,
+	""entity_status"" VARCHAR(16777216),
+	""art_unit"" VARCHAR(16777216)
+);"
+CPC_DEFINITION,,"create or replace TABLE CPC_DEFINITION (
+	""applicationReferences"" VARIANT,
+	""breakdownCode"" BOOLEAN,
+	""childGroups"" VARIANT,
+	""children"" VARIANT,
+	""dateRevised"" FLOAT,
+	""definition"" VARIANT,
+	""glossary"" VARIANT,
+	""informativeReferences"" VARIANT,
+	""ipcConcordant"" VARCHAR(16777216),
+	""level"" FLOAT,
+	""limitingReferences"" VARIANT,
+	""notAllocatable"" BOOLEAN,
+	""parents"" VARIANT,
+	""precedenceLimitingReferences"" VARIANT,
+	""residualReferences"" VARIANT,
+	""rules"" VARIANT,
+	""scopeLimitingReferences"" VARIANT,
+	""status"" VARCHAR(16777216),
+	""symbol"" VARCHAR(16777216),
+	""synonyms"" VARIANT,
+	""titleFull"" VARCHAR(16777216),
+	""titlePart"" VARIANT
+);"
+```
+
+## ❓ Natural Language Question
+"What is the most common 4-digit IPC code among US B2 utility patents granted from June to August in 2022?"
+
+## ✅ Correct SQL Query
+```sql
+WITH interim_table as(
+SELECT 
+    t1."publication_number", 
+    SUBSTR(ipc_u.value:"code", 0, 4) as ipc4
+FROM 
+    PATENTS.PATENTS.PUBLICATIONS t1,
+    LATERAL FLATTEN(input => t1."ipc") AS ipc_u
+WHERE
+"country_code" = 'US'  
+AND "grant_date" between 20220601 AND 20220831
+  AND "grant_date" != 0
+  AND "publication_number" LIKE '%B2%'  
+GROUP BY 
+    t1."publication_number", 
+    ipc4
+) 
+SELECT 
+ipc4
+FROM 
+interim_table 
+GROUP BY ipc4
+ORDER BY COUNT("publication_number") DESC
+LIMIT 1
+```
+
+## 🔧 Your Task
+Analyze the correct SQL query above and modify it to introduce the specific error type: **Clause Missing**.
+
+Think about:
+1. How this error typically manifests in real-world scenarios
+2. What parts of the query are most relevant to this error type
+3. How to make this data be meaningful for improving LLM SQL semantic detection area
+
+## 📤 Output Format
+Return your response in the following format:
+
+**Modified SQL Query:**
+```sql
+[Your modified SQL query here]
+```
+
+**Brief Explanation:**
+[A very brief explanation (1-2 sentences) of what specific change you made to inject the error]
+

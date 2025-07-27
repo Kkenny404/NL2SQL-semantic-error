@@ -1,0 +1,1 @@
+I injected a math function error by changing `AVG(coloc_log2_h4_h3)` to `ROUND(AVG(coloc_log2_h4_h3), -1)`, incorrectly rounding the average to the nearest 10 (precision -1), which is inappropriate for likely small float values.

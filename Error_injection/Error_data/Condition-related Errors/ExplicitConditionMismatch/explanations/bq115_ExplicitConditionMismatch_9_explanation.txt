@@ -1,0 +1,1 @@
+I changed the subquery condition from `year = 2017 AND age < 25` to `year = 2018 AND age <= 20`, altering both the attribute value (year and age) and the operator, thus introducing an explicit condition mismatch.

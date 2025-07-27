@@ -1,0 +1,1 @@
+I injected a function-related error by misusing the `CASE` conditional: it sets `earnings_change` to 0 when the 2017 value is not greater than 2012, instead of allowing negative or zero differences, thus incorrectly handling the conditional logic.

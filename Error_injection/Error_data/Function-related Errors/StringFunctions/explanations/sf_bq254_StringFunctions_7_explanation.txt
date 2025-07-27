@@ -1,0 +1,1 @@
+I injected a string function error by changing `TRIM(pww.name)` to `TRIM(SUBSTR(pww.name, 0, 20))`, incorrectly starting the substring at position 0 instead of 1, which is a common off-by-one error in string manipulation.

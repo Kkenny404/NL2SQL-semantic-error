@@ -1,0 +1,183 @@
+# SQL Semantic Error Injection Task
+
+You are an expert SQL developer tasked with injecting a SPECIFIC semantic error into a correct SQL query.
+
+## 🎯 Your Mission
+Take the provided correct SQL query and modify it to contain EXACTLY ONE semantic error of the specified type. The modified SQL should:
+- ✅ Have valid syntax (no syntax errors)
+- ✅ Be executable against the database
+- ❌ Contain the specified semantic error
+- ❌ NOT contain any other types of errors
+
+## 📋 Error Specification
+**Error Category:** Function-related Errors
+**Category Description:** Function-related Errors occur when NL2SQL models fail to correctly use SQL functions or misunderstand their purposes. We consider the following cases. CRITICAL: Function-related Errors focus on MISUSING the functions themselves, NOT on missing or incorrect clauses. Do not confuse with Clause-related Errors. Function-related Errors (CORRECT focus): Using wrong function types: SUM() instead of COUNT(), MAX() instead of MIN(); Incorrect function parameters: ROUND(value, -1) instead of ROUND(value, 2); Wrong function arguments: SUBSTR(text, 0, 5) instead of SUBSTR(text, 1, 5); Inappropriate function application: UPPER() on numeric data, mathematical functions on text; Function syntax errors: CAST(value, INT) instead of CAST(value AS INT). Clause-related Errors (AVOID - this is a different error category): Missing GROUP BY, ORDER BY, or HAVING clauses; Incorrect clause positioning or structure; Omitting necessary clauses that work with functions. Examples: ✅ CORRECT Function-related Error: Original: SELECT region, SUM(sales) FROM data GROUP BY region; Modified: SELECT region, COUNT(sales) FROM data GROUP BY region; Error: Wrong aggregate function (COUNT instead of SUM). ❌ INCORRECT (this is Clause-related): Original: SELECT region, SUM(sales) FROM data GROUP BY region; Modified: SELECT region, SUM(sales) FROM data; Error: Missing GROUP BY clause (this is clause-related, not function-related). Focus on changing HOW functions are used, not WHETHER they are used with proper clauses.
+
+**Specific Error Type:** Aggregate Functions
+**Error Description:** The model incorrectly applies aggregate functions (e.g., SUM), such as using them without proper GROUP BY clauses or misunderstanding their effect on result sets.
+
+## 💡 Guidelines for Error Injection
+
+### DO:
+- Focus ONLY on the specified error type
+- Keep the query structure as similar as possible to the original
+- Ensure the modified SQL runs without syntax errors
+- Make the error subtle but semantically meaningful
+- Consider the business logic and question intent when injecting the error
+
+### DON'T:
+- Add syntax errors or typos
+- Introduce multiple different error types
+- Completely rewrite the query structure
+- Make obvious/trivial mistakes that wouldn't occur in real scenarios
+- Change unrelated parts of the query
+
+## 📊 Database Schema
+```sql
+
+```
+
+## ❓ Natural Language Question
+"Using the 2017 GitHub Archive data for watch events, which three repositories that include at least one Python file (with a .py extension) smaller than 15,000 bytes and containing the substring "def " in its content have the highest total number of watch events for that year?"
+
+## ✅ Correct SQL Query
+```sql
+WITH watched_repos AS (
+    SELECT
+        PARSE_JSON("repo"):"name"::STRING AS "repo"
+    FROM 
+        GITHUB_REPOS_DATE.MONTH._201701
+    WHERE
+        "type" = 'WatchEvent'
+    UNION ALL
+    SELECT
+        PARSE_JSON("repo"):"name"::STRING AS "repo"
+    FROM 
+        GITHUB_REPOS_DATE.MONTH._201702
+    WHERE
+        "type" = 'WatchEvent'
+    UNION ALL
+    SELECT
+        PARSE_JSON("repo"):"name"::STRING AS "repo"
+    FROM 
+        GITHUB_REPOS_DATE.MONTH._201703
+    WHERE
+        "type" = 'WatchEvent'
+    UNION ALL
+    SELECT
+        PARSE_JSON("repo"):"name"::STRING AS "repo"
+    FROM 
+        GITHUB_REPOS_DATE.MONTH._201704
+    WHERE
+        "type" = 'WatchEvent'
+    UNION ALL
+    SELECT
+        PARSE_JSON("repo"):"name"::STRING AS "repo"
+    FROM 
+        GITHUB_REPOS_DATE.MONTH._201705
+    WHERE
+        "type" = 'WatchEvent'
+    UNION ALL
+    SELECT
+        PARSE_JSON("repo"):"name"::STRING AS "repo"
+    FROM 
+        GITHUB_REPOS_DATE.MONTH._201706
+    WHERE
+        "type" = 'WatchEvent'
+    UNION ALL
+    SELECT
+        PARSE_JSON("repo"):"name"::STRING AS "repo"
+    FROM 
+        GITHUB_REPOS_DATE.MONTH._201707
+    WHERE
+        "type" = 'WatchEvent'
+    UNION ALL
+    SELECT
+        PARSE_JSON("repo"):"name"::STRING AS "repo"
+    FROM 
+        GITHUB_REPOS_DATE.MONTH._201708
+    WHERE
+        "type" = 'WatchEvent'
+    UNION ALL
+    SELECT
+        PARSE_JSON("repo"):"name"::STRING AS "repo"
+    FROM 
+        GITHUB_REPOS_DATE.MONTH._201709
+    WHERE
+        "type" = 'WatchEvent'
+    UNION ALL
+    SELECT
+        PARSE_JSON("repo"):"name"::STRING AS "repo"
+    FROM 
+        GITHUB_REPOS_DATE.MONTH._201710
+    WHERE
+        "type" = 'WatchEvent'
+    UNION ALL
+    SELECT
+        PARSE_JSON("repo"):"name"::STRING AS "repo"
+    FROM 
+        GITHUB_REPOS_DATE.MONTH._201711
+    WHERE
+        "type" = 'WatchEvent'
+    UNION ALL
+    SELECT
+        PARSE_JSON("repo"):"name"::STRING AS "repo"
+    FROM 
+        GITHUB_REPOS_DATE.MONTH._201712
+    WHERE
+        "type" = 'WatchEvent'
+),
+
+repo_watch_counts AS (
+    SELECT
+        "repo",
+        COUNT(*) AS "watch_count"
+    FROM
+        watched_repos
+    GROUP BY
+        "repo"
+)
+
+SELECT
+    REPLACE(r."repo", '"', '') AS "repo",
+    r."watch_count"
+FROM
+    GITHUB_REPOS_DATE.GITHUB_REPOS.SAMPLE_FILES AS f
+JOIN
+    GITHUB_REPOS_DATE.GITHUB_REPOS.SAMPLE_CONTENTS AS c
+    ON f."id" = c."id"
+JOIN 
+    repo_watch_counts AS r
+    ON f."repo_name" = r."repo"
+WHERE
+    f."path" LIKE '%.py' 
+    AND c."size" < 15000 
+    AND POSITION('def ' IN c."content") > 0
+GROUP BY
+    r."repo", r."watch_count"
+ORDER BY
+    r."watch_count" DESC
+LIMIT 
+    3;
+
+```
+
+## 🔧 Your Task
+Analyze the correct SQL query above and modify it to introduce the specific error type: **Aggregate Functions**.
+
+Think about:
+1. How this error typically manifests in real-world scenarios
+2. What parts of the query are most relevant to this error type
+3. How to make this data be meaningful for improving LLM SQL semantic detection area
+
+## 📤 Output Format
+Return your response in the following format:
+
+**Modified SQL Query:**
+```sql
+[Your modified SQL query here]
+```
+
+**Brief Explanation:**
+[A very brief explanation (1-2 sentences) of what specific change you made to inject the error]
+

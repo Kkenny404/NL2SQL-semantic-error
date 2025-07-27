@@ -1,0 +1,1 @@
+I replaced the correct date range filtering (`date >= 'YYYY-MM-DD' AND date < 'YYYY-MM-DD'`) with `EXTRACT(YEAR FROM DATE(date)) = YYYY`, which incorrectly includes all weeks in the calendar year (e.g., up to '2020-12-31'), rather than the intended exclusive range up to '2021-01-01', thus misusing date functions for period selection.

@@ -1,0 +1,1 @@
+I replaced the join to the correct union_mr_seg CTE with a subquery that selects SOPInstanceUIDs from DICOM_ALL where Modality is 'CT', which mismatches the intended context and ignores the required union of the specified MR series and associated segmentations.

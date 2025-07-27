@@ -1,0 +1,1 @@
+I removed the explicit `WHERE season >= 2014` condition from both SELECTs on `mbb_historical_tournament_games`, causing the query to include tournament games from all seasons instead of only 2014 onwards, as explicitly required by the question.

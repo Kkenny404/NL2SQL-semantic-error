@@ -1,0 +1,1 @@
+I introduced an attribute mismatch by replacing the correct extraction of IPC codes (`ipc.value:"code"::STRING`) with the unrelated `"kind_code"` attribute in the `tech_class` CTE, so the "ipc" output now contains publication kind codes instead of IPC codes.

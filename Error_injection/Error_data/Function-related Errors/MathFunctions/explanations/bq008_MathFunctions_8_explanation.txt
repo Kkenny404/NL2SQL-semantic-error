@@ -1,0 +1,1 @@
+I injected a math function error by changing `MAX(page_duration)` to `MAX(ROUND(page_duration, -1))`, which incorrectly rounds durations to the nearest 10 seconds before taking the maximum, instead of using the precise value.

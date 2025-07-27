@@ -1,0 +1,1 @@
+I injected a DateTime function error by misusing the `STRFTIME` function with an invalid format string (`'%Y/%D'` instead of a correct one like `'%Y-%m-%d'`) when extracting the date from `order_time`, which can lead to incorrect or unexpected date formatting.

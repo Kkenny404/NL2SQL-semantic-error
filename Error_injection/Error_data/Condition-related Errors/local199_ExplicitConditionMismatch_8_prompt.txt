@@ -1,0 +1,257 @@
+# SQL Semantic Error Injection Task
+
+You are an expert SQL developer tasked with injecting a SPECIFIC semantic error into a correct SQL query.
+
+## 🎯 Your Mission
+Take the provided correct SQL query and modify it to contain EXACTLY ONE semantic error of the specified type. The modified SQL should:
+- ✅ Have valid syntax (no syntax errors)
+- ✅ Be executable against the database
+- ❌ Contain the specified semantic error
+- ❌ NOT contain any other types of errors
+
+## 📋 Error Specification
+**Error Category:** Condition-related Errors
+**Category Description:** Condition-related Errors occur when NL2SQL models fail to properly handle query conditions, particularly in cases where multiple condition-related issues co-exist. These errors are categorized into explicit and implicit conditions.
+
+**Specific Error Type:** Explicit Condition Mismatch
+**Error Description:** The model generates incorrect conditions that deviate from the natural language requirements, showing a misunderstanding of the query intent. A condition typically consists of three parts (attribute, operator, and value), and we classify it as a condition error only when errors occur in two or more components.
+
+## 💡 Guidelines for Error Injection
+
+### DO:
+- Focus ONLY on the specified error type
+- Keep the query structure as similar as possible to the original
+- Ensure the modified SQL runs without syntax errors
+- Make the error subtle but semantically meaningful
+- Consider the business logic and question intent when injecting the error
+
+### DON'T:
+- Add syntax errors or typos
+- Introduce multiple different error types
+- Completely rewrite the query structure
+- Make obvious/trivial mistakes that wouldn't occur in real scenarios
+- Change unrelated parts of the query
+
+## 📊 Database Schema
+```sql
+Table: actor
+- actor_id [PK]
+- first_name
+- last_name
+- last_update
+
+Table: country
+- country_id [PK]
+- country
+- last_update
+
+Table: city
+- city_id [PK]
+- city
+- country_id
+- last_update
+
+Table: address
+- address_id [PK]
+- address
+- address2
+- district
+- city_id
+- postal_code
+- phone
+- last_update
+
+Table: language
+- language_id [PK]
+- name
+- last_update
+
+Table: category
+- category_id [PK]
+- name
+- last_update
+
+Table: customer
+- customer_id [PK]
+- store_id
+- first_name
+- last_name
+- email
+- address_id
+- active
+- create_date
+- last_update
+
+Table: film
+- film_id [PK]
+- title
+- description
+- release_year
+- language_id
+- original_language_id
+- rental_duration
+- rental_rate
+- length
+- replacement_cost
+- rating
+- special_features
+- last_update
+
+Table: film_actor
+- actor_id [PK]
+- film_id [PK]
+- last_update
+
+Table: film_category
+- film_id [PK]
+- category_id [PK]
+- last_update
+
+Table: film_text
+- film_id [PK]
+- title
+- description
+
+Table: inventory
+- inventory_id [PK]
+- film_id
+- store_id
+- last_update
+
+Table: staff
+- staff_id [PK]
+- first_name
+- last_name
+- address_id
+- picture
+- email
+- store_id
+- active
+- username
+- password
+- last_update
+
+Table: store
+- store_id [PK]
+- manager_staff_id
+- address_id
+- last_update
+
+Table: payment
+- payment_id [PK]
+- customer_id
+- staff_id
+- rental_id
+- amount
+- payment_date
+- last_update
+
+Table: rental
+- rental_id [PK]
+- rental_date
+- inventory_id
+- customer_id
+- return_date
+- staff_id
+- last_update
+
+Foreign Keys:
+- city.country_id → country.country_id
+- address.city_id → city.city_id
+- customer.address_id → address.address_id
+- customer.store_id → store.store_id
+- film.original_language_id → language.language_id
+- film.language_id → language.language_id
+- film_actor.film_id → film.film_id
+- film_actor.actor_id → actor.actor_id
+- film_category.category_id → category.category_id
+- film_category.film_id → film.film_id
+- inventory.film_id → film.film_id
+- inventory.store_id → store.store_id
+- staff.address_id → address.address_id
+- staff.store_id → store.store_id
+- store.address_id → address.address_id
+- store.manager_staff_id → staff.staff_id
+- payment.staff_id → staff.staff_id
+- payment.customer_id → customer.customer_id
+- payment.rental_id → rental.rental_id
+- rental.customer_id → customer.customer_id
+- rental.inventory_id → inventory.inventory_id
+- rental.staff_id → staff.staff_id
+```
+
+## ❓ Natural Language Question
+"Can you identify the year and month with the highest rental orders created by the store's staff for each store? Please list the store ID, the year, the month, and the total rentals for those dates."
+
+## ✅ Correct SQL Query
+```sql
+WITH result_table AS (
+  SELECT 
+    strftime('%Y', RE.RENTAL_DATE) AS YEAR, 
+    strftime('%m', RE.RENTAL_DATE) AS RENTAL_MONTH, 
+    ST.STORE_ID, 
+    COUNT(RE.RENTAL_ID) AS count 
+  FROM 
+    RENTAL RE 
+    JOIN STAFF ST ON RE.STAFF_ID = ST.STAFF_ID 
+  GROUP BY 
+    YEAR, 
+    RENTAL_MONTH, 
+    ST.STORE_ID 
+), 
+monthly_sales AS (
+  SELECT 
+    YEAR, 
+    RENTAL_MONTH, 
+    STORE_ID, 
+    SUM(count) AS total_rentals 
+  FROM 
+    result_table 
+  GROUP BY 
+    YEAR, 
+    RENTAL_MONTH, 
+    STORE_ID
+),
+store_max_sales AS (
+  SELECT 
+    STORE_ID, 
+    YEAR, 
+    RENTAL_MONTH, 
+    total_rentals, 
+    MAX(total_rentals) OVER (PARTITION BY STORE_ID) AS max_rentals 
+  FROM 
+    monthly_sales
+)
+SELECT 
+  STORE_ID, 
+  YEAR, 
+  RENTAL_MONTH, 
+  total_rentals 
+FROM 
+  store_max_sales 
+WHERE 
+  total_rentals = max_rentals
+ORDER BY 
+  STORE_ID;
+
+```
+
+## 🔧 Your Task
+Analyze the correct SQL query above and modify it to introduce the specific error type: **Explicit Condition Mismatch**.
+
+Think about:
+1. How this error typically manifests in real-world scenarios
+2. What parts of the query are most relevant to this error type
+3. How to make this data be meaningful for improving LLM SQL semantic detection area
+
+## 📤 Output Format
+Return your response in the following format:
+
+**Modified SQL Query:**
+```sql
+[Your modified SQL query here]
+```
+
+**Brief Explanation:**
+[A very brief explanation (1-2 sentences) of what specific change you made to inject the error]
+

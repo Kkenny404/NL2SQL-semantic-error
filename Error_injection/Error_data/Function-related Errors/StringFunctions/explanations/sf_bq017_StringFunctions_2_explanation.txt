@@ -1,0 +1,1 @@
+I replaced `REPLACE(highway_type, '"', '')` with `SUBSTR(highway_type, 0, LEN(highway_type))`, which incorrectly starts the substring at position 0 instead of 1 (in most SQL dialects, string positions start at 1), resulting in either an empty string or an off-by-one error—this is a classic string function misuse.

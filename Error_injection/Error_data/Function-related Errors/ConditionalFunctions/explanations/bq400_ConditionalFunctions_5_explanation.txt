@@ -1,0 +1,1 @@
+I injected a function-related error by incorrectly reversing the logic in the CASE WHEN inside the MIN aggregation: it now checks `st1.stop_sequence > st2.stop_sequence` instead of the correct `st1.stop_sequence < st2.stop_sequence`, causing the conditional function to return values only when the stop order is wrong.

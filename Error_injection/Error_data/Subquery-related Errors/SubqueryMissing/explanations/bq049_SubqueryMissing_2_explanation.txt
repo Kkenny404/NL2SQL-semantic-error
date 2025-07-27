@@ -1,0 +1,1 @@
+I removed the subqueries that rank zip codes and filter for the third-highest total Bourbon Whiskey sales, so the query now returns results for all zip codes instead of only the third-ranked one—demonstrating a missing necessary subquery.

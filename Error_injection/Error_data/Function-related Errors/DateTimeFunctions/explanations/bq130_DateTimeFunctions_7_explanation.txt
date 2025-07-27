@@ -1,0 +1,1 @@
+I changed the `DATE_ADD(date, INTERVAL 1 DAY)` function to `DATE_ADD(date, INTERVAL 1 MONTH)` in both the state and county subqueries, introducing a semantic error in date arithmetic by shifting dates by a month instead of a day.

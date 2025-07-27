@@ -1,0 +1,1 @@
+I removed the subquery that aggregates temperature by date (the Temp_Avg CTE), so the query now simply orders individual temperature records instead of computing the average per date, thus missing the necessary subquery.

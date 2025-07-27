@@ -71,13 +71,13 @@
       },
       {
         "error_type": "Implicit Condition Missing",
-        "description": "The model fails to include necessary conditions that are implied but not explicitly stated in the natural language query, such as NULL value handling."
+        "description": "The model fails to include necessary conditions that are implied but not explicitly stated in the natural language query. These implicit conditions are often domain-specific business logic or data integrity requirements that experienced users would naturally assume. Common examples include: (1) NULL value handling: When querying student grades, the model should automatically filter out incomplete records (e.g., adding 'grade IS NOT NULL'); (2) Valid status filtering: When asking for 'active employees,' the model should include 'status = active' even if not explicitly mentioned; (3) Date range constraints: When querying 'recent orders,' the model should infer appropriate time boundaries; (4) Default exclusions: Automatically excluding deleted, archived, or test records that shouldn't appear in normal business queries; (5) Referential integrity: Ensuring proper joins that exclude orphaned records when the relationship is contextually implied."
       }
     ]
   },
   {
     "category": "Function-related Errors",
-    "description": "Function-related Errors occur when NL2SQL models fail to correctly use SQL functions or misunderstand their purposes. We consider the following cases.",
+    "description": "Function-related Errors occur when NL2SQL models fail to correctly use SQL functions or misunderstand their purposes. We consider the following cases. CRITICAL: Function-related Errors focus on MISUSING the functions themselves, NOT on missing or incorrect clauses. Do not confuse with Clause-related Errors. Function-related Errors (CORRECT focus): Using wrong function types: SUM() instead of COUNT(), MAX() instead of MIN(); Incorrect function parameters: ROUND(value, -1) instead of ROUND(value, 2); Wrong function arguments: SUBSTR(text, 0, 5) instead of SUBSTR(text, 1, 5); Inappropriate function application: UPPER() on numeric data, mathematical functions on text; Function syntax errors: CAST(value, INT) instead of CAST(value AS INT). Clause-related Errors (AVOID - this is a different error category): Missing GROUP BY, ORDER BY, or HAVING clauses; Incorrect clause positioning or structure; Omitting necessary clauses that work with functions. Examples: ✅ CORRECT Function-related Error: Original: SELECT region, SUM(sales) FROM data GROUP BY region; Modified: SELECT region, COUNT(sales) FROM data GROUP BY region; Error: Wrong aggregate function (COUNT instead of SUM). ❌ INCORRECT (this is Clause-related): Original: SELECT region, SUM(sales) FROM data GROUP BY region; Modified: SELECT region, SUM(sales) FROM data; Error: Missing GROUP BY clause (this is clause-related, not function-related). Focus on changing HOW functions are used, not WHETHER they are used with proper clauses.",
     "sub_errors": [
       {
         "error_type": "Aggregate Functions",
@@ -88,7 +88,7 @@
         "description": "The model misuses window functions (e.g., OVER, PARTITION BY), often failing to properly specify window frames or partition criteria."
       },
       {
-        "error_type": "Date/Time Functions",
+        "error_type": "DateTime Functions",
         "description": "The model incorrectly handles date and time manipulations (e.g., STRFTIME), such as wrong format strings or improper date arithmetic."
       },
       {
@@ -110,36 +110,16 @@
     ]
   },
   {
-    "category": "Function-related Errors",
-    "description": "Function-related Errors occur when NL2SQL models fail to correctly use SQL functions or misunderstand their purposes. We consider the following cases.",
+    "category": "Clause-related Errors",
+    "description": "Clause-related Errors occur when NL2SQL models fail to correctly include, omit, or structure SQL clauses. These errors primarily involve mishandling GROUP BY, ORDER BY, and HAVING clauses, which are crucial for aggregation, sorting, and filtering grouped results. The errors manifest in two main categories.",
     "sub_errors": [
       {
-        "error_type": "Aggregate Functions",
-        "description": "The model incorrectly applies aggregate functions (e.g., SUM), such as using them without proper GROUP BY clauses or misunderstanding their effect on result sets."
+        "error_type": "Clause Missing",
+        "description": "The model fails to include necessary clauses such as GROUP BY, ORDER BY, or HAVING, resulting in incomplete or incorrect SQL queries that do not fully capture the intent of the natural language."
       },
       {
-        "error_type": "Window Functions",
-        "description": "The model misuses window functions (e.g., OVER, PARTITION BY), often failing to properly specify window frames or partition criteria."
-      },
-      {
-        "error_type": "Date/Time Functions",
-        "description": "The model incorrectly handles date and time manipulations (e.g., STRFTIME), such as wrong format strings or improper date arithmetic."
-      },
-      {
-        "error_type": "Conversion Functions",
-        "description": "The model fails to properly convert between data types (e.g., CAST, CONVERT), leading to type mismatch errors or incorrect data transformations."
-      },
-      {
-        "error_type": "Math Functions",
-        "description": "The model misapplies mathematical functions (e.g., ROUND, CEIL, FLOOR), such as incorrect precision specifications or inappropriate numerical operations."
-      },
-      {
-        "error_type": "String Functions",
-        "description": "The model incorrectly uses string manipulation functions (e.g., SUBSTR, CONCAT), such as wrong substring positions or improper string concatenations."
-      },
-      {
-        "error_type": "Conditional Functions",
-        "description": "The model misuses conditional functions (e.g., IIF, CASE WHEN), such as incorrect condition logic or improper result expressions."
+        "error_type": "Clause Redundancy",
+        "description": "The model includes extraneous clauses like GROUP BY, ORDER BY, or HAVING that are not required by the natural language query, indicating an over-interpretation or misunderstanding of the input requirements."
       }
     ]
   },
@@ -166,7 +146,7 @@
     "description": "This category is mainly for errors caused by incorrect use of some special keywords in SQL and queries where the SQL intent seriously deviates from the original intent of the natural language. These errors typically require special handling or indicate a fundamental breakdown in semantic interpretation.",
     "sub_errors": [
       {
-        "error_type": "ASC/DESC",
+        "error_type": "ASC_DESC",
         "description": "This error occurs when the model improperly handles the ordering of query results by either failing to include the correct sorting order (ASC/DESC) or by incorrectly specifying the order."
       },
       {

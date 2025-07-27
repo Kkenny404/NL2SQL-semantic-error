@@ -1,0 +1,1 @@
+I replaced the correct calculation for `pace_rank_diff` (which should be `opp.pace_rank - team.pace_rank`) with a window function `ROW_NUMBER() OVER ()`, misusing a window function in place of the intended difference calculation, thus introducing a window function semantic error.

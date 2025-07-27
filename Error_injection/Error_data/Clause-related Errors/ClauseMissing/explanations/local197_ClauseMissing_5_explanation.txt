@@ -1,0 +1,1 @@
+I removed the `PARTITION BY month` clause from the `MAX(diff) OVER (PARTITION BY month)` window function, so now it computes the maximum difference over the entire result set instead of per month—this omission of a necessary clause is a classic "Clause Missing" error.

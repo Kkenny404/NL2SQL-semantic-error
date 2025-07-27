@@ -1,0 +1,1 @@
+I added an unnecessary explicit condition `AND bb.innings_no = 1` in the `runs_scored` CTE, restricting results to only the first innings, even though the natural language question did not specify any innings constraint.

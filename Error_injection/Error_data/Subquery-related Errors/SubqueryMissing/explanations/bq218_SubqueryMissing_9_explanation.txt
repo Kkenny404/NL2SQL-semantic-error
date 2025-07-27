@@ -1,0 +1,1 @@
+I removed the necessary subqueries that calculate the year-over-year growth percentage, so the query now simply returns the top 5 items by total sales revenue in 2023, not by YoY growth—demonstrating a missing subquery error.

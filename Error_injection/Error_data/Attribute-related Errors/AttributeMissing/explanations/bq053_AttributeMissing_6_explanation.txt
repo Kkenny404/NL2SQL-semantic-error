@@ -1,0 +1,1 @@
+I removed `spc_common` from the `GROUP BY` and `SELECT` clauses in the 2015 subquery, so the query now fails to distinguish between trees with the same scientific name but different common names, thus missing an essential attribute required for correct grouping and counting.

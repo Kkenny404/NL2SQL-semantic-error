@@ -1,0 +1,1 @@
+I introduced a larger Subquery Mismatch by replacing the average_value subquery that previously computed the average of the top 10 with a SUM over all specializations from specialist_counts. This completely changes the context and breaks the intended comparison between the top 10 values and their average.

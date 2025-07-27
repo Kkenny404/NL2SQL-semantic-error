@@ -1,0 +1,1 @@
+I injected a subquery mismatch by modifying the total_cases CTE to group counts by chromosome instead of counting overall distinct cases. This causes the subquery’s result to no longer match the outer query’s expectation of a single overall denominator, leading to incorrect frequency calculations.

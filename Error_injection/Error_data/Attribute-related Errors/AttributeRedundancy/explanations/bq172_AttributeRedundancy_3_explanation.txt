@@ -1,0 +1,1 @@
+I added the `total_beneficiaries` (SUM(bene_count)) column to both the CTE and the final SELECT, even though the natural language question did not request beneficiary counts—this introduces attribute redundancy.

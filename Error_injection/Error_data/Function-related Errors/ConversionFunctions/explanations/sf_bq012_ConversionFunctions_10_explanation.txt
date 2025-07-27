@@ -1,0 +1,1 @@
+I changed the correct `CAST(column AS NUMBER)` to the incorrect `CAST(column, NUMBER)` syntax, which is a function misuse for type conversion.

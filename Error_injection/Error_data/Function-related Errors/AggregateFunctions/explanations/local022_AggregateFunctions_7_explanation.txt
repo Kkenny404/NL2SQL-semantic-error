@@ -1,0 +1,1 @@
+I changed the aggregate function from SUM(bsc.runs_scored) to COUNT(bsc.runs_scored) in both the SELECT and HAVING clauses of the player_runs CTE, which incorrectly counts the number of scoring events instead of calculating the total runs scored.

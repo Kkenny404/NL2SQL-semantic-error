@@ -1,0 +1,1 @@
+I swapped the logic in the second CASE WHEN: instead of returning avg_page_views for non-purchasers, it now returns 0 for purchasers and avg_page_views for non-purchasers, thus misusing the conditional function and reversing the intended calculation.

@@ -1,0 +1,1 @@
+I modified the final SELECT's conditional function from `CASE WHEN tip_category = 'no tip' THEN ...` to `CASE WHEN tip_category = 'no tip' OR tip_category IS NULL THEN ...`, incorrectly including NULL tip categories as "no tip" trips—this is a misuse of conditional logic in a CASE expression.

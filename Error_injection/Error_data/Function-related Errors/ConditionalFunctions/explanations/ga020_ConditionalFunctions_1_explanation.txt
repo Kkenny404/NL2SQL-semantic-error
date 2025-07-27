@@ -1,0 +1,1 @@
+I modified the CASE expression for calculating `weeks_since_event` so that when `days_since_event = 0`, it now returns 1 instead of 0, which misclassifies the user's first week and shifts all week numbers by one—this is a classic conditional function logic error.

@@ -1,0 +1,1 @@
+I changed the `JOIN` between `pizza_clean_customer_orders` (t1) and `pizza_clean_runner_orders` (t2) from an `INNER JOIN` to a `LEFT JOIN`, which could incorrectly include customer orders that have no matching runner order, thus mismatching the intended data inclusion pattern.

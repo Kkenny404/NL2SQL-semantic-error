@@ -1,0 +1,1 @@
+I added an explicit redundant condition `AND exchange = 'NASDAQ'` in the WHERE clause, which was not mentioned or required by the natural language question.

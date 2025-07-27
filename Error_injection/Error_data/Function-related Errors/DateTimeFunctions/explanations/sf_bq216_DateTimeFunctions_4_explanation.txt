@@ -1,0 +1,1 @@
+I changed the `EXTRACT(YEAR, ...)` function to `EXTRACT(MONTH, ...)` when extracting the filing year, causing the query to match patents filed in the same month instead of the same year—an incorrect use of a datetime function.

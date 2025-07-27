@@ -1,0 +1,164 @@
+# SQL Semantic Error Injection Task
+
+You are an expert SQL developer tasked with injecting a SPECIFIC semantic error into a correct SQL query.
+
+## 🎯 Your Mission
+Take the provided correct SQL query and modify it to contain EXACTLY ONE semantic error of the specified type. The modified SQL should:
+- ✅ Have valid syntax (no syntax errors)
+- ✅ Be executable against the database
+- ❌ Contain the specified semantic error
+- ❌ NOT contain any other types of errors
+
+## 📋 Error Specification
+**Error Category:** Subquery-related Errors
+**Category Description:** Subquery-related Errors occur when NL2SQL models fail to correctly use or generate subqueries. These errors manifest in three distinct categories.
+
+**Specific Error Type:** Subquery Mismatch
+**Error Description:** The model generates a subquery that does not match the context or requirements of the outer query, resulting in logical errors or unexpected results.
+
+## 💡 Guidelines for Error Injection
+
+### DO:
+- Focus ONLY on the specified error type
+- Keep the query structure as similar as possible to the original
+- Ensure the modified SQL runs without syntax errors
+- Make the error subtle but semantically meaningful
+- Consider the business logic and question intent when injecting the error
+
+### DON'T:
+- Add syntax errors or typos
+- Introduce multiple different error types
+- Completely rewrite the query structure
+- Make obvious/trivial mistakes that wouldn't occur in real scenarios
+- Change unrelated parts of the query
+
+## 📊 Database Schema
+```sql
+
+```
+
+## ❓ Natural Language Question
+"Using segment-level copy number data from the copy_number_segment_allelic_hg38_gdc_r23 dataset restricted to 'TCGA-KIRC' samples, merge these segments with the cytogenetic band definitions in 'CytoBands_hg38' to identify each sample’s maximum copy number per cytoband. Classify these maximum copy numbers into amplifications (>3), gains (=3), homozygous deletions (=0), heterozygous deletions (=1), or normal (=2), then calculate the frequency of each subtype out of the total number of distinct cases, and finally present these frequencies as percentages sorted by chromosome and cytoband."
+
+## ✅ Correct SQL Query
+```sql
+WITH copy AS (
+  SELECT 
+    "case_barcode", 
+    "chromosome", 
+    "start_pos", 
+    "end_pos", 
+    MAX("copy_number") AS "copy_number"
+  FROM 
+    "TCGA_MITELMAN"."TCGA_VERSIONED"."COPY_NUMBER_SEGMENT_ALLELIC_HG38_GDC_R23" 
+  WHERE  
+    "project_short_name" = 'TCGA-KIRC'
+  GROUP BY 
+    "case_barcode", 
+    "chromosome", 
+    "start_pos", 
+    "end_pos"
+),
+total_cases AS (
+  SELECT COUNT(DISTINCT "case_barcode") AS "total"
+  FROM copy 
+),
+cytob AS (
+  SELECT 
+    "chromosome", 
+    "cytoband_name", 
+    "hg38_start", 
+    "hg38_stop"
+  FROM 
+    "TCGA_MITELMAN"."PROD"."CYTOBANDS_HG38"
+),
+joined AS (
+  SELECT 
+    cytob."chromosome", 
+    cytob."cytoband_name", 
+    cytob."hg38_start", 
+    cytob."hg38_stop",
+    copy."case_barcode",
+    copy."copy_number"  
+  FROM 
+    copy
+  LEFT JOIN cytob
+    ON cytob."chromosome" = copy."chromosome" 
+  WHERE 
+    (cytob."hg38_start" >= copy."start_pos" AND copy."end_pos" >= cytob."hg38_start")
+    OR (copy."start_pos" >= cytob."hg38_start" AND copy."start_pos" <= cytob."hg38_stop")
+),
+cbands AS (
+  SELECT 
+    "chromosome", 
+    "cytoband_name", 
+    "hg38_start", 
+    "hg38_stop", 
+    "case_barcode",
+    MAX("copy_number") AS "copy_number"
+  FROM 
+    joined
+  GROUP BY 
+    "chromosome", 
+    "cytoband_name", 
+    "hg38_start", 
+    "hg38_stop", 
+    "case_barcode"
+),
+aberrations AS (
+  SELECT
+    "chromosome",
+    "cytoband_name",
+    -- Amplifications: more than two copies for diploid > 4
+    SUM( CASE WHEN "copy_number" > 3 THEN 1 ELSE 0 END ) AS "total_amp",
+    -- Gains: at most two extra copies
+    SUM( CASE WHEN "copy_number" = 3 THEN 1 ELSE 0 END ) AS "total_gain",
+    -- Homozygous deletions, or complete deletions
+    SUM( CASE WHEN "copy_number" = 0 THEN 1 ELSE 0 END ) AS "total_homodel",
+    -- Heterozygous deletions, 1 copy lost
+    SUM( CASE WHEN "copy_number" = 1 THEN 1 ELSE 0 END ) AS "total_heterodel",
+    -- Normal for Diploid = 2
+    SUM( CASE WHEN "copy_number" = 2 THEN 1 ELSE 0 END ) AS "total_normal"
+  FROM 
+    cbands
+  GROUP BY 
+    "chromosome", 
+    "cytoband_name"
+)
+SELECT 
+  aberrations."chromosome", 
+  aberrations."cytoband_name",
+  total_cases."total",  
+  100 * aberrations."total_amp" / total_cases."total" AS "freq_amp", 
+  100 * aberrations."total_gain" / total_cases."total" AS "freq_gain",
+  100 * aberrations."total_homodel" / total_cases."total" AS "freq_homodel", 
+  100 * aberrations."total_heterodel" / total_cases."total" AS "freq_heterodel", 
+  100 * aberrations."total_normal" / total_cases."total" AS "freq_normal"  
+FROM 
+  aberrations, 
+  total_cases
+ORDER BY 
+  aberrations."chromosome", 
+  aberrations."cytoband_name";
+
+```
+
+## 🔧 Your Task
+Analyze the correct SQL query above and modify it to introduce the specific error type: **Subquery Mismatch**.
+
+Think about:
+1. How this error typically manifests in real-world scenarios
+2. What parts of the query are most relevant to this error type
+3. How to make this data be meaningful for improving LLM SQL semantic detection area
+
+## 📤 Output Format
+Return your response in the following format:
+
+**Modified SQL Query:**
+```sql
+[Your modified SQL query here]
+```
+
+**Brief Explanation:**
+[A very brief explanation (1-2 sentences) of what specific change you made to inject the error]
+

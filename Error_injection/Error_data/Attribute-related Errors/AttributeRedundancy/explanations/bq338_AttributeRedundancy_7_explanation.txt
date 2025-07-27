@@ -1,0 +1,1 @@
+I added unnecessary `total_pop` attributes to the `acs_2018`, `acs_2011`, and `acs_diff` CTEs, and included a redundant `total_pop_2011` column (set to NULL) in the final SELECT, even though the question only asks for `geo_id`. This introduces attribute redundancy without affecting query execution.

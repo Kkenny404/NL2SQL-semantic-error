@@ -1,0 +1,1 @@
+I added the unnecessary attribute `dp.division` to the SELECT clause and joined `hardware_dim_product` again, even though the division is not requested or implied by the question, thus introducing attribute redundancy.

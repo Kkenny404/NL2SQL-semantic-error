@@ -1,0 +1,1 @@
+I injected a math function error by changing the display of `tot_snowfall_in` to `ROUND(tot_snowfall_in, -1)`, which rounds snowfall to the nearest 10 inches (incorrect precision), instead of showing the actual value.

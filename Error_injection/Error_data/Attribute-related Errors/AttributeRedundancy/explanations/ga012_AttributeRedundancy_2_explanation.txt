@@ -1,0 +1,1 @@
+I added `product.item_brand` to the SELECT and GROUP BY clauses, introducing an unnecessary attribute not requested in the original question, thus creating an attribute redundancy error.

@@ -1,0 +1,1 @@
+I introduced a redundant `GROUP BY` clause in the outer query, grouping by all selected columns, even though the data is already aggregated and grouped by month in the subqueries; this extra clause is unnecessary for the intended result.

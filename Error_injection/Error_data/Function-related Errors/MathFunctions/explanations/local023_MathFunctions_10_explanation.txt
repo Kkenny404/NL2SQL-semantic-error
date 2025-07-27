@@ -1,0 +1,1 @@
+I changed the precision argument in the `ROUND` function from `3` to `-1`, which incorrectly rounds the batting average to the nearest 10 instead of to three decimal places, thus misapplying the mathematical function.

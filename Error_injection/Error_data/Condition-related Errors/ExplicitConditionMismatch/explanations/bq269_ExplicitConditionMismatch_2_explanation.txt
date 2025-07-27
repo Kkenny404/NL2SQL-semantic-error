@@ -1,0 +1,1 @@
+I changed the purchase classification condition from `totals.transactions > 0` to `totals.transactions >= 5` (attribute and value mismatch), altered the date range in the WHERE clause, and changed the pageviews condition from `IS NOT NULL` to `= 0` (attribute, operator, and value mismatch), thus introducing explicit condition mismatches in multiple components.

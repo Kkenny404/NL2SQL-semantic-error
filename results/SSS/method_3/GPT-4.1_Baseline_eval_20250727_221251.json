@@ -1,0 +1,14 @@
+{
+  "dataset": "SSS",
+  "result_path": "results/SSS/method_3/GPT-4.1_Baseline_20250727_221251.jsonl",
+  "skipped": 0,
+  "accuracy": 1.0,
+  "precision": 1.0,
+  "recall": 1.0,
+  "negative_precision": 1.0,
+  "negative_recall": 1.0,
+  "true_negative": 2,
+  "false_positive": 0,
+  "false_negative": 0,
+  "true_positive": 1
+}

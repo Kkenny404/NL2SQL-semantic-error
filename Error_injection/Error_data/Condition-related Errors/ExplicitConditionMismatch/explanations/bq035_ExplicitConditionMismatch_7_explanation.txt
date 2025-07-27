@@ -1,0 +1,1 @@
+I injected an explicit condition mismatch by adding `WHERE stations.landmark = 'San Jose'` to both subqueries, incorrectly restricting the calculation to only trips starting and ending at stations in San Jose, thus altering both the attribute and value of the intended condition.

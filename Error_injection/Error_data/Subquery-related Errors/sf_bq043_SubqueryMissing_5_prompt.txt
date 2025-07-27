@@ -1,0 +1,113 @@
+# SQL Semantic Error Injection Task
+
+You are an expert SQL developer tasked with injecting a SPECIFIC semantic error into a correct SQL query.
+
+## 🎯 Your Mission
+Take the provided correct SQL query and modify it to contain EXACTLY ONE semantic error of the specified type. The modified SQL should:
+- ✅ Have valid syntax (no syntax errors)
+- ✅ Be executable against the database
+- ❌ Contain the specified semantic error
+- ❌ NOT contain any other types of errors
+
+## 📋 Error Specification
+**Error Category:** Subquery-related Errors
+**Category Description:** Subquery-related Errors occur when NL2SQL models fail to correctly use or generate subqueries. These errors manifest in three distinct categories.
+
+**Specific Error Type:** Subquery Missing
+**Error Description:** The model fails to generate a necessary subquery, leading to an incomplete or incorrect SQL statement.
+
+## 💡 Guidelines for Error Injection
+
+### DO:
+- Focus ONLY on the specified error type
+- Keep the query structure as similar as possible to the original
+- Ensure the modified SQL runs without syntax errors
+- Make the error subtle but semantically meaningful
+- Consider the business logic and question intent when injecting the error
+
+### DON'T:
+- Add syntax errors or typos
+- Introduce multiple different error types
+- Completely rewrite the query structure
+- Make obvious/trivial mistakes that wouldn't occur in real scenarios
+- Change unrelated parts of the query
+
+## 📊 Database Schema
+```sql
+
+```
+
+## ❓ Natural Language Question
+"What are the RNA expression levels of the genes MDM2, TP53, CDKN1A, and CCNE1, along with associated clinical information, in bladder cancer patients with CDKN2A mutations in the 'TCGA-BLCA' project?  Use clinical data from the Genomic Data Commons Release 39, data about somatic mutations derived from the hg19 human genome reference in Feb 2017."
+
+## ✅ Correct SQL Query
+```sql
+SELECT
+  genex."case_barcode" AS "case_barcode",
+  genex."sample_barcode" AS "sample_barcode",
+  genex."aliquot_barcode" AS "aliquot_barcode",
+  genex."HGNC_gene_symbol" AS "HGNC_gene_symbol",
+  clinical_info."Variant_Type" AS "Variant_Type",
+  genex."gene_id" AS "gene_id",
+  genex."normalized_count" AS "normalized_count",
+  genex."project_short_name" AS "project_short_name",
+  clinical_info."demo__gender" AS "gender",
+  clinical_info."demo__vital_status" AS "vital_status",
+  clinical_info."demo__days_to_death" AS "days_to_death"
+FROM ( 
+  SELECT
+    case_list."Variant_Type" AS "Variant_Type",
+    case_list."case_barcode" AS "case_barcode",
+    clinical."demo__gender",
+    clinical."demo__vital_status",
+    clinical."demo__days_to_death"
+  FROM
+    (SELECT
+      mutation."case_barcode",
+      mutation."Variant_Type"
+    FROM
+      "TCGA"."TCGA_VERSIONED"."SOMATIC_MUTATION_HG19_DCC_2017_02" AS mutation
+    WHERE
+      mutation."Hugo_Symbol" = 'CDKN2A'
+      AND mutation."project_short_name" = 'TCGA-BLCA'
+    GROUP BY
+      mutation."case_barcode",
+      mutation."Variant_Type"
+    ORDER BY
+      mutation."case_barcode"
+    ) AS case_list /* end case_list */
+  INNER JOIN
+    "TCGA"."TCGA_VERSIONED"."CLINICAL_GDC_R39" AS clinical
+  ON
+    case_list."case_barcode" = clinical."submitter_id" /* end clinical annotation */ ) AS clinical_info
+INNER JOIN
+  "TCGA"."TCGA_VERSIONED"."RNASEQ_HG19_GDC_2017_02" AS genex
+ON
+  genex."case_barcode" = clinical_info."case_barcode"
+WHERE
+  genex."HGNC_gene_symbol" IN ('MDM2', 'TP53', 'CDKN1A','CCNE1')
+ORDER BY
+  "case_barcode",
+  "HGNC_gene_symbol";
+
+```
+
+## 🔧 Your Task
+Analyze the correct SQL query above and modify it to introduce the specific error type: **Subquery Missing**.
+
+Think about:
+1. How this error typically manifests in real-world scenarios
+2. What parts of the query are most relevant to this error type
+3. How to make this data be meaningful for improving LLM SQL semantic detection area
+
+## 📤 Output Format
+Return your response in the following format:
+
+**Modified SQL Query:**
+```sql
+[Your modified SQL query here]
+```
+
+**Brief Explanation:**
+[A very brief explanation (1-2 sentences) of what specific change you made to inject the error]
+

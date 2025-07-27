@@ -1,0 +1,1 @@
+I injected a semantic error by adding an unnecessary `DISTINCT` keyword in the `address_balances` CTE, which is redundant after a `GROUP BY` and could cause confusion or performance issues without changing the result set.

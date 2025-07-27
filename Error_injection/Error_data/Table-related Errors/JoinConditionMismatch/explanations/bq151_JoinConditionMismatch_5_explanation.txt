@@ -1,0 +1,1 @@
+I injected a join condition mismatch in the `table2` CTE by adding an unrelated condition (`t1.ParticipantBarcode = 'SOME_CONSTANT_VALUE'`) to the join, causing the join to be between unrelated attributes rather than just matching

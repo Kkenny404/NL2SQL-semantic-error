@@ -1,0 +1,1 @@
+I rewrote the query to aggregate over the entire chromosome 1 (ignoring the specified region), replaced the gene symbol aggregation with reference bases (which is irrelevant), and calculated mutation density using the full chromosome length—thus the SQL intent is fundamentally and irreparably misaligned with the original question.

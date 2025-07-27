@@ -1,0 +1,1 @@
+I changed the conversion in the SUM aggregate from `CAST(... AS INTEGER)` to `CAST(... AS TEXT)`, causing the function to convert the rental hours to text instead of a numeric type, which can lead to incorrect ordering and aggregation.

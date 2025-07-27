@@ -1,0 +1,1 @@
+I changed the `ORDER BY earnings_change DESC` to `ORDER BY earnings_change ASC`, reversing the intended sort order so that the results show the smallest (not largest) increases first, which is an ASC_DESC semantic error.

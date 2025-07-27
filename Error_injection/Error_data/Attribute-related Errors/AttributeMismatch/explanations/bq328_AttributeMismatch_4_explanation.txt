@@ -1,0 +1,1 @@
+I changed the `indicator_code` in the WHERE clause from `"NY.GDP.MKTP.KD"` (GDP, constant 2015 US$) to `"NY.GDP.MKTP.CD"` (GDP, current US$), causing the query to use the wrong attribute for GDP and thus introducing an attribute mismatch.

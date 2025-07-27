@@ -1,0 +1,1 @@
+I changed the `ORDER BY lq.body_length DESC` to `ORDER BY lq.body_length ASC`, which will return the 10 shortest questions instead of the 10 longest, thus introducing an ASC_DESC semantic error.

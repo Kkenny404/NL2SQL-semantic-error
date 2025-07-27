@@ -1,0 +1,1 @@
+I replaced the entire multi-CTE logic with a simple query that just lists years with more than 100 collisions, which is a severe semantic deviation from the original intent of identifying years with unique top two accident causes.

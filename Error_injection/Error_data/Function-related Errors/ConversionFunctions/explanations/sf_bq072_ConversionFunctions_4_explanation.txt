@@ -1,0 +1,1 @@
+I changed the conversion in the BlackRace CTE from `CAST("Code" AS INT)` to `CAST("Code" AS VARCHAR)`, causing a type mismatch when comparing numeric "Race" values to string codes in the subquery, which is a classic conversion function misuse.

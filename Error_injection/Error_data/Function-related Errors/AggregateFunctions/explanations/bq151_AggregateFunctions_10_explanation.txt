@@ -1,0 +1,1 @@
+I incorrectly applied the `SUM()` aggregate function to the scalar values `a`, `b`, `c`, and `d` in the final SELECT, which are already aggregated; this is a classic aggregate function misuse that changes the semantics without causing a syntax error.

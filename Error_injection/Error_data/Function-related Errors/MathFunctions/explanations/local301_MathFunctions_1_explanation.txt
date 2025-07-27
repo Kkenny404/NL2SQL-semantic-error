@@ -1,0 +1,1 @@
+I changed the precision argument in the `ROUND` function for `percent_change` from `2` (two decimal places) to `0` (no decimal places), which is a typical math function misapplication resulting in loss of needed precision.

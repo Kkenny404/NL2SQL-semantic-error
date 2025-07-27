@@ -1,0 +1,1 @@
+I incorrectly applied the SUM() aggregate function to the already aggregated values a.num_tags and b.num_questions in the final SELECT, which are scalar values from the CTEs; this misuses aggregate functions by treating pre-calculated totals as if they need further aggregation.

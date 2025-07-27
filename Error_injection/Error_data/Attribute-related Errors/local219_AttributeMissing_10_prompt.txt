@@ -1,0 +1,445 @@
+# SQL Semantic Error Injection Task
+
+You are an expert SQL developer tasked with injecting a SPECIFIC semantic error into a correct SQL query.
+
+## 🎯 Your Mission
+Take the provided correct SQL query and modify it to contain EXACTLY ONE semantic error of the specified type. The modified SQL should:
+- ✅ Have valid syntax (no syntax errors)
+- ✅ Be executable against the database
+- ❌ Contain the specified semantic error
+- ❌ NOT contain any other types of errors
+
+## 📋 Error Specification
+**Error Category:** Attribute-related Errors
+**Category Description:** Attribute-related Errors occur when NL2SQL models incorrectly map the required columns in natural language queries to corresponding attributes in the database schema. These errors manifest in three primary forms.
+
+**Specific Error Type:** Attribute Missing
+**Error Description:** The model fails to identify and include attributes that are essential to fulfilling the query intent, indicating an incomplete understanding of the natural language requirements.
+
+## 💡 Guidelines for Error Injection
+
+### DO:
+- Focus ONLY on the specified error type
+- Keep the query structure as similar as possible to the original
+- Ensure the modified SQL runs without syntax errors
+- Make the error subtle but semantically meaningful
+- Consider the business logic and question intent when injecting the error
+
+### DON'T:
+- Add syntax errors or typos
+- Introduce multiple different error types
+- Completely rewrite the query structure
+- Make obvious/trivial mistakes that wouldn't occur in real scenarios
+- Change unrelated parts of the query
+
+## 📊 Database Schema
+```sql
+Table: Player_Attributes
+- id [PK]
+- player_fifa_api_id
+- player_api_id
+- date
+- overall_rating
+- potential
+- preferred_foot
+- attacking_work_rate
+- defensive_work_rate
+- crossing
+- finishing
+- heading_accuracy
+- short_passing
+- volleys
+- dribbling
+- curve
+- free_kick_accuracy
+- long_passing
+- ball_control
+- acceleration
+- sprint_speed
+- agility
+- reactions
+- balance
+- shot_power
+- jumping
+- stamina
+- strength
+- long_shots
+- aggression
+- interceptions
+- positioning
+- vision
+- penalties
+- marking
+- standing_tackle
+- sliding_tackle
+- gk_diving
+- gk_handling
+- gk_kicking
+- gk_positioning
+- gk_reflexes
+
+Table: Player
+- id [PK]
+- player_api_id
+- player_name
+- player_fifa_api_id
+- birthday
+- height
+- weight
+
+Table: Match
+- id [PK]
+- country_id
+- league_id
+- season
+- stage
+- date
+- match_api_id
+- home_team_api_id
+- away_team_api_id
+- home_team_goal
+- away_team_goal
+- home_player_X1
+- home_player_X2
+- home_player_X3
+- home_player_X4
+- home_player_X5
+- home_player_X6
+- home_player_X7
+- home_player_X8
+- home_player_X9
+- home_player_X10
+- home_player_X11
+- away_player_X1
+- away_player_X2
+- away_player_X3
+- away_player_X4
+- away_player_X5
+- away_player_X6
+- away_player_X7
+- away_player_X8
+- away_player_X9
+- away_player_X10
+- away_player_X11
+- home_player_Y1
+- home_player_Y2
+- home_player_Y3
+- home_player_Y4
+- home_player_Y5
+- home_player_Y6
+- home_player_Y7
+- home_player_Y8
+- home_player_Y9
+- home_player_Y10
+- home_player_Y11
+- away_player_Y1
+- away_player_Y2
+- away_player_Y3
+- away_player_Y4
+- away_player_Y5
+- away_player_Y6
+- away_player_Y7
+- away_player_Y8
+- away_player_Y9
+- away_player_Y10
+- away_player_Y11
+- home_player_1
+- home_player_2
+- home_player_3
+- home_player_4
+- home_player_5
+- home_player_6
+- home_player_7
+- home_player_8
+- home_player_9
+- home_player_10
+- home_player_11
+- away_player_1
+- away_player_2
+- away_player_3
+- away_player_4
+- away_player_5
+- away_player_6
+- away_player_7
+- away_player_8
+- away_player_9
+- away_player_10
+- away_player_11
+- goal
+- shoton
+- shotoff
+- foulcommit
+- card
+- cross
+- corner
+- possession
+- B365H
+- B365D
+- B365A
+- BWH
+- BWD
+- BWA
+- IWH
+- IWD
+- IWA
+- LBH
+- LBD
+- LBA
+- PSH
+- PSD
+- PSA
+- WHH
+- WHD
+- WHA
+- SJH
+- SJD
+- SJA
+- VCH
+- VCD
+- VCA
+- GBH
+- GBD
+- GBA
+- BSH
+- BSD
+- BSA
+
+Table: League
+- id [PK]
+- country_id
+- name
+
+Table: Country
+- id [PK]
+- name
+
+Table: Team
+- id [PK]
+- team_api_id
+- team_fifa_api_id
+- team_long_name
+- team_short_name
+
+Table: Team_Attributes
+- id [PK]
+- team_fifa_api_id
+- team_api_id
+- date
+- buildUpPlaySpeed
+- buildUpPlaySpeedClass
+- buildUpPlayDribbling
+- buildUpPlayDribblingClass
+- buildUpPlayPassing
+- buildUpPlayPassingClass
+- buildUpPlayPositioningClass
+- chanceCreationPassing
+- chanceCreationPassingClass
+- chanceCreationCrossing
+- chanceCreationCrossingClass
+- chanceCreationShooting
+- chanceCreationShootingClass
+- chanceCreationPositioningClass
+- defencePressure
+- defencePressureClass
+- defenceAggression
+- defenceAggressionClass
+- defenceTeamWidth
+- defenceTeamWidthClass
+- defenceDefenderLineClass
+
+Foreign Keys:
+- Player_Attributes.player_api_id → Player.player_api_id
+- Player_Attributes.player_fifa_api_id → Player.player_fifa_api_id
+- Match.away_player_11 → Player.player_api_id
+- Match.away_player_10 → Player.player_api_id
+- Match.away_player_9 → Player.player_api_id
+- Match.away_player_8 → Player.player_api_id
+- Match.away_player_7 → Player.player_api_id
+- Match.away_player_6 → Player.player_api_id
+- Match.away_player_5 → Player.player_api_id
+- Match.away_player_4 → Player.player_api_id
+- Match.away_player_3 → Player.player_api_id
+- Match.away_player_2 → Player.player_api_id
+- Match.away_player_1 → Player.player_api_id
+- Match.home_player_11 → Player.player_api_id
+- Match.home_player_10 → Player.player_api_id
+- Match.home_player_9 → Player.player_api_id
+- Match.home_player_8 → Player.player_api_id
+- Match.home_player_7 → Player.player_api_id
+- Match.home_player_6 → Player.player_api_id
+- Match.home_player_5 → Player.player_api_id
+- Match.home_player_4 → Player.player_api_id
+- Match.home_player_3 → Player.player_api_id
+- Match.home_player_2 → Player.player_api_id
+- Match.home_player_1 → Player.player_api_id
+- Match.away_team_api_id → Team.team_api_id
+- Match.home_team_api_id → Team.team_api_id
+- Match.league_id → League.id
+- Match.country_id → country.id
+- League.country_id → country.id
+- Team_Attributes.team_api_id → Team.team_api_id
+- Team_Attributes.team_fifa_api_id → Team.team_fifa_api_id
+```
+
+## ❓ Natural Language Question
+"In each league, considering all seasons, which single team has the fewest total match wins based on comparing home and away goals, including teams with zero wins, ensuring that if multiple teams tie for the fewest wins, only one team is returned for each league?"
+
+## ✅ Correct SQL Query
+```sql
+WITH match_view AS(
+SELECT
+    M.id,
+    L.name AS league,
+    M.season,
+    M.match_api_id,
+    T.team_long_name AS home_team,
+    TM.team_long_name AS away_team,
+    M.home_team_goal,
+    M.away_team_goal,
+    P1.player_name AS home_gk,
+    P2.player_name AS home_center_back_1,
+    P3.player_name AS home_center_back_2,
+    P4.player_name AS home_right_back,
+    P5.player_name AS home_left_back,
+    P6.player_name AS home_midfield_1,
+    P7.player_name AS home_midfield_2,
+    P8.player_name AS home_midfield_3,
+    P9.player_name AS home_midfield_4,
+    P10.player_name AS home_second_forward,
+    P11.player_name AS home_center_forward,
+    P12.player_name AS away_gk,
+    P13.player_name AS away_center_back_1,
+    P14.player_name AS away_center_back_2,
+    P15.player_name AS away_right_back,
+    P16.player_name AS away_left_back,
+    P17.player_name AS away_midfield_1,
+    P18.player_name AS away_midfield_2,
+    P19.player_name AS away_midfield_3,
+    P20.player_name AS away_midfield_4,
+    P21.player_name AS away_second_forward,
+    P22.player_name AS away_center_forward,
+    M.goal,
+    M.card
+FROM
+    match M
+LEFT JOIN
+    league L ON M.league_id = L.id
+LEFT JOIN
+    team T ON M.home_team_api_id = T.team_api_id
+LEFT JOIN
+    team TM ON M.away_team_api_id = TM.team_api_id
+LEFT JOIN
+    player P1 ON M.home_player_1 = P1.player_api_id
+LEFT JOIN
+    player P2 ON M.home_player_2 = P2.player_api_id
+LEFT JOIN
+    player P3 ON M.home_player_3 = P3.player_api_id
+LEFT JOIN
+    player P4 ON M.home_player_4 = P4.player_api_id
+LEFT JOIN
+    player P5 ON M.home_player_5 = P5.player_api_id
+LEFT JOIN
+    player P6 ON M.home_player_6 = P6.player_api_id
+LEFT JOIN
+    player P7 ON M.home_player_7 = P7.player_api_id
+LEFT JOIN
+    player P8 ON M.home_player_8 = P8.player_api_id
+LEFT JOIN
+    player P9 ON M.home_player_9 = P9.player_api_id
+LEFT JOIN
+    player P10 ON M.home_player_10 = P10.player_api_id
+LEFT JOIN
+    player P11 ON M.home_player_11 = P11.player_api_id
+LEFT JOIN
+    player P12 ON M.away_player_1 = P12.player_api_id
+LEFT JOIN
+    player P13 ON M.away_player_2 = P13.player_api_id
+LEFT JOIN
+    player P14 ON M.away_player_3 = P14.player_api_id
+LEFT JOIN
+    player P15 ON M.away_player_4 = P15.player_api_id
+LEFT JOIN
+    player P16 ON M.away_player_5 = P16.player_api_id
+LEFT JOIN
+    player P17 ON M.away_player_6 = P17.player_api_id
+LEFT JOIN
+    player P18 ON M.away_player_7 = P18.player_api_id
+LEFT JOIN
+    player P19 ON M.away_player_8 = P19.player_api_id
+LEFT JOIN
+    player P20 ON M.away_player_9 = P20.player_api_id
+LEFT JOIN
+    player P21 ON M.away_player_10 = P21.player_api_id
+LEFT JOIN
+    player P22 ON M.away_player_11 = P22.player_api_id
+),
+match_score AS
+(
+    SELECT  -- Displaying teams and their goals as home_team
+        id,
+        home_team AS team,
+        CASE
+            WHEN home_team_goal > away_team_goal THEN 1 ELSE 0 END AS Winning_match
+    FROM
+        match_view
+
+    UNION ALL
+
+    SELECT  -- Displaying teams and their goals as away_team
+        id,
+        away_team AS team,
+        CASE
+            WHEN away_team_goal > home_team_goal THEN 1 ELSE 0 END AS Winning_match
+    FROM
+        match_view
+),
+winning_matches AS
+(
+    SELECT  -- Displaying total match wins for each team
+        MV.league,
+        M.team,
+        COUNT(CASE WHEN M.Winning_match = 1 THEN 1 END) AS wins,
+        ROW_NUMBER() OVER(PARTITION BY MV.league ORDER BY COUNT(CASE WHEN M.Winning_match = 1 THEN 1 END) ASC) AS rn
+    FROM
+        match_score M
+    JOIN
+        match_view MV
+    ON
+        M.id = MV.id
+    GROUP BY
+        MV.league,
+        team
+    ORDER BY
+        league,
+        wins ASC
+)
+SELECT
+    league,
+    team
+FROM
+    winning_matches
+WHERE
+    rn = 1  -- Getting the team with the least number of wins in each league
+ORDER BY
+    league;
+```
+
+## 🔧 Your Task
+Analyze the correct SQL query above and modify it to introduce the specific error type: **Attribute Missing**.
+
+Think about:
+1. How this error typically manifests in real-world scenarios
+2. What parts of the query are most relevant to this error type
+3. How to make this data be meaningful for improving LLM SQL semantic detection area
+
+## 📤 Output Format
+Return your response in the following format:
+
+**Modified SQL Query:**
+```sql
+[Your modified SQL query here]
+```
+
+**Brief Explanation:**
+[A very brief explanation (1-2 sentences) of what specific change you made to inject the error]
+

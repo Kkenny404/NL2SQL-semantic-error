@@ -1,0 +1,1 @@
+I removed the necessary GROUP BY clause in the final SELECT, so the aggregation in ORDER BY is invalid or produces incorrect results, exemplifying a missing clause error.

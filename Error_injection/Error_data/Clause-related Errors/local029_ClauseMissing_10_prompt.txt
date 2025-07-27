@@ -1,0 +1,168 @@
+# SQL Semantic Error Injection Task
+
+You are an expert SQL developer tasked with injecting a SPECIFIC semantic error into a correct SQL query.
+
+## 🎯 Your Mission
+Take the provided correct SQL query and modify it to contain EXACTLY ONE semantic error of the specified type. The modified SQL should:
+- ✅ Have valid syntax (no syntax errors)
+- ✅ Be executable against the database
+- ❌ Contain the specified semantic error
+- ❌ NOT contain any other types of errors
+
+## 📋 Error Specification
+**Error Category:** Clause-related Errors
+**Category Description:** Clause-related Errors occur when NL2SQL models fail to correctly include, omit, or structure SQL clauses. These errors primarily involve mishandling GROUP BY, ORDER BY, and HAVING clauses, which are crucial for aggregation, sorting, and filtering grouped results. The errors manifest in two main categories.
+
+**Specific Error Type:** Clause Missing
+**Error Description:** The model fails to include necessary clauses such as GROUP BY, ORDER BY, or HAVING, resulting in incomplete or incorrect SQL queries that do not fully capture the intent of the natural language.
+
+## 💡 Guidelines for Error Injection
+
+### DO:
+- Focus ONLY on the specified error type
+- Keep the query structure as similar as possible to the original
+- Ensure the modified SQL runs without syntax errors
+- Make the error subtle but semantically meaningful
+- Consider the business logic and question intent when injecting the error
+
+### DON'T:
+- Add syntax errors or typos
+- Introduce multiple different error types
+- Completely rewrite the query structure
+- Make obvious/trivial mistakes that wouldn't occur in real scenarios
+- Change unrelated parts of the query
+
+## 📊 Database Schema
+```sql
+Table: olist_customers
+- customer_id
+- customer_unique_id
+- customer_zip_code_prefix
+- customer_city
+- customer_state
+
+Table: olist_sellers
+- seller_id
+- seller_zip_code_prefix
+- seller_city
+- seller_state
+
+Table: olist_order_reviews
+- review_id
+- order_id
+- review_score
+- review_comment_title
+- review_comment_message
+- review_creation_date
+- review_answer_timestamp
+
+Table: olist_order_items
+- order_id
+- order_item_id
+- product_id
+- seller_id
+- shipping_limit_date
+- price
+- freight_value
+
+Table: olist_products
+- product_id
+- product_category_name
+- product_name_lenght
+- product_description_lenght
+- product_photos_qty
+- product_weight_g
+- product_length_cm
+- product_height_cm
+- product_width_cm
+
+Table: olist_geolocation
+- geolocation_zip_code_prefix
+- geolocation_lat
+- geolocation_lng
+- geolocation_city
+- geolocation_state
+
+Table: product_category_name_translation
+- product_category_name
+- product_category_name_english
+
+Table: olist_orders
+- order_id
+- customer_id
+- order_status
+- order_purchase_timestamp
+- order_approved_at
+- order_delivered_carrier_date
+- order_delivered_customer_date
+- order_estimated_delivery_date
+
+Table: olist_order_payments
+- order_id
+- payment_sequential
+- payment_type
+- payment_installments
+- payment_value
+
+Table: olist_products_dataset
+- index
+- product_id
+- product_category_name
+- product_name_lenght
+- product_description_lenght
+- product_photos_qty
+- product_weight_g
+- product_length_cm
+- product_height_cm
+- product_width_cm
+
+Foreign Keys:
+```
+
+## ❓ Natural Language Question
+"Please identify the top three customers, based on their customer_unique_id, who have the highest number of delivered orders, and provide the average payment value, city, and state for each of these customers."
+
+## ✅ Correct SQL Query
+```sql
+WITH customer_orders AS (
+    SELECT
+        c.customer_unique_id,
+        COUNT(o.order_id) AS Total_Orders_By_Customers,
+        AVG(p.payment_value) AS Average_Payment_By_Customer,
+        c.customer_city,
+        c.customer_state
+    FROM olist_customers c
+    JOIN olist_orders o ON c.customer_id = o.customer_id
+    JOIN olist_order_payments p ON o.order_id = p.order_id
+    WHERE o.order_status = 'delivered'
+    GROUP BY c.customer_unique_id, c.customer_city, c.customer_state
+)
+
+SELECT 
+    Average_Payment_By_Customer,
+    customer_city,
+    customer_state
+FROM customer_orders
+ORDER BY Total_Orders_By_Customers DESC
+LIMIT 3;
+```
+
+## 🔧 Your Task
+Analyze the correct SQL query above and modify it to introduce the specific error type: **Clause Missing**.
+
+Think about:
+1. How this error typically manifests in real-world scenarios
+2. What parts of the query are most relevant to this error type
+3. How to make this data be meaningful for improving LLM SQL semantic detection area
+
+## 📤 Output Format
+Return your response in the following format:
+
+**Modified SQL Query:**
+```sql
+[Your modified SQL query here]
+```
+
+**Brief Explanation:**
+[A very brief explanation (1-2 sentences) of what specific change you made to inject the error]
+

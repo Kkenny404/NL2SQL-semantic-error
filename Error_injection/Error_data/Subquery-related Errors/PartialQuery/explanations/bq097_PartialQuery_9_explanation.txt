@@ -1,0 +1,1 @@
+I removed the final SELECT statement that wraps the main calculation in a subquery (the `earnings_diff` CTE and its filtering/sorting), leaving only the core join and calculation; this results in a partial query that is only a component of the full answer, lacking the final filtering and ordering needed to fully address the natural language request.

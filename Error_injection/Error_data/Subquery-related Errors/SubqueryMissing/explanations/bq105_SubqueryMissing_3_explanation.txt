@@ -1,0 +1,1 @@
+I removed the subquery that aggregates population by state from the 2010 census data and instead joined directly to the zipcode_area table, which does not provide state-level population. This omission of the necessary subquery means the query no longer correctly computes state populations, introducing a "subquery missing" error.

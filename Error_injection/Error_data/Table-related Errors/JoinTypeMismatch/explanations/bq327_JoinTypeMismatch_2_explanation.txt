@@ -1,0 +1,1 @@
+I changed the `INNER JOIN` between `country_summary` and `international_debt` to a `LEFT JOIN`, which may include rows from `country_summary` without matching debt records, potentially altering the result and misaligning with the intent to only count actual Russian debt indicators.

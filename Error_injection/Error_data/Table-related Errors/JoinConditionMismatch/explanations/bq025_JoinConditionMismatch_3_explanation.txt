@@ -1,0 +1,1 @@
+I injected a join condition mismatch by joining `age.country_name` to `pop.country_code` instead of the correct `age.country_code = pop.country_code`, thus creating an invalid join between unrelated attributes.

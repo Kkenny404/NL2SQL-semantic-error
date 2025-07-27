@@ -1,0 +1,1 @@
+I injected a redundant `GROUP BY date` clause in the final SELECT, which is unnecessary since each row in `daily_z_scores` is already unique by date and no aggregation is performed at this level.

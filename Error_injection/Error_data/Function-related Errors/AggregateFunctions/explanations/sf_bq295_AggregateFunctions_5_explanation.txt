@@ -1,0 +1,1 @@
+I replaced r."watch_count" with SUM(r."watch_count") in the SELECT clause and removed r."watch_count" from the GROUP BY, causing an incorrect aggregation of watch counts per repo (double-counting), which is a misuse of aggregate functions.

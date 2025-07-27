@@ -1,0 +1,1 @@
+I replaced the aggregate `COUNT(*)` with the window function `COUNT(*) OVER (PARTITION BY q.question_id)`, which misuses window functions by not aggregating at the correct level and producing multiple rows per question, thus changing the query's semantics.

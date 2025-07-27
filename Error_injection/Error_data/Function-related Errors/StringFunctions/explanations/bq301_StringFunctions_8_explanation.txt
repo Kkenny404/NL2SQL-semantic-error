@@ -1,0 +1,1 @@
+I changed the `questions.tags` field to `SUBSTR(questions.tags, 0, 15)`, incorrectly starting the substring at position 0 instead of 1, which is a common string function misuse in SQL.

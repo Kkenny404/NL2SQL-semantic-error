@@ -1,0 +1,1 @@
+I modified the ProductABuyers subquery to remove the filter for items.item_name = selected_product, so it now includes all purchasers rather than only those who bought the selected product. This creates a subquery mismatch where the inner logic no longer matches the intended requirement of filtering buyers based on the specified product.

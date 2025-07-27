@@ -1,0 +1,1 @@
+I removed the explicit condition filtering users to those who registered in 2021 in the `orders_x_users` CTE, so the query now incorrectly includes orders from users who registered outside of 2021.

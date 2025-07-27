@@ -1,0 +1,236 @@
+# SQL Semantic Error Injection Task
+
+You are an expert SQL developer tasked with injecting a SPECIFIC semantic error into a correct SQL query.
+
+## 🎯 Your Mission
+Take the provided correct SQL query and modify it to contain EXACTLY ONE semantic error of the specified type. The modified SQL should:
+- ✅ Have valid syntax (no syntax errors)
+- ✅ Be executable against the database
+- ❌ Contain the specified semantic error
+- ❌ NOT contain any other types of errors
+
+## 📋 Error Specification
+**Error Category:** Subquery-related Errors
+**Category Description:** Subquery-related Errors occur when NL2SQL models fail to correctly use or generate subqueries. These errors manifest in three distinct categories.
+
+**Specific Error Type:** Subquery Mismatch
+**Error Description:** The model generates a subquery that does not match the context or requirements of the outer query, resulting in logical errors or unexpected results.
+
+## 💡 Guidelines for Error Injection
+
+### DO:
+- Focus ONLY on the specified error type
+- Keep the query structure as similar as possible to the original
+- Ensure the modified SQL runs without syntax errors
+- Make the error subtle but semantically meaningful
+- Consider the business logic and question intent when injecting the error
+
+### DON'T:
+- Add syntax errors or typos
+- Introduce multiple different error types
+- Completely rewrite the query structure
+- Make obvious/trivial mistakes that wouldn't occur in real scenarios
+- Change unrelated parts of the query
+
+## 📊 Database Schema
+```sql
+CREATE TABLE `bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_20210109` (
+    ads_storage INT64,
+    advertising_id INT64,
+    affiliation STRING,
+    app_info STRUCT<id STRING,
+    browser_version STRING>>,
+    city STRING,
+    country STRING,
+    coupon STRING,
+    creative_name STRING,
+    creative_slot STRING>>,
+    currency STRING>,
+    device STRUCT<category STRING,
+    double_value FLOAT64>>>,
+    double_value INT64,
+    ecommerce STRUCT<total_item_quantity INT64,
+    event_bundle_sequence_id INT64,
+    event_date STRING,
+    event_dimensions STRUCT<hostname STRING>,
+    event_name STRING,
+    event_params ARRAY<STRUCT<key STRING,
+    event_previous_timestamp INT64,
+    event_server_timestamp_offset INT64,
+    event_timestamp INT64,
+    event_value_in_usd FLOAT64,
+    firebase_app_id STRING,
+    float_value FLOAT64,
+    float_value INT64,
+    geo STRUCT<continent STRING,
+    install_source STRING>,
+    install_store STRING,
+    int_value INT64,
+    int_value INT64,
+    is_limited_ad_tracking STRING,
+    item_brand STRING,
+    item_category STRING,
+    item_category2 STRING,
+    item_category3 STRING,
+    item_category4 STRING,
+    item_category5 STRING,
+    item_list_id STRING,
+    item_list_index STRING,
+    item_list_name STRING,
+    item_name STRING,
+    item_refund FLOAT64,
+    item_refund_in_usd FLOAT64,
+    item_revenue FLOAT64,
+    item_revenue_in_usd FLOAT64,
+    item_variant STRING,
+    items ARRAY<STRUCT<item_id STRING,
+    language STRING,
+    location_id STRING,
+    metro STRING>,
+    mobile_brand_name STRING,
+    mobile_marketing_name STRING,
+    mobile_model_name STRING,
+    mobile_os_hardware_model INT64,
+    name STRING,
+    operating_system STRING,
+    operating_system_version STRING,
+    platform STRING,
+    price FLOAT64,
+    price_in_usd FLOAT64,
+    privacy_info STRUCT<analytics_storage INT64,
+    promotion_id STRING,
+    promotion_name STRING,
+    purchase_revenue FLOAT64,
+    purchase_revenue_in_usd FLOAT64,
+    quantity INT64,
+    refund_value FLOAT64,
+    refund_value_in_usd FLOAT64,
+    region STRING,
+    set_timestamp_micros INT64>>>,
+    shipping_value FLOAT64,
+    shipping_value_in_usd FLOAT64,
+    source STRING>,
+    stream_id INT64,
+    sub_continent STRING,
+    tax_value FLOAT64,
+    tax_value_in_usd FLOAT64,
+    time_zone_offset_seconds INT64,
+    traffic_source STRUCT<medium STRING,
+    transaction_id STRING>,
+    unique_items INT64,
+    user_first_touch_timestamp INT64,
+    user_id STRING,
+    user_ltv STRUCT<revenue FLOAT64,
+    user_properties ARRAY<STRUCT<key INT64,
+    user_pseudo_id STRING,
+    uses_transient_token STRING>,
+    value STRUCT<string_value INT64,
+    value STRUCT<string_value STRING,
+    vendor_id INT64,
+    version STRING,
+    web_info STRUCT<browser STRING
+);
+
+-- Tables with the same structure: bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_20201109, bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_20210110, bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_20210123, bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_20201107, bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_20201111, bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_20201228, bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_20201224, bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_20210119, bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_20201105, bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_20210131, bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_20201218, bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_20210124, bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_20201222, bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_20210103, bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_20210127, bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_20210108, bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_20201120, bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_20201130, bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_20201124, bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_20210104, bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_20201115, bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_20210128, bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_20210121, bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_20201114, bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_20201127, bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_20210111, bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_20210118, bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_20210113, bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_20201212, bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_20201113, bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_20201221, bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_20210112, bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_20210120, bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_20210101, bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_20201209, bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_20201206, bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_20201225, bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_20201129, bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_20201112, bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_20201230, bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_20210115, bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_20210107, bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_20201210, bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_20201121, bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_20201215, bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_20201229, bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_20201123, bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_20201204, bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_20201201, bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_20210102, bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_20210106, bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_20201205, bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_20201226, bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_20201211, bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_20201203, bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_20201102, bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_20201106, bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_20201213, bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_20201128, bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_20210105, bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_20201220, bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_20201117, bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_20201231, bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_20201208, bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_20201108, bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_20201214, bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_20201207, bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_20201223, bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_20210117, bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_20201219, bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_20201110, bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_20201122, bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_20210130, bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_20201216, bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_20210126, bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_20210129, bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_20210125, bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_20201227, bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_20201126, bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_20201217, bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_20201101, bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_20201116, bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_20201103, bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_20210122, bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_20201104, bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_20210114, bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_20210116, bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_20201119, bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_20201125, bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_20201118, bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_20201202
+```
+
+## ❓ Natural Language Question
+"Tell me the most purchased other products and their quantities by customers who bought the Google Red Speckled Tee each month for the three months starting from November 2020."
+
+## ✅ Correct SQL Query
+```sql
+WITH
+Params AS (
+  SELECT 'Google Red Speckled Tee' AS selected_product
+),
+DateRanges AS (
+  SELECT '20201101' AS start_date, '20201130' AS end_date, '202011' AS period UNION ALL
+  SELECT '20201201', '20201231', '202012' UNION ALL
+  SELECT '20210101', '20210131', '202101'
+),
+PurchaseEvents AS (
+  SELECT
+    period,
+    user_pseudo_id,
+    items
+  FROM
+    DateRanges
+  JOIN
+    `bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_*`
+    ON _TABLE_SUFFIX BETWEEN start_date AND end_date
+  WHERE
+    event_name = 'purchase'
+),
+ProductABuyers AS (
+  SELECT DISTINCT
+    period,
+    user_pseudo_id
+  FROM
+    Params,
+    PurchaseEvents,
+    UNNEST(items) AS items
+  WHERE
+    items.item_name = selected_product
+),
+TopProducts AS (
+  SELECT
+    pe.period,
+    items.item_name AS item_name,
+    SUM(items.quantity) AS item_quantity
+  FROM
+    Params,
+    PurchaseEvents pe,
+    UNNEST(items) AS items
+  WHERE
+    user_pseudo_id IN (SELECT user_pseudo_id FROM ProductABuyers pb WHERE pb.period = pe.period)
+    AND items.item_name != selected_product
+  GROUP BY
+    pe.period, items.item_name
+),
+TopProductPerPeriod AS (
+  SELECT
+    period,
+    item_name,
+    item_quantity
+  FROM (
+    SELECT
+      period,
+      item_name,
+      item_quantity,
+      RANK() OVER (PARTITION BY period ORDER BY item_quantity DESC) AS rank
+    FROM
+      TopProducts
+  )
+  WHERE
+    rank = 1
+)
+SELECT
+  period,
+  item_name,
+  item_quantity
+FROM
+  TopProductPerPeriod
+ORDER BY
+  period;
+
+```
+
+## 🔧 Your Task
+Analyze the correct SQL query above and modify it to introduce the specific error type: **Subquery Mismatch**.
+
+Think about:
+1. How this error typically manifests in real-world scenarios
+2. What parts of the query are most relevant to this error type
+3. How to make this data be meaningful for improving LLM SQL semantic detection area
+
+## 📤 Output Format
+Return your response in the following format:
+
+**Modified SQL Query:**
+```sql
+[Your modified SQL query here]
+```
+
+**Brief Explanation:**
+[A very brief explanation (1-2 sentences) of what specific change you made to inject the error]
+

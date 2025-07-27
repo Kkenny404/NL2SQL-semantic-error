@@ -1,0 +1,1 @@
+I removed the explicit condition restricting "grant_date" to December 2016 from the inner WHERE clause, so the query now includes patents granted at any time, not just those granted in December 2016 as required by the question.

@@ -1,0 +1,296 @@
+# SQL Semantic Error Injection Task
+
+You are an expert SQL developer tasked with injecting a SPECIFIC semantic error into a correct SQL query.
+
+## 🎯 Your Mission
+Take the provided correct SQL query and modify it to contain EXACTLY ONE semantic error of the specified type. The modified SQL should:
+- ✅ Have valid syntax (no syntax errors)
+- ✅ Be executable against the database
+- ❌ Contain the specified semantic error
+- ❌ NOT contain any other types of errors
+
+## 📋 Error Specification
+**Error Category:** Function-related Errors
+**Category Description:** Function-related Errors occur when NL2SQL models fail to correctly use SQL functions or misunderstand their purposes. We consider the following cases. CRITICAL: Function-related Errors focus on MISUSING the functions themselves, NOT on missing or incorrect clauses. Do not confuse with Clause-related Errors. Function-related Errors (CORRECT focus): Using wrong function types: SUM() instead of COUNT(), MAX() instead of MIN(); Incorrect function parameters: ROUND(value, -1) instead of ROUND(value, 2); Wrong function arguments: SUBSTR(text, 0, 5) instead of SUBSTR(text, 1, 5); Inappropriate function application: UPPER() on numeric data, mathematical functions on text; Function syntax errors: CAST(value, INT) instead of CAST(value AS INT). Clause-related Errors (AVOID - this is a different error category): Missing GROUP BY, ORDER BY, or HAVING clauses; Incorrect clause positioning or structure; Omitting necessary clauses that work with functions. Examples: ✅ CORRECT Function-related Error: Original: SELECT region, SUM(sales) FROM data GROUP BY region; Modified: SELECT region, COUNT(sales) FROM data GROUP BY region; Error: Wrong aggregate function (COUNT instead of SUM). ❌ INCORRECT (this is Clause-related): Original: SELECT region, SUM(sales) FROM data GROUP BY region; Modified: SELECT region, SUM(sales) FROM data; Error: Missing GROUP BY clause (this is clause-related, not function-related). Focus on changing HOW functions are used, not WHETHER they are used with proper clauses.
+
+**Specific Error Type:** String Functions
+**Error Description:** The model incorrectly uses string manipulation functions (e.g., SUBSTR, CONCAT), such as wrong substring positions or improper string concatenations.
+
+## 💡 Guidelines for Error Injection
+
+### DO:
+- Focus ONLY on the specified error type
+- Keep the query structure as similar as possible to the original
+- Ensure the modified SQL runs without syntax errors
+- Make the error subtle but semantically meaningful
+- Consider the business logic and question intent when injecting the error
+
+### DON'T:
+- Add syntax errors or typos
+- Introduce multiple different error types
+- Completely rewrite the query structure
+- Make obvious/trivial mistakes that wouldn't occur in real scenarios
+- Change unrelated parts of the query
+
+## 📊 Database Schema
+```sql
+CREATE TABLE `bigquery-public-data.noaa_gsod.gsod2000` (
+    Global summary of day data for 18 surface meteorological elements are derived from the synoptic/hourly observations"",
+    a station may only report a 6-hour amount for the period during which rain fell. See Flag field for source of data""),
+    but also reported at least one occurrence of precipitation in hourly observations--this could indicate a trace occurred,
+    but should be considered as incomplete data for the day.\nI = Station did not report any precip data for the day and did not report any occurrences of precipitation in its hourly observations--it's still possible that precip occurred but was not reported""),
+    count_dewp INT64 OPTIONS(description=""Number of observations used in calculating mean dew point""),
+    count_slp INT64 OPTIONS(description=""Number of observations used in calculating mean sea level pressure""),
+    count_stp INT64 OPTIONS(description=""Number of observations used in calculating mean station pressure""),
+    count_temp INT64 OPTIONS(description=""Number of observations used in calculating mean temperature""),
+    count_visib INT64 OPTIONS(description=""Number of observations used in calculating mean visibility""),
+    count_wdsp STRING OPTIONS(description=""Number of observations used in calculating mean wind speed""),
+    da STRING OPTIONS(description=""The day""),
+    dewp FLOAT64 OPTIONS(description=""Mean dew point for the day in degreesm Fahrenheit to tenths.  Missing = 9999.9""),
+    flag_max STRING OPTIONS(description=""Blank indicates max temp was taken from the explicit max temp report and not from the 'hourly' data.\n* indicates max temp was  derived from the hourly data (i.e.,
+    flag_min STRING OPTIONS(description=""Blank indicates min temp was taken from the explicit min temp report and not from the 'hourly' data.\n* indicates min temp was derived from the hourly data (i.e.,
+    flag_prcp STRING OPTIONS(description=""A = 1 report of 6-hour precipitation amount\nB = Summation of 2 reports of 6-hour precipitation amount\nC = Summation of 3 reports of 6-hour precipitation amount\nD = Summation of 4 reports of 6-hour precipitation amount\nE = 1 report of 12-hour precipitation amount\nF = Summation of 2 reports of 12-hour precipitation amount\nG = 1 report of 24-hour precipitation amount\nH = Station reported '0' as the amount for the day (eg,
+    fog STRING OPTIONS(description=""Indicators (1 = yes,
+    for example,
+    from 6-hour reports),
+    gust FLOAT64 OPTIONS(description=""Maximum wind gust reported for the day in knots to tenths. Missing = 999.9""),
+    hail STRING OPTIONS(description=""Indicators (1 = yes,
+    highest hourly or synoptic-reported temperature)""),
+    lowest hourly or synoptic-reported temperature)""),
+    max FLOAT64 OPTIONS(description=""Maximum temperature reported during the day in Fahrenheit to tenths--time of max temp report varies by country and region,
+    may include latter part of previous day. \n.00 indicates no measurable precipitation (includes a trace).\nMissing = 99.99\nNote: Many stations do not report '0' on days with no precipitation--therefore,
+    min FLOAT64 OPTIONS(description=""Minimum temperature reported during the day in Fahrenheit to tenths--time of min temp report varies by country and region,
+    mo STRING OPTIONS(description=""The month""),
+    mxpsd STRING OPTIONS(description=""Maximum sustained wind speed reported for the day in knots to tenths. Missing = 999.9""),
+    not reported) for the occurrence during the day""),
+    not reported) for the occurrence during the day""),
+    not reported) for the occurrence during the day""),
+    not reported) for the occurrence during the day""),
+    not reported) for the occurrence during the day""),
+    prcp FLOAT64 OPTIONS(description=""Total precipitation (rain and/or melted snow) reported during the day in inches and hundredths; will usually not end with the midnight observation--i.e.,
+    rain_drizzle STRING OPTIONS(description=""Indicators (1 = yes,
+    slp FLOAT64 OPTIONS(description=""Mean sea level pressure for the day in millibars to tenths. Missing = 9999.9""),
+    sndp FLOAT64 OPTIONS(description=""Snow depth in inches to tenths--last report for the day if reported more thanonce. Missing = 999.9\nNote: Most stations do not report '0' ondays with no snow on the ground--therefore,
+    snow_ice_pellets STRING OPTIONS(description=""Indicators (1 = yes,
+    so this will sometimes not be the max for the calendar day. Missing = 9999.9""),
+    so this will sometimes not be the min for the calendar day. Missing = 9999.9""),
+    stn STRING OPTIONS(description=""Station number (WMO/DATSAV3 number) for the location""),
+    stp FLOAT64 OPTIONS(description=""Mean station pressure for the day in millibars to tenths. Missing = 9999.9""),
+    temp FLOAT64 OPTIONS(description=""Mean temperature for the day in degrees Fahrenheit to tenths. Missing = 9999.9""),
+    thunder STRING OPTIONS(description=""Indicators (1 = yes,
+    tornado_funnel_cloud STRING OPTIONS(description=""Indicators (1 = yes,
+    visib FLOAT64 OPTIONS(description=""Mean visibility for the day in miles to tenths.  Missing = 999.9""),
+    wban STRING OPTIONS(description=""WBAN number where applicable--this is the historical \""Weather Bureau Air Force Navy\"" number - with WBAN being the acronym""),
+    wdsp STRING OPTIONS(description=""Mean wind speed for the day in knots to tenths. Missing = 999.9""),
+    will often appear on these days""),
+    will often appear on these days. Also,
+    year STRING OPTIONS(description=""The year"")
+);
+
+-- Tables with the same structure: bigquery-public-data.noaa_gsod.gsod2001, bigquery-public-data.noaa_gsod.gsod1933, bigquery-public-data.noaa_gsod.gsod1942, bigquery-public-data.noaa_gsod.gsod1963, bigquery-public-data.noaa_gsod.gsod1954, bigquery-public-data.noaa_gsod.gsod1982, bigquery-public-data.noaa_gsod.gsod1946, bigquery-public-data.noaa_gsod.gsod2012, bigquery-public-data.noaa_gsod.gsod1978, bigquery-public-data.noaa_gsod.gsod1948, bigquery-public-data.noaa_gsod.gsod2009, bigquery-public-data.noaa_gsod.gsod2011, bigquery-public-data.noaa_gsod.gsod1976, bigquery-public-data.noaa_gsod.gsod1943, bigquery-public-data.noaa_gsod.gsod1981, bigquery-public-data.noaa_gsod.gsod1970, bigquery-public-data.noaa_gsod.gsod1945, bigquery-public-data.noaa_gsod.gsod1968, bigquery-public-data.noaa_gsod.gsod1973, bigquery-public-data.noaa_gsod.gsod1998, bigquery-public-data.noaa_gsod.gsod1950, bigquery-public-data.noaa_gsod.gsod1977, bigquery-public-data.noaa_gsod.gsod1947, bigquery-public-data.noaa_gsod.gsod1999, bigquery-public-data.noaa_gsod.gsod1971, bigquery-public-data.noaa_gsod.gsod1936, bigquery-public-data.noaa_gsod.gsod1957, bigquery-public-data.noaa_gsod.gsod1992, bigquery-public-data.noaa_gsod.gsod1991, bigquery-public-data.noaa_gsod.gsod1951, bigquery-public-data.noaa_gsod.gsod1964, bigquery-public-data.noaa_gsod.gsod1930, bigquery-public-data.noaa_gsod.gsod1958, bigquery-public-data.noaa_gsod.gsod1974, bigquery-public-data.noaa_gsod.gsod1959, bigquery-public-data.noaa_gsod.gsod1961, bigquery-public-data.noaa_gsod.gsod1980, bigquery-public-data.noaa_gsod.gsod1949, bigquery-public-data.noaa_gsod.gsod2006, bigquery-public-data.noaa_gsod.gsod2005, bigquery-public-data.noaa_gsod.gsod2013, bigquery-public-data.noaa_gsod.gsod1953, bigquery-public-data.noaa_gsod.gsod1996, bigquery-public-data.noaa_gsod.gsod1969, bigquery-public-data.noaa_gsod.gsod1937, bigquery-public-data.noaa_gsod.gsod2008, bigquery-public-data.noaa_gsod.gsod2010, bigquery-public-data.noaa_gsod.gsod2007, bigquery-public-data.noaa_gsod.gsod1993, bigquery-public-data.noaa_gsod.gsod1939, bigquery-public-data.noaa_gsod.gsod1985, bigquery-public-data.noaa_gsod.gsod2015, bigquery-public-data.noaa_gsod.gsod1962, bigquery-public-data.noaa_gsod.gsod1986, bigquery-public-data.noaa_gsod.gsod1952, bigquery-public-data.noaa_gsod.gsod1987, bigquery-public-data.noaa_gsod.gsod1944, bigquery-public-data.noaa_gsod.gsod1990, bigquery-public-data.noaa_gsod.gsod1975, bigquery-public-data.noaa_gsod.gsod1941, bigquery-public-data.noaa_gsod.gsod1967, bigquery-public-data.noaa_gsod.gsod1938, bigquery-public-data.noaa_gsod.gsod1934, bigquery-public-data.noaa_gsod.gsod2004, bigquery-public-data.noaa_gsod.gsod1994, bigquery-public-data.noaa_gsod.gsod1983, bigquery-public-data.noaa_gsod.gsod1972, bigquery-public-data.noaa_gsod.gsod1995, bigquery-public-data.noaa_gsod.gsod1929, bigquery-public-data.noaa_gsod.gsod1984, bigquery-public-data.noaa_gsod.gsod1979, bigquery-public-data.noaa_gsod.gsod1965, bigquery-public-data.noaa_gsod.gsod1989, bigquery-public-data.noaa_gsod.gsod1956, bigquery-public-data.noaa_gsod.gsod1960, bigquery-public-data.noaa_gsod.gsod1997, bigquery-public-data.noaa_gsod.gsod1955, bigquery-public-data.noaa_gsod.gsod1935, bigquery-public-data.noaa_gsod.gsod2002, bigquery-public-data.noaa_gsod.gsod1988, bigquery-public-data.noaa_gsod.gsod1931, bigquery-public-data.noaa_gsod.gsod1940, bigquery-public-data.noaa_gsod.gsod1966, bigquery-public-data.noaa_gsod.gsod1932, bigquery-public-data.noaa_gsod.gsod2014, bigquery-public-data.noaa_gsod.gsod2003
+
+CREATE TABLE `bigquery-public-data.noaa_gsod.gsod2020` (
+    a station may only report a 6-hour amount for the period during which rain fell. See Flag field for source of data""),
+    but also reported at least one occurrence of precipitation in hourly observations--this could indicate a trace occurred,
+    but should be considered as incomplete data for the day. I = Station did not report any precip data for the day and did not report any occurrences of precipitation in its hourly observations--it's still possible that precip occurred but was not reported""),
+    count_dewp INT64 OPTIONS(description=""Number of observations used in calculating mean dew point""),
+    count_slp INT64 OPTIONS(description=""Number of observations used in calculating mean sea level pressure""),
+    count_stp INT64 OPTIONS(description=""Number of observations used in calculating mean station pressure""),
+    count_temp INT64 OPTIONS(description=""Number of observations used in calculating mean temperature""),
+    count_visib INT64 OPTIONS(description=""Number of observations used in calculating mean visibility""),
+    count_wdsp STRING OPTIONS(description=""Number of observations used in calculating mean wind speed""),
+    da STRING OPTIONS(description=""The day""),
+    date DATE OPTIONS(description=""Date of the weather observations""),
+    dewp FLOAT64 OPTIONS(description=""Mean dew point for the day in degreesm Fahrenheit to tenths.  Missing = 9999.9""),
+    flag_max STRING OPTIONS(description=""Blank indicates max temp was taken from the explicit max temp report and not from the 'hourly' data. * indicates max temp was  derived from the hourly data (i.e.,
+    flag_min STRING OPTIONS(description=""Blank indicates min temp was taken from the explicit min temp report and not from the 'hourly' data. * indicates min temp was derived from the hourly data (i.e.,
+    flag_prcp STRING OPTIONS(description=""A = 1 report of 6-hour precipitation amount B = Summation of 2 reports of 6-hour precipitation amount C = Summation of 3 reports of 6-hour precipitation amount D = Summation of 4 reports of 6-hour precipitation amount E = 1 report of 12-hour precipitation amount F = Summation of 2 reports of 12-hour precipitation amount G = 1 report of 24-hour precipitation amount H = Station reported '0' as the amount for the day (eg,
+    fog STRING OPTIONS(description=""Indicators (1 = yes,
+    for example,
+    from 6-hour reports),
+    gust FLOAT64 OPTIONS(description=""Maximum wind gust reported for the day in knots to tenths. Missing = 999.9""),
+    hail STRING OPTIONS(description=""Indicators (1 = yes,
+    highest hourly or synoptic-reported temperature)""),
+    lowest hourly or synoptic-reported temperature)""),
+    max FLOAT64 OPTIONS(description=""Maximum temperature reported during the day in Fahrenheit to tenths--time of max temp report varies by country and region,
+    may include latter part of previous day.  .00 indicates no measurable precipitation (includes a trace). Missing = 99.99 Note: Many stations do not report '0' on days with no precipitation--therefore,
+    min FLOAT64 OPTIONS(description=""Minimum temperature reported during the day in Fahrenheit to tenths--time of min temp report varies by country and region,
+    mo STRING OPTIONS(description=""The month""),
+    mxpsd STRING OPTIONS(description=""Maximum sustained wind speed reported for the day in knots to tenths. Missing = 999.9""),
+    not reported) for the occurrence during the day""),
+    not reported) for the occurrence during the day""),
+    not reported) for the occurrence during the day""),
+    not reported) for the occurrence during the day""),
+    not reported) for the occurrence during the day""),
+    not reported) for the occurrence during the day""),
+    prcp FLOAT64 OPTIONS(description=""Total precipitation (rain and/or melted snow) reported during the day in inches and hundredths; will usually not end with the midnight observation--i.e.,
+    rain_drizzle STRING OPTIONS(description=""Indicators (1 = yes,
+    slp FLOAT64 OPTIONS(description=""Mean sea level pressure for the day in millibars to tenths. Missing = 9999.9""),
+    sndp FLOAT64 OPTIONS(description=""Snow depth in inches to tenths--last report for the day if reported more thanonce. Missing = 999.9 Note: Most stations do not report '0' ondays with no snow on the ground--therefore,
+    snow_ice_pellets STRING OPTIONS(description=""Indicators (1 = yes,
+    so this will sometimes not be the max for the calendar day. Missing = 9999.9""),
+    so this will sometimes not be the min for the calendar day. Missing = 9999.9""),
+    stn STRING OPTIONS(description=""Cloud - GSOD NOAA""),
+    stp FLOAT64 OPTIONS(description=""Mean station pressure for the day in millibars to tenths. Missing = 9999.9""),
+    temp FLOAT64 OPTIONS(description=""Mean temperature for the day in degrees Fahrenheit to tenths. Missing = 9999.9""),
+    thunder STRING OPTIONS(description=""Indicators (1 = yes,
+    tornado_funnel_cloud STRING OPTIONS(description=""Indicators (1 = yes,
+    visib FLOAT64 OPTIONS(description=""Mean visibility for the day in miles to tenths.  Missing = 999.9""),
+    wban STRING OPTIONS(description=""WBAN number where applicable--this is the historical \""Weather Bureau Air Force Navy\"" number - with WBAN being the acronym""),
+    wdsp STRING OPTIONS(description=""Mean wind speed for the day in knots to tenths. Missing = 999.9""),
+    will often appear on these days""),
+    will often appear on these days. Also,
+    year STRING OPTIONS(description=""The year"")
+);
+
+-- Tables with the same structure: bigquery-public-data.noaa_gsod.gsod2023, bigquery-public-data.noaa_gsod.gsod2022, bigquery-public-data.noaa_gsod.gsod2021, bigquery-public-data.noaa_gsod.gsod2024
+
+CREATE TABLE `bigquery-public-data.noaa_gsod.gsod2018` (
+    a station may only report a 6-hour amount for the period during which rain fell. See Flag field for source of data""),
+    but also reported at least one occurrence of precipitation in hourly observations--this could indicate a trace occurred,
+    but should be considered as incomplete data for the day. I = Station did not report any precip data for the day and did not report any occurrences of precipitation in its hourly observations--it's still possible that precip occurred but was not reported""),
+    count_dewp INT64 OPTIONS(description=""Number of observations used in calculating mean dew point""),
+    count_slp INT64 OPTIONS(description=""Number of observations used in calculating mean sea level pressure""),
+    count_stp INT64 OPTIONS(description=""Number of observations used in calculating mean station pressure""),
+    count_temp INT64 OPTIONS(description=""Number of observations used in calculating mean temperature""),
+    count_visib INT64 OPTIONS(description=""Number of observations used in calculating mean visibility""),
+    count_wdsp STRING OPTIONS(description=""Number of observations used in calculating mean wind speed""),
+    da STRING OPTIONS(description=""The day""),
+    dewp FLOAT64 OPTIONS(description=""Mean dew point for the day in degreesm Fahrenheit to tenths.  Missing = 9999.9""),
+    flag_max STRING OPTIONS(description=""Blank indicates max temp was taken from the explicit max temp report and not from the 'hourly' data. * indicates max temp was  derived from the hourly data (i.e.,
+    flag_min STRING OPTIONS(description=""Blank indicates min temp was taken from the explicit min temp report and not from the 'hourly' data. * indicates min temp was derived from the hourly data (i.e.,
+    flag_prcp STRING OPTIONS(description=""A = 1 report of 6-hour precipitation amount B = Summation of 2 reports of 6-hour precipitation amount C = Summation of 3 reports of 6-hour precipitation amount D = Summation of 4 reports of 6-hour precipitation amount E = 1 report of 12-hour precipitation amount F = Summation of 2 reports of 12-hour precipitation amount G = 1 report of 24-hour precipitation amount H = Station reported '0' as the amount for the day (eg,
+    fog STRING OPTIONS(description=""Indicators (1 = yes,
+    for example,
+    from 6-hour reports),
+    gust FLOAT64 OPTIONS(description=""Maximum wind gust reported for the day in knots to tenths. Missing = 999.9""),
+    hail STRING OPTIONS(description=""Indicators (1 = yes,
+    highest hourly or synoptic-reported temperature)""),
+    lowest hourly or synoptic-reported temperature)""),
+    max FLOAT64 OPTIONS(description=""Maximum temperature reported during the day in Fahrenheit to tenths--time of max temp report varies by country and region,
+    may include latter part of previous day.  .00 indicates no measurable precipitation (includes a trace). Missing = 99.99 Note: Many stations do not report '0' on days with no precipitation--therefore,
+    min FLOAT64 OPTIONS(description=""Minimum temperature reported during the day in Fahrenheit to tenths--time of min temp report varies by country and region,
+    mo STRING OPTIONS(description=""The month""),
+    mxpsd STRING OPTIONS(description=""Maximum sustained wind speed reported for the day in knots to tenths. Missing = 999.9""),
+    not reported) for the occurrence during the day""),
+    not reported) for the occurrence during the day""),
+    not reported) for the occurrence during the day""),
+    not reported) for the occurrence during the day""),
+    not reported) for the occurrence during the day""),
+    not reported) for the occurrence during the day""),
+    prcp FLOAT64 OPTIONS(description=""Total precipitation (rain and/or melted snow) reported during the day in inches and hundredths; will usually not end with the midnight observation--i.e.,
+    rain_drizzle STRING OPTIONS(description=""Indicators (1 = yes,
+    slp FLOAT64 OPTIONS(description=""Mean sea level pressure for the day in millibars to tenths. Missing = 9999.9""),
+    sndp FLOAT64 OPTIONS(description=""Snow depth in inches to tenths--last report for the day if reported more thanonce. Missing = 999.9 Note: Most stations do not report '0' ondays with no snow on the ground--therefore,
+    snow_ice_pellets STRING OPTIONS(description=""Indicators (1 = yes,
+    so this will sometimes not be the max for the calendar day. Missing = 9999.9""),
+    so this will sometimes not be the min for the calendar day. Missing = 9999.9""),
+    stn STRING OPTIONS(description=""Cloud - GSOD NOAA""),
+    stp FLOAT64 OPTIONS(description=""Mean station pressure for the day in millibars to tenths. Missing = 9999.9""),
+    temp FLOAT64 OPTIONS(description=""Mean temperature for the day in degrees Fahrenheit to tenths. Missing = 9999.9""),
+    thunder STRING OPTIONS(description=""Indicators (1 = yes,
+    tornado_funnel_cloud STRING OPTIONS(description=""Indicators (1 = yes,
+    visib FLOAT64 OPTIONS(description=""Mean visibility for the day in miles to tenths.  Missing = 999.9""),
+    wban STRING OPTIONS(description=""WBAN number where applicable--this is the historical \""Weather Bureau Air Force Navy\"" number - with WBAN being the acronym""),
+    wdsp STRING OPTIONS(description=""Mean wind speed for the day in knots to tenths. Missing = 999.9""),
+    will often appear on these days""),
+    will often appear on these days. Also,
+    year STRING OPTIONS(description=""The year"")
+);
+
+-- Tables with the same structure: bigquery-public-data.noaa_gsod.gsod2016, bigquery-public-data.noaa_gsod.gsod2017, bigquery-public-data.noaa_gsod.gsod2019
+
+CREATE TABLE `bigquery-public-data.noaa_gsod.stations` (
+    STRING OPTIONS(description=""""),
+    begin STRING OPTIONS(description=""""),
+    call STRING OPTIONS(description=""""),
+    country STRING OPTIONS(description=""""),
+    elev STRING OPTIONS(description=""""),
+    lat FLOAT64 OPTIONS(description=""""),
+    lon FLOAT64 OPTIONS(description=""""),
+    name STRING OPTIONS(description=""""),
+    state STRING OPTIONS(description=""""),
+    usaf STRING OPTIONS(description=""""),
+    wban STRING OPTIONS(description="""")
+);
+```
+
+## ❓ Natural Language Question
+"What are the top 3 dates in October 2009 with the highest average temperature for station number 723758, in the format YYYY-MM-DD?"
+
+## ✅ Correct SQL Query
+```sql
+WITH
+  # FIRST CAST EACH YEAR, MONTH, DATE TO STRINGS
+  T AS (
+    SELECT
+      *,
+      CAST(year AS STRING) AS year_string,
+      CAST(mo AS STRING) AS month_string,
+      CAST(da AS STRING) AS day_string
+    FROM
+      `bigquery-public-data.noaa_gsod.gsod2009`
+    WHERE
+      stn = "723758"
+  ),
+
+  # SECOND, CONCAT ALL THE STRINGS TOGETHER INTO ONE COLUMN
+  TT AS (
+    SELECT
+      *,
+      CONCAT(year_string, "-", month_string, "-", day_string) AS date_string
+    FROM
+      T
+  ),
+
+  # THIRD, CAST THE DATE STRING INTO A DATE FORMAT
+  TTT AS (
+    SELECT
+      *,
+      CAST(date_string AS DATE) AS date_date
+    FROM
+      TT
+  ),
+
+  # FOURTH, CALCULATE THE MEAN TEMPERATURE FOR EACH DATE
+  Temp_Avg AS (
+    SELECT
+      date_date,
+      AVG(temp) AS avg_temp
+    FROM
+      TTT
+    WHERE
+      date_date BETWEEN '2009-10-01' AND '2009-10-31'
+    GROUP BY
+      date_date
+  )
+
+# FINAL SELECTION OF TOP 3 DATES WITH HIGHEST MEAN TEMPERATURE
+SELECT
+  date_date AS dates
+FROM
+  Temp_Avg
+ORDER BY
+  avg_temp DESC
+LIMIT 3;
+```
+
+## 🔧 Your Task
+Analyze the correct SQL query above and modify it to introduce the specific error type: **String Functions**.
+
+Think about:
+1. How this error typically manifests in real-world scenarios
+2. What parts of the query are most relevant to this error type
+3. How to make this data be meaningful for improving LLM SQL semantic detection area
+
+## 📤 Output Format
+Return your response in the following format:
+
+**Modified SQL Query:**
+```sql
+[Your modified SQL query here]
+```
+
+**Brief Explanation:**
+[A very brief explanation (1-2 sentences) of what specific change you made to inject the error]
+

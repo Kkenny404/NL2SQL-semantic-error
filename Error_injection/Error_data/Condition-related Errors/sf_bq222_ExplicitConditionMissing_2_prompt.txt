@@ -1,0 +1,202 @@
+# SQL Semantic Error Injection Task
+
+You are an expert SQL developer tasked with injecting a SPECIFIC semantic error into a correct SQL query.
+
+## 🎯 Your Mission
+Take the provided correct SQL query and modify it to contain EXACTLY ONE semantic error of the specified type. The modified SQL should:
+- ✅ Have valid syntax (no syntax errors)
+- ✅ Be executable against the database
+- ❌ Contain the specified semantic error
+- ❌ NOT contain any other types of errors
+
+## 📋 Error Specification
+**Error Category:** Condition-related Errors
+**Category Description:** Condition-related Errors occur when NL2SQL models fail to properly handle query conditions, particularly in cases where multiple condition-related issues co-exist. These errors are categorized into explicit and implicit conditions.
+
+**Specific Error Type:** Explicit Condition Missing
+**Error Description:** The model fails to include conditions that are explicitly stated in the natural language query, indicating an incomplete interpretation of the user requirements.
+
+## 💡 Guidelines for Error Injection
+
+### DO:
+- Focus ONLY on the specified error type
+- Keep the query structure as similar as possible to the original
+- Ensure the modified SQL runs without syntax errors
+- Make the error subtle but semantically meaningful
+- Consider the business logic and question intent when injecting the error
+
+### DON'T:
+- Add syntax errors or typos
+- Introduce multiple different error types
+- Completely rewrite the query structure
+- Make obvious/trivial mistakes that wouldn't occur in real scenarios
+- Change unrelated parts of the query
+
+## 📊 Database Schema
+```sql
+
+
+================================================================================-- Schema from: PATENTS/DDL.csv
+table_name,description,DDL
+DISCLOSURES_13,,"create or replace TABLE DISCLOSURES_13 (
+	""family_id"" VARCHAR(16777216),
+	""record_id"" VARCHAR(16777216),
+	""disclosure_event"" VARCHAR(16777216),
+	""sso"" VARCHAR(16777216),
+	""patent_owner_harmonized"" VARCHAR(16777216),
+	""patent_owner_unharmonized"" VARCHAR(16777216),
+	""date"" NUMBER(38,0),
+	""standard"" VARCHAR(16777216),
+	""committee_project"" VARCHAR(16777216),
+	""tc_name"" VARCHAR(16777216),
+	""sc_name"" VARCHAR(16777216),
+	""wg_name"" VARCHAR(16777216),
+	""licensing_commitment"" VARCHAR(16777216),
+	""copyright"" VARCHAR(16777216),
+	""blanket_type"" VARCHAR(16777216),
+	""blanket_scope"" VARCHAR(16777216),
+	""third_party"" VARCHAR(16777216),
+	""reciprocity"" VARCHAR(16777216),
+	""serial_cleaned"" VARCHAR(16777216),
+	""pub_cleaned"" VARCHAR(16777216)
+);"
+PUBLICATIONS,,"create or replace TABLE PUBLICATIONS (
+	""publication_number"" VARCHAR(16777216),
+	""application_number"" VARCHAR(16777216),
+	""country_code"" VARCHAR(16777216),
+	""kind_code"" VARCHAR(16777216),
+	""application_kind"" VARCHAR(16777216),
+	""application_number_formatted"" VARCHAR(16777216),
+	""pct_number"" VARCHAR(16777216),
+	""family_id"" VARCHAR(16777216),
+	""spif_publication_number"" VARCHAR(16777216),
+	""spif_application_number"" VARCHAR(16777216),
+	""title_localized"" VARIANT,
+	""abstract_localized"" VARIANT,
+	""claims_localized"" VARIANT,
+	""claims_localized_html"" VARIANT,
+	""description_localized"" VARIANT,
+	""description_localized_html"" VARIANT,
+	""publication_date"" NUMBER(38,0),
+	""filing_date"" NUMBER(38,0),
+	""grant_date"" NUMBER(38,0),
+	""priority_date"" NUMBER(38,0),
+	""priority_claim"" VARIANT,
+	""inventor"" VARIANT,
+	""inventor_harmonized"" VARIANT,
+	""assignee"" VARIANT,
+	""assignee_harmonized"" VARIANT,
+	""examiner"" VARIANT,
+	""uspc"" VARIANT,
+	""ipc"" VARIANT,
+	""cpc"" VARIANT,
+	""fi"" VARIANT,
+	""fterm"" VARIANT,
+	""locarno"" VARIANT,
+	""citation"" VARIANT,
+	""parent"" VARIANT,
+	""child"" VARIANT,
+	""entity_status"" VARCHAR(16777216),
+	""art_unit"" VARCHAR(16777216)
+);"
+CPC_DEFINITION,,"create or replace TABLE CPC_DEFINITION (
+	""applicationReferences"" VARIANT,
+	""breakdownCode"" BOOLEAN,
+	""childGroups"" VARIANT,
+	""children"" VARIANT,
+	""dateRevised"" FLOAT,
+	""definition"" VARIANT,
+	""glossary"" VARIANT,
+	""informativeReferences"" VARIANT,
+	""ipcConcordant"" VARCHAR(16777216),
+	""level"" FLOAT,
+	""limitingReferences"" VARIANT,
+	""notAllocatable"" BOOLEAN,
+	""parents"" VARIANT,
+	""precedenceLimitingReferences"" VARIANT,
+	""residualReferences"" VARIANT,
+	""rules"" VARIANT,
+	""scopeLimitingReferences"" VARIANT,
+	""status"" VARCHAR(16777216),
+	""symbol"" VARCHAR(16777216),
+	""synonyms"" VARIANT,
+	""titleFull"" VARCHAR(16777216),
+	""titlePart"" VARIANT
+);"
+```
+
+## ❓ Natural Language Question
+"Find the CPC technology areas in Germany that had the highest exponential moving average (smoothing factor 0.1) of patent filings per year, specifically for patents granted in December 2016. For each CPC group at level 4, show the full title, CPC group, and the year with the highest exponential moving average of patent filings."
+
+## ✅ Correct SQL Query
+```sql
+WITH patent_cpcs AS (
+    SELECT
+        cd."parents",
+        CAST(FLOOR("filing_date" / 10000) AS INT) AS "filing_year"
+    FROM (
+        SELECT MAX("cpc") AS "cpc", MAX("filing_date") AS "filing_date"
+        FROM "PATENTS"."PATENTS"."PUBLICATIONS"
+        WHERE "application_number" != ''
+          AND "country_code" = 'DE'
+          AND "grant_date" >= 20161201
+          AND "grant_date" <= 20161231
+        GROUP BY "application_number"
+    ), LATERAL FLATTEN(INPUT => "cpc") AS cpcs
+    JOIN "PATENTS"."PATENTS"."CPC_DEFINITION" cd ON cd."symbol" = cpcs.value:"code"
+    WHERE cpcs.value:"first" = TRUE
+      AND "filing_date" > 0
+),
+yearly_counts AS (
+    SELECT
+        "cpc_group",
+        "filing_year",
+        COUNT(*) AS "cnt"
+    FROM (
+        SELECT
+            cpc_parent.VALUE AS "cpc_group",  -- Corrected reference to flattened "parents"
+            "filing_year"
+        FROM patent_cpcs,
+             LATERAL FLATTEN(INPUT => "parents") AS cpc_parent  -- Corrected reference to flattened "parents"
+    )
+    GROUP BY "cpc_group", "filing_year"
+),
+moving_avg AS (
+    SELECT
+        "cpc_group",
+        "filing_year",
+        "cnt",
+        AVG("cnt") OVER (PARTITION BY "cpc_group" ORDER BY "filing_year" ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS "moving_avg"
+    FROM yearly_counts
+)
+SELECT 
+    c."titleFull",  -- Ensure correct column name (check case)
+    REPLACE("cpc_group", '"', '') AS "cpc_group",
+    MAX("filing_year") AS "best_filing_year"
+FROM moving_avg
+JOIN "PATENTS"."PATENTS"."CPC_DEFINITION" c ON "cpc_group" = c."symbol"
+WHERE c."level" = 4
+GROUP BY c."titleFull", "cpc_group"
+ORDER BY c."titleFull", "cpc_group" ASC;
+
+```
+
+## 🔧 Your Task
+Analyze the correct SQL query above and modify it to introduce the specific error type: **Explicit Condition Missing**.
+
+Think about:
+1. How this error typically manifests in real-world scenarios
+2. What parts of the query are most relevant to this error type
+3. How to make this data be meaningful for improving LLM SQL semantic detection area
+
+## 📤 Output Format
+Return your response in the following format:
+
+**Modified SQL Query:**
+```sql
+[Your modified SQL query here]
+```
+
+**Brief Explanation:**
+[A very brief explanation (1-2 sentences) of what specific change you made to inject the error]
+

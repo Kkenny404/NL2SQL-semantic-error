@@ -1,0 +1,1 @@
+I injected a redundant `ORDER BY drug_name` clause inside the subquery `A`, which is unnecessary because the outer query determines the final ordering; this is a classic example of clause redundancy.

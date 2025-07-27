@@ -1,0 +1,1 @@
+I injected a redundant `HAVING COUNT(*) > 0` clause, which is unnecessary because the query logic and dataset already ensure only questions with at least zero answers are considered; this clause does not change the result but is extraneous for the intent.

@@ -1,0 +1,1 @@
+I changed the JOIN condition from `a.object_id = b.object_id` to `a.object_number = b.object_id`, mismatching the join keys by joining unrelated attributes (`object_number` is a string, `object_id` is an integer), thus introducing a join condition mismatch.

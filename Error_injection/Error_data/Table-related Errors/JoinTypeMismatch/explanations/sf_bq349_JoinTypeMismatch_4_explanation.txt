@@ -1,0 +1,1 @@
+I changed the `JOIN` between `bounding_area` and `poi` in the `poi_counts` CTE from an `INNER JOIN` to a `LEFT JOIN`, which will include boundaries with zero POIs (NULLs), thus mismatching the intended data inclusion pattern.

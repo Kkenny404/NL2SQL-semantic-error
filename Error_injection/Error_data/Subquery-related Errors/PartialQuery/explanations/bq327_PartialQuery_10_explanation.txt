@@ -1,0 +1,1 @@
+I removed the aggregation (COUNT) and final wrapping SELECT, returning only the filtered rows with value = 0; this produces a partial query that does not answer "how many" as requested, but is a valid subquery or intermediate step.

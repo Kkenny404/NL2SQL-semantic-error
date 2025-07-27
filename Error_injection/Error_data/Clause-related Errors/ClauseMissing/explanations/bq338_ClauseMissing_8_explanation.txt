@@ -1,0 +1,1 @@
+I removed the `ORDER BY population_change_percentage DESC LIMIT 20` clause from the `population_change` CTE, so it no longer restricts results to the top 20 by percentage increase, thus missing a necessary clause for the query's intent.

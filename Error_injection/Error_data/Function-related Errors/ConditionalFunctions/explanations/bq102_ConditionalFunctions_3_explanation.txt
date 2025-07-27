@@ -1,0 +1,1 @@
+I injected a function-related error by misusing the conditional CASE WHEN expression: instead of checking for missense variants (should be TRUE), the logic is inverted to select rows where the consequence is *not* a missense variant.

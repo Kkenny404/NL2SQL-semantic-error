@@ -1,0 +1,212 @@
+# SQL Semantic Error Injection Task
+
+You are an expert SQL developer tasked with injecting a SPECIFIC semantic error into a correct SQL query.
+
+## 🎯 Your Mission
+Take the provided correct SQL query and modify it to contain EXACTLY ONE semantic error of the specified type. The modified SQL should:
+- ✅ Have valid syntax (no syntax errors)
+- ✅ Be executable against the database
+- ❌ Contain the specified semantic error
+- ❌ NOT contain any other types of errors
+
+## 📋 Error Specification
+**Error Category:** Function-related Errors
+**Category Description:** Function-related Errors occur when NL2SQL models fail to correctly use SQL functions or misunderstand their purposes. We consider the following cases. CRITICAL: Function-related Errors focus on MISUSING the functions themselves, NOT on missing or incorrect clauses. Do not confuse with Clause-related Errors. Function-related Errors (CORRECT focus): Using wrong function types: SUM() instead of COUNT(), MAX() instead of MIN(); Incorrect function parameters: ROUND(value, -1) instead of ROUND(value, 2); Wrong function arguments: SUBSTR(text, 0, 5) instead of SUBSTR(text, 1, 5); Inappropriate function application: UPPER() on numeric data, mathematical functions on text; Function syntax errors: CAST(value, INT) instead of CAST(value AS INT). Clause-related Errors (AVOID - this is a different error category): Missing GROUP BY, ORDER BY, or HAVING clauses; Incorrect clause positioning or structure; Omitting necessary clauses that work with functions. Examples: ✅ CORRECT Function-related Error: Original: SELECT region, SUM(sales) FROM data GROUP BY region; Modified: SELECT region, COUNT(sales) FROM data GROUP BY region; Error: Wrong aggregate function (COUNT instead of SUM). ❌ INCORRECT (this is Clause-related): Original: SELECT region, SUM(sales) FROM data GROUP BY region; Modified: SELECT region, SUM(sales) FROM data; Error: Missing GROUP BY clause (this is clause-related, not function-related). Focus on changing HOW functions are used, not WHETHER they are used with proper clauses.
+
+**Specific Error Type:** String Functions
+**Error Description:** The model incorrectly uses string manipulation functions (e.g., SUBSTR, CONCAT), such as wrong substring positions or improper string concatenations.
+
+## 💡 Guidelines for Error Injection
+
+### DO:
+- Focus ONLY on the specified error type
+- Keep the query structure as similar as possible to the original
+- Ensure the modified SQL runs without syntax errors
+- Make the error subtle but semantically meaningful
+- Consider the business logic and question intent when injecting the error
+
+### DON'T:
+- Add syntax errors or typos
+- Introduce multiple different error types
+- Completely rewrite the query structure
+- Make obvious/trivial mistakes that wouldn't occur in real scenarios
+- Change unrelated parts of the query
+
+## 📊 Database Schema
+```sql
+
+
+================================================================================-- Schema from: GEO_OPENSTREETMAP/DDL.csv
+table_name,description,DDL
+HISTORY_RELATIONS,,"create or replace TABLE HISTORY_RELATIONS (
+	""id"" NUMBER(38,0),
+	""version"" NUMBER(38,0),
+	""username"" VARCHAR(16777216),
+	""changeset"" NUMBER(38,0),
+	""visible"" BOOLEAN,
+	""osm_timestamp"" NUMBER(38,0),
+	""geometry"" BINARY(8388608),
+	""members"" VARIANT,
+	""all_tags"" VARIANT
+);"
+HISTORY_CHANGESETS,,"create or replace TABLE HISTORY_CHANGESETS (
+	""id"" NUMBER(38,0),
+	""osm_timestamp_min"" NUMBER(38,0),
+	""osm_timestamp_max"" NUMBER(38,0),
+	""relations"" VARIANT,
+	""ways"" VARIANT,
+	""nodes"" VARIANT
+);"
+PLANET_FEATURES,,"create or replace TABLE PLANET_FEATURES (
+	""feature_type"" VARCHAR(16777216),
+	""osm_id"" NUMBER(38,0),
+	""osm_way_id"" NUMBER(38,0),
+	""osm_version"" NUMBER(38,0),
+	""osm_timestamp"" NUMBER(38,0),
+	""all_tags"" VARIANT,
+	""geometry"" BINARY(8388608)
+);"
+PLANET_FEATURES_POINTS,,"create or replace TABLE PLANET_FEATURES_POINTS (
+	""osm_id"" NUMBER(38,0),
+	""osm_version"" NUMBER(38,0),
+	""osm_way_id"" NUMBER(38,0),
+	""osm_timestamp"" NUMBER(38,0),
+	""geometry"" BINARY(8388608),
+	""all_tags"" VARIANT
+);"
+HISTORY_LAYERS,,"create or replace TABLE HISTORY_LAYERS (
+	""layer_code"" NUMBER(38,0),
+	""layer_class"" VARCHAR(16777216),
+	""layer_name"" VARCHAR(16777216),
+	""osm_id"" NUMBER(38,0),
+	""osm_way_id"" NUMBER(38,0),
+	""osm_timestamp"" NUMBER(38,0),
+	""osm_version"" NUMBER(38,0),
+	""all_tags"" VARIANT,
+	""geometry"" BINARY(8388608),
+	""gdal_type"" VARCHAR(16777216)
+);"
+PLANET_WAYS,,"create or replace TABLE PLANET_WAYS (
+	""id"" NUMBER(38,0),
+	""version"" NUMBER(38,0),
+	""username"" VARCHAR(16777216),
+	""changeset"" NUMBER(38,0),
+	""visible"" BOOLEAN,
+	""osm_timestamp"" NUMBER(38,0),
+	""geometry"" BINARY(8388608),
+	""all_tags"" VARIANT,
+	""nodes"" VARIANT
+);"
+HISTORY_NODES,,"create or replace TABLE HISTORY_NODES (
+	""id"" NUMBER(38,0),
+	""version"" NUMBER(38,0),
+	""username"" VARCHAR(16777216),
+	""changeset"" NUMBER(38,0),
+	""visible"" BOOLEAN,
+	""osm_timestamp"" NUMBER(38,0),
+	""geometry"" BINARY(8388608),
+	""all_tags"" VARIANT,
+	""latitude"" NUMBER(38,9),
+	""longitude"" NUMBER(38,9)
+);"
+PLANET_NODES,,"create or replace TABLE PLANET_NODES (
+	""id"" NUMBER(38,0),
+	""version"" NUMBER(38,0),
+	""username"" VARCHAR(16777216),
+	""changeset"" NUMBER(38,0),
+	""visible"" BOOLEAN,
+	""osm_timestamp"" NUMBER(38,0),
+	""geometry"" BINARY(8388608),
+	""all_tags"" VARIANT,
+	""latitude"" NUMBER(38,9),
+	""longitude"" NUMBER(38,9)
+);"
+PLANET_RELATIONS,,"create or replace TABLE PLANET_RELATIONS (
+	""id"" NUMBER(38,0),
+	""version"" NUMBER(38,0),
+	""username"" VARCHAR(16777216),
+	""changeset"" NUMBER(38,0),
+	""visible"" BOOLEAN,
+	""osm_timestamp"" NUMBER(38,0),
+	""geometry"" BINARY(8388608),
+	""all_tags"" VARIANT,
+	""members"" VARIANT
+);"
+PLANET_LAYERS,,"create or replace TABLE PLANET_LAYERS (
+	""layer_code"" NUMBER(38,0),
+	""layer_class"" VARCHAR(16777216),
+	""layer_name"" VARCHAR(16777216),
+	""gdal_type"" VARCHAR(16777216),
+	""osm_id"" NUMBER(38,0),
+	""osm_way_id"" NUMBER(38,0),
+	""osm_timestamp"" NUMBER(38,0),
+	""osm_version"" NUMBER(38,0),
+	""all_tags"" VARIANT,
+	""geometry"" BINARY(8388608)
+);"
+```
+
+## ❓ Natural Language Question
+"What are the five longest types of highways within the multipolygon boundary of Denmark (as defined by Wikidata ID 'Q35') by total length, analyzed through planet features?"
+
+## ✅ Correct SQL Query
+```sql
+WITH bounding_area AS (
+    SELECT "geometry" AS geometry
+    FROM GEO_OPENSTREETMAP.GEO_OPENSTREETMAP.PLANET_FEATURES,
+    LATERAL FLATTEN(INPUT => planet_features."all_tags") AS "tag"
+    WHERE "feature_type" = 'multipolygons'
+      AND "tag".value:"key" = 'wikidata'
+      AND "tag".value:"value" = 'Q35'
+),
+
+highway_info AS (
+    SELECT 
+        SUM(ST_LENGTH(
+                ST_GEOGRAPHYFROMWKB(planet_features."geometry")
+            )
+        ) AS highway_length,
+        "tag".value:"value" AS highway_type
+    FROM 
+        GEO_OPENSTREETMAP.GEO_OPENSTREETMAP.PLANET_FEATURES AS planet_features,
+        bounding_area
+    CROSS JOIN LATERAL FLATTEN(INPUT => planet_features."all_tags") AS "tag"
+    WHERE "tag".value:"key" = 'highway'
+    AND "feature_type" = 'lines'
+    AND ST_DWITHIN(
+        ST_GEOGFROMWKB(planet_features."geometry"), 
+        ST_GEOGFROMWKB(bounding_area.geometry),
+        0.0
+    ) 
+    GROUP BY highway_type
+)
+
+SELECT 
+  REPLACE(highway_type, '"', '') AS highway_type
+FROM
+  highway_info
+ORDER BY 
+  highway_length DESC
+LIMIT 5;
+
+```
+
+## 🔧 Your Task
+Analyze the correct SQL query above and modify it to introduce the specific error type: **String Functions**.
+
+Think about:
+1. How this error typically manifests in real-world scenarios
+2. What parts of the query are most relevant to this error type
+3. How to make this data be meaningful for improving LLM SQL semantic detection area
+
+## 📤 Output Format
+Return your response in the following format:
+
+**Modified SQL Query:**
+```sql
+[Your modified SQL query here]
+```
+
+**Brief Explanation:**
+[A very brief explanation (1-2 sentences) of what specific change you made to inject the error]
+

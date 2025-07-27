@@ -1,0 +1,1 @@
+I removed the `AND product.productRevenue IS NOT NULL` condition from the purchase group (cte2), omitting the implicit business logic that only sessions with actual product revenue should be classified as purchases.

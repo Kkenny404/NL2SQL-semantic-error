@@ -1,0 +1,1 @@
+I removed the explicit condition `WHERE ROUND(trip_seconds / 60) BETWEEN 1 AND 50`, so the query no longer restricts trips to those with durations between 1 and 50 minutes, thus missing a clearly stated requirement from the natural language question.

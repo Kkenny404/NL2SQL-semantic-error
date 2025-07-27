@@ -1,0 +1,1 @@
+I changed the `RIGHT JOIN` to an `INNER JOIN`, which will exclude customers in `GET_CUS_ID` who have no matching records in the July sessions table, thus potentially omitting relevant customers and mismatching the intended inclusion/exclusion pattern.

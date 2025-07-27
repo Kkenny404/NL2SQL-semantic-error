@@ -1,0 +1,1 @@
+I removed all aggregation and logic for finding the top-scoring driver and constructor per year, so the query now simply lists every result with driver and constructor per year, completely deviating from the original intent.

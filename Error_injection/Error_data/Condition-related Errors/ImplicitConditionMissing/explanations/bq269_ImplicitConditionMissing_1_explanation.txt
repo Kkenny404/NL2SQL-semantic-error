@@ -1,0 +1,1 @@
+I removed the implicit condition `AND totals.pageviews IS NOT NULL` from the WHERE clause, so sessions with NULL pageviews are now incorrectly included in the calculation.

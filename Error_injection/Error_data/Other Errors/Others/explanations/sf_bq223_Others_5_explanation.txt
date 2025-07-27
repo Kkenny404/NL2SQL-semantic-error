@@ -1,0 +1,1 @@
+I changed the SELECT and GROUP BY to use the cited assignee (refs.cited_assignee) instead of the citing assignee, causing the query to answer a fundamentally different question and thus severely deviating from the original intent.

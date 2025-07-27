@@ -1,0 +1,1 @@
+I changed the condition from `event_name = 'page_view'` to `event_name != 'page_view'`, altering both the operator and the value in the condition, thus introducing an explicit condition mismatch.

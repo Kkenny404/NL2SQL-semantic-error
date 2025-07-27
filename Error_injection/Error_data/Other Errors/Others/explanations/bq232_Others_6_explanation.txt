@@ -1,0 +1,1 @@
+I rewrote the query to return the total incidents for all boroughs, major and minor categories since 2010, completely ignoring the original intent to filter for 'Other Theft' within 'Theft and Handling' in Westminster by year—thus introducing a severe semantic deviation that would require a full rewrite to correct.

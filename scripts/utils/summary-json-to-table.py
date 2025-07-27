@@ -2,10 +2,14 @@ import json
 import pandas as pd
 
 # 文件路径
+# file_paths = {
+#     "GPT-4o": "results/CoT/CoT_GPT_results_None_20250713_220628_basic_summary.json",
+#     "Claude-sonnet-4": "results/CoT/CoT_CLAUD_results_None_20250713_214609_basic_summary.json",
+#     "Gemini-2.5-flash": "results/CoT/CoT_Gemini_results_None_20250714_051846_basic_summary.json"
+# }
 file_paths = {
-    "GPT-4o": "results/CoT/CoT_GPT_results_None_20250713_220628_basic_summary.json",
-    "Claude-sonnet-4": "results/CoT/CoT_CLAUD_results_None_20250713_214609_basic_summary.json",
-    "Gemini-2.5-flash": "results/CoT/CoT_Gemini_results_None_20250714_051846_basic_summary.json"
+    "Baseline": "results/SSS/method_None/GPT-4.1_Baseline_20250727_223030_basic_summary.json",
+    "CoT": "results/SSS/CoT_None/GPT-4.1_20250727_225758_basic_summary.json",
 }
 
 # 存储结果
@@ -39,6 +43,6 @@ df = pd.DataFrame(results)
 print(df)
 
 # 导出到 CSV 文件
-output_file = "results/CoT/CoT_summary_table.csv"
+output_file = "results/SSS/CoTandBaselineTable_gpt.csv"
 df.to_csv(output_file, index=False, encoding="utf-8")
 print(f"Table has been exported to {output_file}")

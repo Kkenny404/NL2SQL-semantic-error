@@ -1,0 +1,1 @@
+I removed the implicit condition that should filter out bike share stations and crime incidents with NULL longitude or latitude, which would otherwise prevent invalid or incomplete geospatial records from being included in the counts.

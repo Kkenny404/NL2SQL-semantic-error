@@ -1,0 +1,266 @@
+# SQL Semantic Error Injection Task
+
+You are an expert SQL developer tasked with injecting a SPECIFIC semantic error into a correct SQL query.
+
+## 🎯 Your Mission
+Take the provided correct SQL query and modify it to contain EXACTLY ONE semantic error of the specified type. The modified SQL should:
+- ✅ Have valid syntax (no syntax errors)
+- ✅ Be executable against the database
+- ❌ Contain the specified semantic error
+- ❌ NOT contain any other types of errors
+
+## 📋 Error Specification
+**Error Category:** Attribute-related Errors
+**Category Description:** Attribute-related Errors occur when NL2SQL models incorrectly map the required columns in natural language queries to corresponding attributes in the database schema. These errors manifest in three primary forms.
+
+**Specific Error Type:** Attribute Mismatch
+**Error Description:** The model selects incorrect attributes from the schema, indicating a misunderstanding between natural language expressions and their corresponding database fields.
+
+## 💡 Guidelines for Error Injection
+
+### DO:
+- Focus ONLY on the specified error type
+- Keep the query structure as similar as possible to the original
+- Ensure the modified SQL runs without syntax errors
+- Make the error subtle but semantically meaningful
+- Consider the business logic and question intent when injecting the error
+
+### DON'T:
+- Add syntax errors or typos
+- Introduce multiple different error types
+- Completely rewrite the query structure
+- Make obvious/trivial mistakes that wouldn't occur in real scenarios
+- Change unrelated parts of the query
+
+## 📊 Database Schema
+```sql
+
+
+================================================================================-- Schema from: PATENTS_GOOGLE/DDL.csv
+table_name,description,DDL
+CPC_DEFINITION,,"create or replace TABLE CPC_DEFINITION (
+	""applicationReferences"" VARIANT,
+	""breakdownCode"" BOOLEAN,
+	""childGroups"" VARIANT,
+	""children"" VARIANT,
+	""dateRevised"" FLOAT,
+	""definition"" VARIANT,
+	""glossary"" VARIANT,
+	""informativeReferences"" VARIANT,
+	""ipcConcordant"" VARCHAR(16777216),
+	""level"" FLOAT,
+	""limitingReferences"" VARIANT,
+	""notAllocatable"" BOOLEAN,
+	""parents"" VARIANT,
+	""precedenceLimitingReferences"" VARIANT,
+	""residualReferences"" VARIANT,
+	""rules"" VARIANT,
+	""scopeLimitingReferences"" VARIANT,
+	""status"" VARCHAR(16777216),
+	""symbol"" VARCHAR(16777216),
+	""synonyms"" VARIANT,
+	""titleFull"" VARCHAR(16777216),
+	""titlePart"" VARIANT
+);"
+DISCLOSURES_13,,"create or replace TABLE DISCLOSURES_13 (
+	""family_id"" VARCHAR(16777216),
+	""record_id"" VARCHAR(16777216),
+	""disclosure_event"" VARCHAR(16777216),
+	""sso"" VARCHAR(16777216),
+	""patent_owner_harmonized"" VARCHAR(16777216),
+	""patent_owner_unharmonized"" VARCHAR(16777216),
+	""date"" NUMBER(38,0),
+	""standard"" VARCHAR(16777216),
+	""committee_project"" VARCHAR(16777216),
+	""tc_name"" VARCHAR(16777216),
+	""sc_name"" VARCHAR(16777216),
+	""wg_name"" VARCHAR(16777216),
+	""licensing_commitment"" VARCHAR(16777216),
+	""copyright"" VARCHAR(16777216),
+	""blanket_type"" VARCHAR(16777216),
+	""blanket_scope"" VARCHAR(16777216),
+	""third_party"" VARCHAR(16777216),
+	""reciprocity"" VARCHAR(16777216),
+	""serial_cleaned"" VARCHAR(16777216),
+	""pub_cleaned"" VARCHAR(16777216)
+);"
+PUBLICATIONS,,"create or replace TABLE PUBLICATIONS (
+	""publication_number"" VARCHAR(16777216),
+	""application_number"" VARCHAR(16777216),
+	""country_code"" VARCHAR(16777216),
+	""kind_code"" VARCHAR(16777216),
+	""application_kind"" VARCHAR(16777216),
+	""application_number_formatted"" VARCHAR(16777216),
+	""pct_number"" VARCHAR(16777216),
+	""family_id"" VARCHAR(16777216),
+	""title_localized"" VARIANT,
+	""abstract_localized"" VARIANT,
+	""claims_localized"" VARIANT,
+	""description_localized"" VARIANT,
+	""publication_date"" NUMBER(38,0),
+	""filing_date"" NUMBER(38,0),
+	""grant_date"" NUMBER(38,0),
+	""priority_date"" NUMBER(38,0),
+	""priority_claim"" VARIANT,
+	""inventor"" VARIANT,
+	""inventor_harmonized"" VARIANT,
+	""assignee"" VARIANT,
+	""assignee_harmonized"" VARIANT,
+	""examiner"" VARIANT,
+	""uspc"" VARIANT,
+	""ipc"" VARIANT,
+	""cpc"" VARIANT,
+	""fi"" VARIANT,
+	""fterm"" VARIANT,
+	""citation"" VARIANT,
+	""entity_status"" VARCHAR(16777216),
+	""art_unit"" VARCHAR(16777216)
+);"
+ABS_AND_EMB,,"create or replace TABLE ABS_AND_EMB (
+	""publication_number"" VARCHAR(16777216),
+	""title"" VARCHAR(16777216),
+	""title_translated"" BOOLEAN,
+	""abstract"" VARCHAR(16777216),
+	""abstract_translated"" BOOLEAN,
+	""cpc"" VARIANT,
+	""cpc_low"" VARIANT,
+	""cpc_inventive_low"" VARIANT,
+	""top_terms"" VARIANT,
+	""similar"" VARIANT,
+	""url"" VARCHAR(16777216),
+	""country"" VARCHAR(16777216),
+	""publication_description"" VARCHAR(16777216),
+	""cited_by"" VARIANT,
+	""embedding_v1"" VARIANT
+);"
+```
+
+## ❓ Natural Language Question
+"For each publication family whose earliest publication was first published in January 2015, please provide the earliest publication date, the distinct publication numbers, their country codes, the distinct CPC and IPC codes, distinct families (namely, the ids) that cite and are cited by this publication family. Please present all lists as comma-separated values, sorted alphabetically"
+
+## ✅ Correct SQL Query
+```sql
+WITH fam AS (
+  SELECT DISTINCT
+    "family_id"
+  FROM
+    "PATENTS_GOOGLE"."PATENTS_GOOGLE"."PUBLICATIONS"
+),
+
+crossover AS (
+  SELECT
+    "publication_number",
+    "family_id"
+  FROM
+    "PATENTS_GOOGLE"."PATENTS_GOOGLE"."PUBLICATIONS"
+),
+
+pub AS (
+  SELECT
+    "family_id",
+    MIN("publication_date") AS "publication_date",
+    LISTAGG("publication_number", ',') WITHIN GROUP (ORDER BY "publication_number") AS "publication_number",
+    LISTAGG("country_code", ',') WITHIN GROUP (ORDER BY "country_code") AS "country_code"
+  FROM
+    "PATENTS_GOOGLE"."PATENTS_GOOGLE"."PUBLICATIONS" AS p
+  GROUP BY
+    "family_id"
+),
+
+tech_class AS (
+  SELECT
+    p."family_id",
+    LISTAGG(DISTINCT cpc.value:"code"::STRING, ',') WITHIN GROUP (ORDER BY cpc.value:"code"::STRING) AS "cpc",
+    LISTAGG(DISTINCT ipc.value:"code"::STRING, ',') WITHIN GROUP (ORDER BY ipc.value:"code"::STRING) AS "ipc"
+  FROM
+    "PATENTS_GOOGLE"."PATENTS_GOOGLE"."PUBLICATIONS" AS p
+    CROSS JOIN LATERAL FLATTEN(input => p."cpc") AS cpc
+    CROSS JOIN LATERAL FLATTEN(input => p."ipc") AS ipc
+  GROUP BY
+    p."family_id"
+),
+
+cit AS (
+  SELECT
+    p."family_id",
+    LISTAGG(crossover."family_id", ',') WITHIN GROUP (ORDER BY crossover."family_id" ASC) AS "citation"
+  FROM
+    "PATENTS_GOOGLE"."PATENTS_GOOGLE"."PUBLICATIONS" AS p
+    CROSS JOIN LATERAL FLATTEN(input => p."citation") AS citation
+    LEFT JOIN
+      crossover
+    ON
+      citation.value:"publication_number"::STRING = crossover."publication_number"
+  GROUP BY
+    p."family_id"
+),
+
+tmp_gpr AS (
+  SELECT
+    "family_id",
+    LISTAGG(crossover."publication_number", ',') AS "cited_by_publication_number"
+  FROM
+    "PATENTS_GOOGLE"."PATENTS_GOOGLE"."ABS_AND_EMB" AS p
+    CROSS JOIN LATERAL FLATTEN(input => p."cited_by") AS cited_by
+    LEFT JOIN
+      crossover
+    ON
+      cited_by.value:"publication_number"::STRING = crossover."publication_number"
+  GROUP BY
+    "family_id"
+),
+
+gpr AS (
+  SELECT
+    tmp_gpr."family_id",
+    LISTAGG(crossover."family_id", ',') WITHIN GROUP (ORDER BY crossover."family_id" ASC) AS "cited_by"
+  FROM
+    tmp_gpr
+    CROSS JOIN LATERAL FLATTEN(input => SPLIT(tmp_gpr."cited_by_publication_number", ',')) AS cited_by_publication_number
+    LEFT JOIN
+      crossover
+    ON
+      cited_by_publication_number.value::STRING = crossover."publication_number"
+  GROUP BY
+    tmp_gpr."family_id"
+)
+
+SELECT
+  fam."family_id",
+  pub."publication_date",
+  pub."publication_number",
+  pub."country_code",
+  tech_class."cpc",
+  tech_class."ipc",
+  cit."citation",
+  gpr."cited_by"
+FROM
+  fam
+  LEFT JOIN pub ON fam."family_id" = pub."family_id"
+  LEFT JOIN tech_class ON fam."family_id" = tech_class."family_id"
+  LEFT JOIN cit ON fam."family_id" = cit."family_id"
+  LEFT JOIN gpr ON fam."family_id" = gpr."family_id"
+WHERE
+  pub."publication_date" BETWEEN 20150101 AND 20150131;
+
+```
+
+## 🔧 Your Task
+Analyze the correct SQL query above and modify it to introduce the specific error type: **Attribute Mismatch**.
+
+Think about:
+1. How this error typically manifests in real-world scenarios
+2. What parts of the query are most relevant to this error type
+3. How to make this data be meaningful for improving LLM SQL semantic detection area
+
+## 📤 Output Format
+Return your response in the following format:
+
+**Modified SQL Query:**
+```sql
+[Your modified SQL query here]
+```
+
+**Brief Explanation:**
+[A very brief explanation (1-2 sentences) of what specific change you made to inject the error]
+

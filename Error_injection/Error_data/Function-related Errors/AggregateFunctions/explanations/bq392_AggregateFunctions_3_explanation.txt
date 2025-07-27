@@ -1,0 +1,1 @@
+I changed the aggregate function from AVG(temp) to SUM(temp) in the Temp_Avg CTE, which incorrectly calculates the sum of temperatures for each date instead of the average temperature as required by the natural language question.

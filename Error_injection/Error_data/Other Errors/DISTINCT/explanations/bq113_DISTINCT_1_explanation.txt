@@ -1,0 +1,1 @@
+I injected a semantic error by adding an unnecessary `DISTINCT` to the `SELECT` clause, which could cause deduplication and potentially hide duplicate rows that should be considered, thus impacting the accuracy of the result.

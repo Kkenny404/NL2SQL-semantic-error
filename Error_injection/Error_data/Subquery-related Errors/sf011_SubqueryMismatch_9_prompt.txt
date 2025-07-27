@@ -1,0 +1,184 @@
+# SQL Semantic Error Injection Task
+
+You are an expert SQL developer tasked with injecting a SPECIFIC semantic error into a correct SQL query.
+
+## 🎯 Your Mission
+Take the provided correct SQL query and modify it to contain EXACTLY ONE semantic error of the specified type. The modified SQL should:
+- ✅ Have valid syntax (no syntax errors)
+- ✅ Be executable against the database
+- ❌ Contain the specified semantic error
+- ❌ NOT contain any other types of errors
+
+## 📋 Error Specification
+**Error Category:** Subquery-related Errors
+**Category Description:** Subquery-related Errors occur when NL2SQL models fail to correctly use or generate subqueries. These errors manifest in three distinct categories.
+
+**Specific Error Type:** Subquery Mismatch
+**Error Description:** The model generates a subquery that does not match the context or requirements of the outer query, resulting in logical errors or unexpected results.
+
+## 💡 Guidelines for Error Injection
+
+### DO:
+- Focus ONLY on the specified error type
+- Keep the query structure as similar as possible to the original
+- Ensure the modified SQL runs without syntax errors
+- Make the error subtle but semantically meaningful
+- Consider the business logic and question intent when injecting the error
+
+### DON'T:
+- Add syntax errors or typos
+- Introduce multiple different error types
+- Completely rewrite the query structure
+- Make obvious/trivial mistakes that wouldn't occur in real scenarios
+- Change unrelated parts of the query
+
+## 📊 Database Schema
+```sql
+
+
+================================================================================-- Schema from: PUBLIC/DDL.csv
+table_name,description,DDL
+CENSUS_GALAXY__ZIP_CODE_TO_BLOCK_GROUP_SAMPLE.public.Xref_TractToZip_Residential,,"CREATE TABLE CENSUS_GALAXY__ZIP_CODE_TO_BLOCK_GROUP_SAMPLE.public.Xref_TractToZip_Residential (
+    FromStateCountyTractID TEXT,
+    ToZipCode TEXT,
+    ResidentialMappingRatioTZ NUMBER
+);"
+CENSUS_GALAXY__ZIP_CODE_TO_BLOCK_GROUP_SAMPLE.public.Xref_ZipToTract_Residential,,"CREATE TABLE CENSUS_GALAXY__ZIP_CODE_TO_BLOCK_GROUP_SAMPLE.public.Xref_ZipToTract_Residential (
+    FromZipCode TEXT,
+    ToStateCountyTractID TEXT,
+    ResidentialMappingRatioZT NUMBER
+);"
+CENSUS_GALAXY__ZIP_CODE_TO_BLOCK_GROUP_SAMPLE.public.Fact_CensusValues_ACS2021,,"CREATE TABLE CENSUS_GALAXY__ZIP_CODE_TO_BLOCK_GROUP_SAMPLE.public.Fact_CensusValues_ACS2021 (
+    CensusValue FLOAT,
+    MetricID TEXT,
+    BlockGroupID TEXT
+);"
+CENSUS_GALAXY__ZIP_CODE_TO_BLOCK_GROUP_SAMPLE.public.Dim_CensusMetrics,,"CREATE TABLE CENSUS_GALAXY__ZIP_CODE_TO_BLOCK_GROUP_SAMPLE.public.Dim_CensusMetrics (
+    Type TEXT,
+    Descriptor2 TEXT,
+    MetricCategory TEXT,
+    MetricTableDesc TEXT,
+    MetricTableID TEXT,
+    MetricID TEXT,
+    Descriptor1 TEXT,
+    UnitMeasureType TEXT,
+    MetricGroup TEXT,
+    Descriptor3 TEXT
+);"
+CENSUS_GALAXY__ZIP_CODE_TO_BLOCK_GROUP_SAMPLE.public.Fact_CensusValues_ACS2021_ByZip,,"CREATE TABLE CENSUS_GALAXY__ZIP_CODE_TO_BLOCK_GROUP_SAMPLE.public.Fact_CensusValues_ACS2021_ByZip (
+    CensusValueByZip NUMBER,
+    MetricID TEXT,
+    ZipCode TEXT
+);"
+CENSUS_GALAXY__ZIP_CODE_TO_BLOCK_GROUP_SAMPLE.public.LU_GeographyExpanded,,"CREATE TABLE CENSUS_GALAXY__ZIP_CODE_TO_BLOCK_GROUP_SAMPLE.public.LU_GeographyExpanded (
+    ZipCodeCentroidPoint TEXT,
+    ZipCode TEXT,
+    ZipCodePolygon TEXT,
+    ZipCodeCentroidLon TEXT,
+    PreferredStateAbbrev TEXT,
+    ZipCodeType TEXT,
+    PreferredCity TEXT,
+    PreferredCityStateAbbrev TEXT,
+    PreferredStateName TEXT,
+    ZipCodeCentroidLat TEXT
+);"
+CENSUS_GALAXY__ZIP_CODE_TO_BLOCK_GROUP_SAMPLE.public.Dim_CensusGeography,,"CREATE TABLE CENSUS_GALAXY__ZIP_CODE_TO_BLOCK_GROUP_SAMPLE.public.Dim_CensusGeography (
+    StateAbbrev TEXT,
+    BlockGroupPolygon TEXT,
+    BlockGroupCode TEXT,
+    StateCountyTractID TEXT,
+    TractCode TEXT,
+    AmtLand NUMBER,
+    BlockGroupCentroidLon TEXT,
+    StateName TEXT,
+    BlockGroupName TEXT,
+    MTFCC TEXT,
+    CountyName TEXT,
+    GeographyYear TEXT,
+    AmtWater NUMBER,
+    BlockGroupCentroidLat TEXT,
+    BlockGroupID TEXT,
+    BlockGroupCentroidPoints TEXT,
+    FuncStat TEXT,
+    StateFIPS TEXT,
+    CountyFIPS TEXT
+);"
+CENSUS_GALAXY__ZIP_CODE_TO_BLOCK_GROUP_SAMPLE.public.Fact_StateBenchmark_ACS2021,,"CREATE TABLE CENSUS_GALAXY__ZIP_CODE_TO_BLOCK_GROUP_SAMPLE.public.Fact_StateBenchmark_ACS2021 (
+    TotalStatePopulation NUMBER,
+    MetricID TEXT,
+    StateBenchmarkValue FLOAT,
+    TotalUSPopulation NUMBER,
+    StateFIPS TEXT,
+    StateAbbrev TEXT
+);"
+```
+
+## ❓ Natural Language Question
+"Determine the population distribution within each block group relative to its census tract in New York State using 2021 ACS data. Include block group ID, census value, state county tract ID, total tract population, and the population ratio of each block group."
+
+## ✅ Correct SQL Query
+```sql
+ WITH TractPop AS (
+    SELECT
+        CG."BlockGroupID",
+        FCV."CensusValue",
+        CG."StateCountyTractID",
+        CG."BlockGroupPolygon"
+    FROM
+        CENSUS_GALAXY__ZIP_CODE_TO_BLOCK_GROUP_SAMPLE.PUBLIC."Dim_CensusGeography" CG
+    JOIN
+        CENSUS_GALAXY__ZIP_CODE_TO_BLOCK_GROUP_SAMPLE.PUBLIC."Fact_CensusValues_ACS2021" FCV
+        ON CG."BlockGroupID" = FCV."BlockGroupID"
+    WHERE
+        CG."StateAbbrev" = 'NY'
+        AND FCV."MetricID" = 'B01003_001E'
+),
+
+TractGroup AS (
+    SELECT
+        CG."StateCountyTractID",
+        SUM(FCV."CensusValue") AS "TotalTractPop"
+    FROM
+        CENSUS_GALAXY__ZIP_CODE_TO_BLOCK_GROUP_SAMPLE.PUBLIC."Dim_CensusGeography" CG
+    JOIN
+        CENSUS_GALAXY__ZIP_CODE_TO_BLOCK_GROUP_SAMPLE.PUBLIC."Fact_CensusValues_ACS2021" FCV
+        ON CG."BlockGroupID" = FCV."BlockGroupID"
+    WHERE
+        CG."StateAbbrev" = 'NY'
+        AND FCV."MetricID" = 'B01003_001E'
+    GROUP BY
+        CG."StateCountyTractID"
+)
+
+SELECT
+    TP."BlockGroupID",
+    TP."CensusValue",
+    TP."StateCountyTractID",
+    TG."TotalTractPop",
+    CASE WHEN TG."TotalTractPop" <> 0 THEN TP."CensusValue" / TG."TotalTractPop" ELSE 0 END AS "BlockGroupRatio"
+FROM
+    TractPop TP
+JOIN
+    TractGroup TG
+    ON TP."StateCountyTractID" = TG."StateCountyTractID";
+```
+
+## 🔧 Your Task
+Analyze the correct SQL query above and modify it to introduce the specific error type: **Subquery Mismatch**.
+
+Think about:
+1. How this error typically manifests in real-world scenarios
+2. What parts of the query are most relevant to this error type
+3. How to make this data be meaningful for improving LLM SQL semantic detection area
+
+## 📤 Output Format
+Return your response in the following format:
+
+**Modified SQL Query:**
+```sql
+[Your modified SQL query here]
+```
+
+**Brief Explanation:**
+[A very brief explanation (1-2 sentences) of what specific change you made to inject the error]
+

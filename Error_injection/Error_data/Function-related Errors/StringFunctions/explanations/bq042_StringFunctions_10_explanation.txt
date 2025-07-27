@@ -1,0 +1,1 @@
+I injected a string function error by using `SUBSTR(year, 2, 4)` instead of `year` in the timestamp construction, which incorrectly omits the first digit of the year (e.g., "2011" becomes "011"), resulting in wrong or invalid years.

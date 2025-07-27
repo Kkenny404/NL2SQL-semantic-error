@@ -1,0 +1,1 @@
+I injected a math function error by wrapping the average median income difference in a `ROUND(..., 0)` function, which inappropriately rounds the value to the nearest integer instead of preserving its decimal precision.

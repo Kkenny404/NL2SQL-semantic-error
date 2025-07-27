@@ -1,0 +1,1 @@
+I replaced the entire logic for calculating the smallest absolute difference between median revenue and median functional expenses across years with a query that simply sums total expenses per year for 2012, thus producing results that are completely unrelated to the original question and requiring a full rewrite to recover the intended logic.

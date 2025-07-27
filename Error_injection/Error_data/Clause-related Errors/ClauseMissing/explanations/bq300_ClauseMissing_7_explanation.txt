@@ -1,0 +1,1 @@
+I removed the necessary `GROUP BY q.question_id` clause, so the aggregation is now performed over the entire result set rather than per question, resulting in an incorrect answer.

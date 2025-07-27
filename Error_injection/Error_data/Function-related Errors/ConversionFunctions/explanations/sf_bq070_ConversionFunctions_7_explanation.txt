@@ -1,0 +1,1 @@
+I changed the conversion of "PixelSpacing"[0] from `CAST(... AS FLOAT)` to `CAST(... AS INT)`, which is a misuse of the conversion function because pixel spacing is a floating-point value and casting it to INT will lose precision and potentially produce incorrect results.

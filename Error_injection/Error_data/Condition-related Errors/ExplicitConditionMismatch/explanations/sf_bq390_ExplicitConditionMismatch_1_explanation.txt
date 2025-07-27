@@ -1,0 +1,1 @@
+I changed the modality from `'MR'` to `'CT'` and the series description from `'T2 Weighted Axial'` to `'T1 Weighted Axial'` in the first CTE, altering both the attribute and value components of the condition, thus creating an explicit condition mismatch.

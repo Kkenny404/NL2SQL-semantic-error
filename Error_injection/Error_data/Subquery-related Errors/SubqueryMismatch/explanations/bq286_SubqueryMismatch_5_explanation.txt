@@ -1,0 +1,1 @@
+I introduced a Subquery Mismatch by changing the subquery to aggregate by state instead of name and joining on state instead of name. This causes the denominator to represent the total number of babies in each state rather than the total across all states for a given name, resulting in a logically incorrect proportion.

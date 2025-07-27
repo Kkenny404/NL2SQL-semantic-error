@@ -1,0 +1,1 @@
+I added a DISTINCT to the outer SELECT, which is unnecessary because the subquery already produces unique (period, description, c) rows; this could cause unnecessary deduplication and potentially impact performance or intent if there were additional columns.

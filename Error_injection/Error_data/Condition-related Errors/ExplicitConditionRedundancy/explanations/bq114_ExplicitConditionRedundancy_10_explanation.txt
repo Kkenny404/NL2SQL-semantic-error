@@ -1,0 +1,1 @@
+I added the redundant condition `AND epa.state_name = 'California'` to the WHERE clause, unnecessarily restricting results to California, even though the natural language question did not specify any state filter.

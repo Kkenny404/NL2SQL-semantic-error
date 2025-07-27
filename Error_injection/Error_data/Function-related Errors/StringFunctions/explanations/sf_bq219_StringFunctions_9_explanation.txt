@@ -1,0 +1,1 @@
+I changed all instances of `TO_CHAR("date", 'YYYY-MM')` to `SUBSTR(TO_CHAR("date", 'YYYY-MM'), 0, 7)`, which incorrectly starts the substring at position 0 instead of 1, resulting in an off-by-one error in the extracted month string.

@@ -1,0 +1,1 @@
+I replaced `t1.page_name` with `t1.product_id` in the SELECT clause, mismatching the attribute and thus returning the product ID instead of the product name as requested.

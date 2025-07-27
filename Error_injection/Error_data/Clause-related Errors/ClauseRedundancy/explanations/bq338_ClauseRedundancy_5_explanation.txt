@@ -1,0 +1,1 @@
+I injected a redundant `GROUP BY` clause in the `population_change` CTE, even though there is no aggregation present, making the clause unnecessary for the query's logic.

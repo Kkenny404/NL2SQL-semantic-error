@@ -1,0 +1,1 @@
+I removed the `GROUP BY state_name, Weather_Condition` clause from the `weekend_accidents` CTE, causing the aggregation to be performed over the entire filtered dataset instead of per state and weather condition. This omission results in incorrect results and demonstrates a classic "clause missing" error.

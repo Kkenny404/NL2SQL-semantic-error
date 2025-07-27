@@ -1,0 +1,1 @@
+I added the unnecessary attribute "gender" to the SELECT list in `table1`, even though gender is not mentioned or implied in the natural language question, thus introducing attribute redundancy.

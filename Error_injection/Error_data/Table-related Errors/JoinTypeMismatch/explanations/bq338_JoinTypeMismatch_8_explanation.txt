@@ -1,0 +1,1 @@
+I changed the `JOIN` between `acs_2018` and `acs_2011` in the `acs_diff` CTE from an `INNER JOIN` to a `LEFT JOIN`, which can introduce rows from 2018 without a matching 2011 record, thus mismatching the join type with the query's intent of requiring presence in both years.

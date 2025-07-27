@@ -1,0 +1,1 @@
+I added `DISTINCT` to the `COUNT(a.consecutive_number)` aggregation, which can cause undercounting if there are legitimate duplicate accident records due to the join, thus introducing an unnecessary deduplication (DISTINCT) semantic error.

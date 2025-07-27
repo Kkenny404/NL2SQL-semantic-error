@@ -1,0 +1,1 @@
+I removed the filter `AND f."path" LIKE '%.swift'` from the WHERE clause, so the query no longer restricts results to Swift files—an essential attribute for fulfilling the question intent.

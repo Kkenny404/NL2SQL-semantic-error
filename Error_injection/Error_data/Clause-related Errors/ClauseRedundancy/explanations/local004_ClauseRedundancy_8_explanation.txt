@@ -1,0 +1,1 @@
+I injected a redundant `GROUP BY` clause in the outer query, grouping by all selected columns, which is unnecessary since the data is already aggregated per customer in the CTE; this is a classic clause redundancy error.

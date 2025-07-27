@@ -1,0 +1,1 @@
+I added an unnecessary DISTINCT to the final SELECT, which could cause the query to deduplicate months if there were ties, potentially returning more than one month and deviating from the intent to return a single result.

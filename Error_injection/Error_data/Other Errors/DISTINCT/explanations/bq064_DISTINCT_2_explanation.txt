@@ -1,0 +1,1 @@
+I incorrectly added `DISTINCT` to the `zipcodes_within_distance` CTE, causing unnecessary deduplication and potentially hiding legitimate duplicate rows that should be considered in the spatial join, thus introducing a semantic error related to DISTINCT.

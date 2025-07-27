@@ -1,0 +1,1 @@
+I injected a string function error by incorrectly using `SUBSTR(month_string, 2, 2)` and `SUBSTR(day_string, 2, 2)` instead of the correct `LPAD` or `SUBSTR(..., 1, 2)`, which will produce wrong month and day values in the concatenated date string.

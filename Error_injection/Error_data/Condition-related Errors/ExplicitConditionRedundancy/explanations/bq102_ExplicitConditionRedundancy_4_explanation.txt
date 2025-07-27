@@ -1,0 +1,1 @@
+I added the redundant condition `AND vep.IMPACT = 'MODERATE'`, which is unnecessary because the natural language question does not specify any requirement on the variant impact.

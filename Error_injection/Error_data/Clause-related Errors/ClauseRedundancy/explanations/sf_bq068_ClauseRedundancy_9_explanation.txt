@@ -1,0 +1,1 @@
+I injected a redundant `GROUP BY "type", max_balance, min_balance` clause into the final SELECT, which is unnecessary because the data is already grouped in the CTE and the natural language question does not require further grouping at this stage.

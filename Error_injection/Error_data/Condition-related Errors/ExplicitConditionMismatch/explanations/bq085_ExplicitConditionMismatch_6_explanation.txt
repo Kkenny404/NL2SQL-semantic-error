@@ -1,0 +1,1 @@
+I changed the condition on `date` from `=` to `>=` (operator error) and on `country_region` from `IN` to `NOT IN` (attribute/value error), thus mismatching two parts of the explicit condition and altering the query intent.

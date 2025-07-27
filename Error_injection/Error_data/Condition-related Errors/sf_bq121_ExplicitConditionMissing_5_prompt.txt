@@ -1,0 +1,350 @@
+# SQL Semantic Error Injection Task
+
+You are an expert SQL developer tasked with injecting a SPECIFIC semantic error into a correct SQL query.
+
+## 🎯 Your Mission
+Take the provided correct SQL query and modify it to contain EXACTLY ONE semantic error of the specified type. The modified SQL should:
+- ✅ Have valid syntax (no syntax errors)
+- ✅ Be executable against the database
+- ❌ Contain the specified semantic error
+- ❌ NOT contain any other types of errors
+
+## 📋 Error Specification
+**Error Category:** Condition-related Errors
+**Category Description:** Condition-related Errors occur when NL2SQL models fail to properly handle query conditions, particularly in cases where multiple condition-related issues co-exist. These errors are categorized into explicit and implicit conditions.
+
+**Specific Error Type:** Explicit Condition Missing
+**Error Description:** The model fails to include conditions that are explicitly stated in the natural language query, indicating an incomplete interpretation of the user requirements.
+
+## 💡 Guidelines for Error Injection
+
+### DO:
+- Focus ONLY on the specified error type
+- Keep the query structure as similar as possible to the original
+- Ensure the modified SQL runs without syntax errors
+- Make the error subtle but semantically meaningful
+- Consider the business logic and question intent when injecting the error
+
+### DON'T:
+- Add syntax errors or typos
+- Introduce multiple different error types
+- Completely rewrite the query structure
+- Make obvious/trivial mistakes that wouldn't occur in real scenarios
+- Change unrelated parts of the query
+
+## 📊 Database Schema
+```sql
+
+
+================================================================================-- Schema from: STACKOVERFLOW/DDL.csv
+table_name,description,DDL
+COMMENTS,,"create or replace TABLE COMMENTS (
+	""id"" NUMBER(38,0),
+	""text"" VARCHAR(16777216),
+	""creation_date"" NUMBER(38,0),
+	""post_id"" NUMBER(38,0),
+	""user_id"" NUMBER(38,0),
+	""user_display_name"" VARCHAR(16777216),
+	""score"" NUMBER(38,0)
+);"
+POST_HISTORY,,"create or replace TABLE POST_HISTORY (
+	""id"" NUMBER(38,0),
+	""creation_date"" NUMBER(38,0),
+	""post_id"" NUMBER(38,0),
+	""post_history_type_id"" NUMBER(38,0),
+	""revision_guid"" VARCHAR(16777216),
+	""user_id"" NUMBER(38,0),
+	""text"" VARCHAR(16777216),
+	""comment"" VARCHAR(16777216)
+);"
+TAGS,,"create or replace TABLE TAGS (
+	""id"" NUMBER(38,0),
+	""tag_name"" VARCHAR(16777216),
+	""count"" NUMBER(38,0),
+	""excerpt_post_id"" NUMBER(38,0),
+	""wiki_post_id"" NUMBER(38,0)
+);"
+USERS,,"create or replace TABLE USERS (
+	""id"" NUMBER(38,0),
+	""display_name"" VARCHAR(16777216),
+	""about_me"" VARCHAR(16777216),
+	""age"" VARCHAR(16777216),
+	""creation_date"" NUMBER(38,0),
+	""last_access_date"" NUMBER(38,0),
+	""location"" VARCHAR(16777216),
+	""reputation"" NUMBER(38,0),
+	""up_votes"" NUMBER(38,0),
+	""down_votes"" NUMBER(38,0),
+	""views"" NUMBER(38,0),
+	""profile_image_url"" VARCHAR(16777216),
+	""website_url"" VARCHAR(16777216)
+);"
+BADGES,,"create or replace TABLE BADGES (
+	""id"" NUMBER(38,0),
+	""name"" VARCHAR(16777216),
+	""date"" NUMBER(38,0),
+	""user_id"" NUMBER(38,0),
+	""class"" NUMBER(38,0),
+	""tag_based"" BOOLEAN
+);"
+POSTS_ORPHANED_TAG_WIKI,,"create or replace TABLE POSTS_ORPHANED_TAG_WIKI (
+	""id"" NUMBER(38,0),
+	""title"" VARCHAR(16777216),
+	""body"" VARCHAR(16777216),
+	""accepted_answer_id"" VARCHAR(16777216),
+	""answer_count"" VARCHAR(16777216),
+	""comment_count"" NUMBER(38,0),
+	""community_owned_date"" NUMBER(38,0),
+	""creation_date"" NUMBER(38,0),
+	""favorite_count"" VARCHAR(16777216),
+	""last_activity_date"" NUMBER(38,0),
+	""last_edit_date"" NUMBER(38,0),
+	""last_editor_display_name"" VARCHAR(16777216),
+	""last_editor_user_id"" NUMBER(38,0),
+	""owner_display_name"" VARCHAR(16777216),
+	""owner_user_id"" NUMBER(38,0),
+	""parent_id"" VARCHAR(16777216),
+	""post_type_id"" NUMBER(38,0),
+	""score"" NUMBER(38,0),
+	""tags"" VARCHAR(16777216),
+	""view_count"" VARCHAR(16777216)
+);"
+POSTS_PRIVILEGE_WIKI,,"create or replace TABLE POSTS_PRIVILEGE_WIKI (
+	""id"" NUMBER(38,0),
+	""title"" VARCHAR(16777216),
+	""body"" VARCHAR(16777216),
+	""accepted_answer_id"" VARCHAR(16777216),
+	""answer_count"" VARCHAR(16777216),
+	""comment_count"" NUMBER(38,0),
+	""community_owned_date"" VARCHAR(16777216),
+	""creation_date"" NUMBER(38,0),
+	""favorite_count"" VARCHAR(16777216),
+	""last_activity_date"" NUMBER(38,0),
+	""last_edit_date"" NUMBER(38,0),
+	""last_editor_display_name"" VARCHAR(16777216),
+	""last_editor_user_id"" NUMBER(38,0),
+	""owner_display_name"" VARCHAR(16777216),
+	""owner_user_id"" NUMBER(38,0),
+	""parent_id"" VARCHAR(16777216),
+	""post_type_id"" NUMBER(38,0),
+	""score"" NUMBER(38,0),
+	""tags"" VARCHAR(16777216),
+	""view_count"" VARCHAR(16777216)
+);"
+POSTS_TAG_WIKI,,"create or replace TABLE POSTS_TAG_WIKI (
+	""id"" NUMBER(38,0),
+	""title"" VARCHAR(16777216),
+	""body"" VARCHAR(16777216),
+	""accepted_answer_id"" VARCHAR(16777216),
+	""answer_count"" VARCHAR(16777216),
+	""comment_count"" NUMBER(38,0),
+	""community_owned_date"" NUMBER(38,0),
+	""creation_date"" NUMBER(38,0),
+	""favorite_count"" VARCHAR(16777216),
+	""last_activity_date"" NUMBER(38,0),
+	""last_edit_date"" NUMBER(38,0),
+	""last_editor_display_name"" VARCHAR(16777216),
+	""last_editor_user_id"" NUMBER(38,0),
+	""owner_display_name"" VARCHAR(16777216),
+	""owner_user_id"" NUMBER(38,0),
+	""parent_id"" VARCHAR(16777216),
+	""post_type_id"" NUMBER(38,0),
+	""score"" NUMBER(38,0),
+	""tags"" VARCHAR(16777216),
+	""view_count"" VARCHAR(16777216)
+);"
+POSTS_WIKI_PLACEHOLDER,,"create or replace TABLE POSTS_WIKI_PLACEHOLDER (
+	""id"" NUMBER(38,0),
+	""title"" VARCHAR(16777216),
+	""body"" VARCHAR(16777216),
+	""accepted_answer_id"" VARCHAR(16777216),
+	""answer_count"" VARCHAR(16777216),
+	""comment_count"" NUMBER(38,0),
+	""community_owned_date"" VARCHAR(16777216),
+	""creation_date"" NUMBER(38,0),
+	""favorite_count"" VARCHAR(16777216),
+	""last_activity_date"" NUMBER(38,0),
+	""last_edit_date"" NUMBER(38,0),
+	""last_editor_display_name"" VARCHAR(16777216),
+	""last_editor_user_id"" NUMBER(38,0),
+	""owner_display_name"" VARCHAR(16777216),
+	""owner_user_id"" NUMBER(38,0),
+	""parent_id"" VARCHAR(16777216),
+	""post_type_id"" NUMBER(38,0),
+	""score"" NUMBER(38,0),
+	""tags"" VARCHAR(16777216),
+	""view_count"" VARCHAR(16777216)
+);"
+POSTS_TAG_WIKI_EXCERPT,,"create or replace TABLE POSTS_TAG_WIKI_EXCERPT (
+	""id"" NUMBER(38,0),
+	""title"" VARCHAR(16777216),
+	""body"" VARCHAR(16777216),
+	""accepted_answer_id"" VARCHAR(16777216),
+	""answer_count"" VARCHAR(16777216),
+	""comment_count"" NUMBER(38,0),
+	""community_owned_date"" NUMBER(38,0),
+	""creation_date"" NUMBER(38,0),
+	""favorite_count"" VARCHAR(16777216),
+	""last_activity_date"" NUMBER(38,0),
+	""last_edit_date"" NUMBER(38,0),
+	""last_editor_display_name"" VARCHAR(16777216),
+	""last_editor_user_id"" NUMBER(38,0),
+	""owner_display_name"" VARCHAR(16777216),
+	""owner_user_id"" NUMBER(38,0),
+	""parent_id"" VARCHAR(16777216),
+	""post_type_id"" NUMBER(38,0),
+	""score"" NUMBER(38,0),
+	""tags"" VARCHAR(16777216),
+	""view_count"" VARCHAR(16777216)
+);"
+VOTES,,"create or replace TABLE VOTES (
+	""id"" NUMBER(38,0),
+	""creation_date"" NUMBER(38,0),
+	""post_id"" NUMBER(38,0),
+	""vote_type_id"" NUMBER(38,0)
+);"
+POSTS_ANSWERS,,"create or replace TABLE POSTS_ANSWERS (
+	""id"" NUMBER(38,0),
+	""title"" VARCHAR(16777216),
+	""body"" VARCHAR(16777216),
+	""accepted_answer_id"" VARCHAR(16777216),
+	""answer_count"" VARCHAR(16777216),
+	""comment_count"" NUMBER(38,0),
+	""community_owned_date"" NUMBER(38,0),
+	""creation_date"" NUMBER(38,0),
+	""favorite_count"" VARCHAR(16777216),
+	""last_activity_date"" NUMBER(38,0),
+	""last_edit_date"" NUMBER(38,0),
+	""last_editor_display_name"" VARCHAR(16777216),
+	""last_editor_user_id"" NUMBER(38,0),
+	""owner_display_name"" VARCHAR(16777216),
+	""owner_user_id"" NUMBER(38,0),
+	""parent_id"" NUMBER(38,0),
+	""post_type_id"" NUMBER(38,0),
+	""score"" NUMBER(38,0),
+	""tags"" VARCHAR(16777216),
+	""view_count"" VARCHAR(16777216)
+);"
+POSTS_MODERATOR_NOMINATION,,"create or replace TABLE POSTS_MODERATOR_NOMINATION (
+	""id"" NUMBER(38,0),
+	""title"" VARCHAR(16777216),
+	""body"" VARCHAR(16777216),
+	""accepted_answer_id"" VARCHAR(16777216),
+	""answer_count"" VARCHAR(16777216),
+	""comment_count"" NUMBER(38,0),
+	""community_owned_date"" NUMBER(38,0),
+	""creation_date"" NUMBER(38,0),
+	""favorite_count"" VARCHAR(16777216),
+	""last_activity_date"" NUMBER(38,0),
+	""last_edit_date"" NUMBER(38,0),
+	""last_editor_display_name"" VARCHAR(16777216),
+	""last_editor_user_id"" NUMBER(38,0),
+	""owner_display_name"" VARCHAR(16777216),
+	""owner_user_id"" NUMBER(38,0),
+	""parent_id"" VARCHAR(16777216),
+	""post_type_id"" NUMBER(38,0),
+	""score"" NUMBER(38,0),
+	""tags"" VARCHAR(16777216),
+	""view_count"" VARCHAR(16777216)
+);"
+POSTS_QUESTIONS,,"create or replace TABLE POSTS_QUESTIONS (
+	""id"" NUMBER(38,0),
+	""title"" VARCHAR(16777216),
+	""body"" VARCHAR(16777216),
+	""accepted_answer_id"" NUMBER(38,0),
+	""answer_count"" NUMBER(38,0),
+	""comment_count"" NUMBER(38,0),
+	""community_owned_date"" NUMBER(38,0),
+	""creation_date"" NUMBER(38,0),
+	""favorite_count"" NUMBER(38,0),
+	""last_activity_date"" NUMBER(38,0),
+	""last_edit_date"" NUMBER(38,0),
+	""last_editor_display_name"" VARCHAR(16777216),
+	""last_editor_user_id"" NUMBER(38,0),
+	""owner_display_name"" VARCHAR(16777216),
+	""owner_user_id"" NUMBER(38,0),
+	""parent_id"" VARCHAR(16777216),
+	""post_type_id"" NUMBER(38,0),
+	""score"" NUMBER(38,0),
+	""tags"" VARCHAR(16777216),
+	""view_count"" NUMBER(38,0)
+);"
+STACKOVERFLOW_POSTS,,"create or replace TABLE STACKOVERFLOW_POSTS (
+	""id"" NUMBER(38,0),
+	""title"" VARCHAR(16777216),
+	""body"" VARCHAR(16777216),
+	""accepted_answer_id"" NUMBER(38,0),
+	""answer_count"" NUMBER(38,0),
+	""comment_count"" NUMBER(38,0),
+	""community_owned_date"" NUMBER(38,0),
+	""creation_date"" NUMBER(38,0),
+	""favorite_count"" NUMBER(38,0),
+	""last_activity_date"" NUMBER(38,0),
+	""last_edit_date"" NUMBER(38,0),
+	""last_editor_display_name"" VARCHAR(16777216),
+	""last_editor_user_id"" NUMBER(38,0),
+	""owner_display_name"" VARCHAR(16777216),
+	""owner_user_id"" NUMBER(38,0),
+	""parent_id"" NUMBER(38,0),
+	""post_type_id"" NUMBER(38,0),
+	""score"" NUMBER(38,0),
+	""tags"" VARCHAR(16777216),
+	""view_count"" NUMBER(38,0)
+);"
+POST_LINKS,,"create or replace TABLE POST_LINKS (
+	""id"" NUMBER(38,0),
+	""creation_date"" NUMBER(38,0),
+	""link_type_id"" NUMBER(38,0),
+	""post_id"" NUMBER(38,0),
+	""related_post_id"" NUMBER(38,0)
+);"
+```
+
+## ❓ Natural Language Question
+"How do the average reputation and number of badges vary among Stack Overflow users based on the number of complete years they have been members, considering only those who joined on or before October 1, 2021?"
+
+## ✅ Correct SQL Query
+```sql
+WITH sub AS (
+  SELECT 
+    "users"."id",
+    CAST(TO_TIMESTAMP(MAX("users"."creation_date") / 1000000.0) AS DATE) AS "user_creation_date",  -- 使用 MAX 聚合 creation_date 并转换为 DATE
+    MAX("users"."reputation") AS "reputation",  
+    SUM(CASE WHEN badges."user_id" IS NULL THEN 0 ELSE 1 END) AS "num_badges"
+  FROM "STACKOVERFLOW"."STACKOVERFLOW"."USERS" "users"
+  LEFT JOIN "STACKOVERFLOW"."STACKOVERFLOW"."BADGES" badges
+    ON "users"."id" = badges."user_id"
+  WHERE CAST(TO_TIMESTAMP("users"."creation_date" / 1000000.0) AS DATE) <= DATE '2021-10-01'
+  GROUP BY "users"."id"
+)
+
+SELECT 
+  DATEDIFF(YEAR, "user_creation_date", DATE '2021-10-01') AS "user_tenure",
+  COUNT(1) AS "Num_Users",
+  AVG("reputation") AS "Avg_Reputation",
+  AVG("num_badges") AS "Avg_Num_Badges"
+FROM sub
+GROUP BY "user_tenure"
+ORDER BY "user_tenure";
+
+```
+
+## 🔧 Your Task
+Analyze the correct SQL query above and modify it to introduce the specific error type: **Explicit Condition Missing**.
+
+Think about:
+1. How this error typically manifests in real-world scenarios
+2. What parts of the query are most relevant to this error type
+3. How to make this data be meaningful for improving LLM SQL semantic detection area
+
+## 📤 Output Format
+Return your response in the following format:
+
+**Modified SQL Query:**
+```sql
+[Your modified SQL query here]
+```
+
+**Brief Explanation:**
+[A very brief explanation (1-2 sentences) of what specific change you made to inject the error]
+

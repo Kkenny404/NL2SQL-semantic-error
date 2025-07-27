@@ -1,0 +1,1 @@
+I removed the implicit condition that should filter out census tracts with NULL median_income in either 2011 or 2018 from the population_change CTE, allowing tracts with missing income data to be included in the top 20 population change calculation, which can lead to misleading results.

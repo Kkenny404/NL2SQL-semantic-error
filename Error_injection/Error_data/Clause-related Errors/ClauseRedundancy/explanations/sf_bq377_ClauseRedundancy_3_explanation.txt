@@ -1,0 +1,1 @@
+I added an unnecessary ORDER BY "package_name" ASC clause; the natural language question only asks for frequency (descending count), so sorting by package name is redundant and not required.

@@ -1,0 +1,1 @@
+I changed the condition in the final WHERE clause from `total_rentals = max_rentals` to `total_rentals >= max_rentals`, altering both the operator and the value components of the condition, thus introducing an explicit condition mismatch.

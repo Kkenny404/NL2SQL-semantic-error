@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 import google.generativeai as genai
 import anthropic
 from openai import OpenAI
+from schema.get_spider_schema import get_schema, schema_shrink
 
 load_dotenv()
 api_key = os.getenv("GOOGLE_API_KEY")
@@ -192,12 +193,12 @@ def query_claude(prompt: str) -> str:
     )
     return response.content[0].text.strip().lower()
 
-def query_gpt(prompt: str, model: str = "gpt-4o") -> str:
+def query_gpt(prompt: str, model: str = "gpt-4.1") -> str:
     """Call GPT model using Chat Completions API"""
     print(f"[GPT] Querying model: {model}")
     try:
         response = openai_client.chat.completions.create(
-            model=model,  # 可以使用 "gpt-4o", "gpt-4", "gpt-3.5-turbo" 等
+            model=model,
             messages=[
                 {"role": "user", "content": prompt}
             ],
@@ -211,7 +212,14 @@ def query_gpt(prompt: str, model: str = "gpt-4o") -> str:
 
 
 
-
+def load_sql(sql_root, sql_id):
+    """Load the SQL content from a file based on the given SQL ID."""
+    sql_path = os.path.join(sql_root, f"{sql_id}")
+    if not os.path.exists(sql_path):
+        print(f"[SKIP] SQL file not found: {sql_path}")
+        return None
+    with open(sql_path, "r", encoding="utf-8") as f:
+        return f.read()
 
 
 
@@ -232,3 +240,6 @@ if __name__ == "__main__":
     
 #     result2 = query_gemini(sql_prompt)
 #     print(f"[Gemini SQL Test]: '{result2}'")
+
+
+

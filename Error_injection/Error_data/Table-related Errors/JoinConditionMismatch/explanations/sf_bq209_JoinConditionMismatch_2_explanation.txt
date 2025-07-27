@@ -1,0 +1,1 @@
+I changed the join condition between `patents_sample` and `t3` from `patents_sample."publication_number" = t3."cited_publication_number"` (correct) to `patents_sample."publication_number" = t3."citing_publication_number"` (incorrect), thus joining on unrelated attributes and introducing a join condition mismatch.

@@ -1,0 +1,1 @@
+I replaced the correct use of `FORMAT_TIMESTAMP('%Y-%m-%d', a.metadata_date)` with a simple `CAST(a.metadata_date AS STRING)`, which does not format the timestamp as 'YYYY-MM-DD' and may result in an undesired string representation, thus misusing the conversion function.

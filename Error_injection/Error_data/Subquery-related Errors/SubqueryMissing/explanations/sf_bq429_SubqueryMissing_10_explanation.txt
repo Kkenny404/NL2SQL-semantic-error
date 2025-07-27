@@ -1,0 +1,1 @@
+I removed the necessary subquery that computes the average median income difference at the ZIP code level before aggregating by state, instead directly averaging the difference at the state level—thus missing the required ZIP code-level subquery.

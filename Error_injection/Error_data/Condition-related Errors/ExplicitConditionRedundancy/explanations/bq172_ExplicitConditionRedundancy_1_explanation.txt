@@ -1,0 +1,1 @@
+I added the redundant condition `AND bene_count_ge65 IS NOT NULL` in the second WHERE clause, which restricts results to rows with non-null beneficiary counts for age 65+, even though the natural language question does not mention any age or null filtering.

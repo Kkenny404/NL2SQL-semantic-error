@@ -1,0 +1,1 @@
+I removed the explicit condition `WHERE t2.cancellation IS NULL` from the query, so canceled orders are no longer filtered out, directly introducing the "explicit condition missing" error.

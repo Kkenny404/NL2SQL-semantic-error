@@ -1,0 +1,1 @@
+I changed the aggregation in the `median_income_diff_by_zipcode` subquery from `AVG("median_income_diff")` to `MAX("median_income_diff")`, causing the subquery to return the maximum difference per ZIP code instead of the average, which mismatches the intent of the outer query and introduces a subquery mismatch error.

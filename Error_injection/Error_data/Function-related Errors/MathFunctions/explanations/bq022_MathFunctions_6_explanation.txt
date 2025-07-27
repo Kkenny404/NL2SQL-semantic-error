@@ -1,0 +1,1 @@
+I changed the precision argument in the ROUND function from 0 to 2, causing the minimum and maximum trip durations to be rounded to two decimal places instead of the nearest whole number as required.

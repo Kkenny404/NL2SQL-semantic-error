@@ -1,0 +1,1 @@
+I removed the implicit data quality conditions WHERE x2."filing_date" != 0 and WHERE x3."filing_date" != 0 from the subqueries. These are implicitly required to exclude records with invalid/missing filing dates (represented as 0), which would cause incorrect date calculations and meaningless results in patent citation analysis.

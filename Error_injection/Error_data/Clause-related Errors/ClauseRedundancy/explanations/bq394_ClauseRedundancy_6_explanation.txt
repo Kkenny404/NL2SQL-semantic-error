@@ -1,0 +1,1 @@
+I injected a redundant `GROUP BY` clause in the `DifferenceSums` CTE, grouping by all columns even though no aggregation is needed at this stage, which is unnecessary for the query's logic and constitutes clause redundancy.

@@ -1,0 +1,1 @@
+I removed the condition `end_station_name NOT IN ('Mobile Station', 'Repair Shop')`, so rides ending at those stations are no longer excluded—an essential attribute for fulfilling the query intent is now missing.

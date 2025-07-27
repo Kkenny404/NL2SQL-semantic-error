@@ -1,0 +1,1 @@
+I removed the explicit condition that restricts mapped concepts to only standard concepts (the join to `standard_concept_ids`), so the query now includes non-standard concepts, missing the explicit requirement from the NLQ to consider only standard concepts and their descendants.

@@ -1,0 +1,1 @@
+I replaced the direct string concatenation for `year_filed` with an unnecessary and incorrect use of `PARSE_DATE` and `FORMAT_DATE`, which misuses date functions on a string that is already a year, introducing a function-related DateTime error.

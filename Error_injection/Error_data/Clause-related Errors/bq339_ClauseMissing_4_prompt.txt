@@ -1,0 +1,467 @@
+# SQL Semantic Error Injection Task
+
+You are an expert SQL developer tasked with injecting a SPECIFIC semantic error into a correct SQL query.
+
+## 🎯 Your Mission
+Take the provided correct SQL query and modify it to contain EXACTLY ONE semantic error of the specified type. The modified SQL should:
+- ✅ Have valid syntax (no syntax errors)
+- ✅ Be executable against the database
+- ❌ Contain the specified semantic error
+- ❌ NOT contain any other types of errors
+
+## 📋 Error Specification
+**Error Category:** Clause-related Errors
+**Category Description:** Clause-related Errors occur when NL2SQL models fail to correctly include, omit, or structure SQL clauses. These errors primarily involve mishandling GROUP BY, ORDER BY, and HAVING clauses, which are crucial for aggregation, sorting, and filtering grouped results. The errors manifest in two main categories.
+
+**Specific Error Type:** Clause Missing
+**Error Description:** The model fails to include necessary clauses such as GROUP BY, ORDER BY, or HAVING, resulting in incomplete or incorrect SQL queries that do not fully capture the intent of the natural language.
+
+## 💡 Guidelines for Error Injection
+
+### DO:
+- Focus ONLY on the specified error type
+- Keep the query structure as similar as possible to the original
+- Ensure the modified SQL runs without syntax errors
+- Make the error subtle but semantically meaningful
+- Consider the business logic and question intent when injecting the error
+
+### DON'T:
+- Add syntax errors or typos
+- Introduce multiple different error types
+- Completely rewrite the query structure
+- Make obvious/trivial mistakes that wouldn't occur in real scenarios
+- Change unrelated parts of the query
+
+## 📊 Database Schema
+```sql
+
+
+================================================================================-- Schema from: bigquery-public-data.san_francisco_311/DDL.csv
+table_name,ddl
+311_service_requests,"CREATE TABLE `bigquery-public-data.san_francisco_311.311_service_requests`
+(
+  unique_key INT64,
+  created_date TIMESTAMP,
+  closed_date TIMESTAMP,
+  resolution_action_updated_date TIMESTAMP,
+  status STRING,
+  status_notes STRING,
+  agency_name STRING,
+  category STRING,
+  complaint_type STRING,
+  descriptor STRING,
+  incident_address STRING,
+  supervisor_district INT64,
+  neighborhood STRING,
+  location STRING,
+  source STRING,
+  media_url STRING,
+  latitude FLOAT64,
+  longitude FLOAT64,
+  police_district STRING
+);"
+
+-- Schema from: bigquery-public-data.san_francisco_bikeshare/DDL.csv
+table_name,ddl
+bikeshare_regions,"CREATE TABLE `bigquery-public-data.san_francisco_bikeshare.bikeshare_regions`
+(
+  region_id INT64 NOT NULL OPTIONS(description=""Unique identifier for the region""),
+  name STRING NOT NULL OPTIONS(description=""Public name for this region"")
+);"
+bikeshare_station_info,"CREATE TABLE `bigquery-public-data.san_francisco_bikeshare.bikeshare_station_info`
+(
+  station_id STRING NOT NULL OPTIONS(description=""Unique identifier of a station.""),
+  name STRING NOT NULL OPTIONS(description=""Public name of the station""),
+  short_name STRING OPTIONS(description=""Short name or other type of identifier, as used by the data publisher""),
+  lat FLOAT64 NOT NULL OPTIONS(description=""The latitude of station. The field value must be a valid WGS 84 latitude in decimal degrees format. See: http://en.wikipedia.org/wiki/World_Geodetic_System, https://en.wikipedia.org/wiki/Decimal_degrees""),
+  lon FLOAT64 NOT NULL OPTIONS(description=""The longitude of station. The field value must be a valid WGS 84 longitude in decimal degrees format. See: http://en.wikipedia.org/wiki/World_Geodetic_System, https://en.wikipedia.org/wiki/Decimal_degrees""),
+  region_id INT64 OPTIONS(description=""ID of the region where station is located""),
+  rental_methods STRING OPTIONS(description=""Array of enumerables containing the payment methods accepted at this station.  Current valid values (in CAPS) are: KEY (i.e. operator issued bike key / fob / card) CREDITCARD PAYPASS APPLEPAY ANDROIDPAY TRANSITCARD ACCOUNTNUMBER PHONE This list is intended to be as comprehensive at the time of publication as possible but is subject to change, as defined in File Requirements above""),
+  capacity INT64 OPTIONS(description=""Number of total docking points installed at this station, both available and unavailable""),
+  external_id STRING OPTIONS(description=""""),
+  eightd_has_key_dispenser BOOL OPTIONS(description=""""),
+  has_kiosk BOOL OPTIONS(description=""""),
+  station_geom GEOGRAPHY OPTIONS(description="""")
+);"
+bikeshare_station_status,"CREATE TABLE `bigquery-public-data.san_francisco_bikeshare.bikeshare_station_status`
+(
+  station_id STRING NOT NULL OPTIONS(description=""Unique identifier of a station""),
+  num_bikes_available INT64 NOT NULL OPTIONS(description=""Number of bikes available for rental""),
+  num_bikes_disabled INT64 OPTIONS(description=""Number of disabled bikes at the station. Vendors who do not want to publicize the number of disabled bikes or docks in their system can opt to omit station capacity (in station_information), num_bikes_disabled and num_docks_disabled. If station capacity is published then broken docks/bikes can be inferred (though not specifically whether the decreased capacity is a broken bike or dock)""),
+  num_docks_available INT64 NOT NULL OPTIONS(description=""Number of docks accepting bike returns""),
+  num_docks_disabled INT64 OPTIONS(description=""Number of empty but disabled dock points at the station. This value remains as part of the spec as it is possibly useful during development""),
+  is_installed BOOL NOT NULL OPTIONS(description=""1/0 boolean - is the station currently on the street""),
+  is_renting BOOL NOT NULL OPTIONS(description=""1/0 boolean - is the station currently renting bikes (even if the station is empty, if it is set to allow rentals this value should be 1)""),
+  is_returning BOOL NOT NULL OPTIONS(description=""1/0 boolean - is the station accepting bike returns (if a station is full but would allow a return if it was not full then this value should be 1)""),
+  last_reported INT64 NOT NULL OPTIONS(description=""Integer POSIX timestamp indicating the last time this station reported its status to the backend""),
+  num_ebikes_available INT64 OPTIONS(description=""""),
+  eightd_has_available_keys BOOL OPTIONS(description="""")
+);"
+bikeshare_trips,"CREATE TABLE `bigquery-public-data.san_francisco_bikeshare.bikeshare_trips`
+(
+  trip_id STRING NOT NULL OPTIONS(description=""Numeric ID of bike trip""),
+  duration_sec INT64 OPTIONS(description=""Time of trip in seconds""),
+  start_date TIMESTAMP OPTIONS(description=""Start date of trip with date and time, in PST""),
+  start_station_name STRING OPTIONS(description=""Station name of start station""),
+  start_station_id INT64 OPTIONS(description=""Numeric reference for start station""),
+  end_date TIMESTAMP OPTIONS(description=""End date of trip with date and time, in PST""),
+  end_station_name STRING OPTIONS(description=""Station name for end station""),
+  end_station_id INT64 OPTIONS(description=""Numeric reference for end station""),
+  bike_number INT64 OPTIONS(description=""ID of bike used""),
+  zip_code STRING OPTIONS(description=""Home zip code of subscriber (customers can choose to manually enter zip at kiosk however data is unreliable)""),
+  subscriber_type STRING OPTIONS(description=""Subscriber = annual or 30-day member; Customer = 24-hour or 3-day member""),
+  c_subscription_type STRING OPTIONS(description=""""),
+  start_station_latitude FLOAT64 OPTIONS(description=""""),
+  start_station_longitude FLOAT64 OPTIONS(description=""""),
+  end_station_latitude FLOAT64 OPTIONS(description=""""),
+  end_station_longitude FLOAT64 OPTIONS(description=""""),
+  member_birth_year INT64 OPTIONS(description=""""),
+  member_gender STRING OPTIONS(description=""""),
+  bike_share_for_all_trip STRING OPTIONS(description=""""),
+  start_station_geom GEOGRAPHY OPTIONS(description=""""),
+  end_station_geom GEOGRAPHY OPTIONS(description="""")
+);"
+
+-- Schema from: bigquery-public-data.san_francisco_film_locations/DDL.csv
+table_name,ddl
+film_locations,"CREATE TABLE `bigquery-public-data.san_francisco_film_locations.film_locations`
+(
+  title STRING OPTIONS(description=""""),
+  release_year INT64 OPTIONS(description=""""),
+  locations STRING OPTIONS(description=""""),
+  fun_facts STRING OPTIONS(description=""""),
+  production_company STRING OPTIONS(description=""""),
+  distributor STRING OPTIONS(description=""""),
+  director STRING OPTIONS(description=""""),
+  writer STRING OPTIONS(description=""""),
+  actor_1 STRING OPTIONS(description=""""),
+  actor_2 STRING OPTIONS(description=""""),
+  actor_3 STRING OPTIONS(description="""")
+)
+OPTIONS(
+  description=""If you love movies, and you love San Francisco, you're bound to love this -- a listing of filming locations of movies shot in San Francisco starting from 1924. You'll find the titles, locations, fun facts, names of the director, writer, actors, and studio for most of these films.""
+);"
+
+-- Schema from: bigquery-public-data.san_francisco_neighborhoods/DDL.csv
+table_name,ddl
+boundaries,"CREATE TABLE `bigquery-public-data.san_francisco_neighborhoods.boundaries`
+(
+  neighborhood STRING,
+  internal_point_latitude FLOAT64,
+  internal_point_longitude FLOAT64,
+  internal_point_geom GEOGRAPHY,
+  neighborhood_geom GEOGRAPHY
+);"
+
+-- Schema from: bigquery-public-data.san_francisco_sffd_service_calls/DDL.csv
+table_name,ddl
+sffd_service_calls,"CREATE TABLE `bigquery-public-data.san_francisco_sffd_service_calls.sffd_service_calls`
+(
+  call_number INT64 NOT NULL OPTIONS(description=""A unique 9-digit number assigned by the 911 Dispatch Center (DEM) to this call. These number are used for both Police and Fire calls""),
+  unit_id STRING OPTIONS(description=""Unit Identifier. For example E01 for Engine 1 or T01 for Truck 1.""),
+  incident_number INT64 OPTIONS(description=""A unique 8-digit number assigned by DEM to this Fire incident.""),
+  call_type STRING OPTIONS(description=""Type of call the incident falls into. See the list below.""),
+  call_date DATE OPTIONS(description=""Date the call is received at the 911 Dispatch Center. Used for reporting purposes.""),
+  watch_date DATE OPTIONS(description=""Watch date when the call is received. Watch date starts at 0800 each morning and ends at 0800 the next day.""),
+  received_timestamp DATETIME OPTIONS(description=""Date and time of call is received at the 911 Dispatch Center.""),
+  entry_timestamp DATETIME OPTIONS(description=""Date and time the 911 operator submits the entry of the initical call information into the CAD system""),
+  dispatch_timestamp DATETIME OPTIONS(description=""Date and time the 911 operator dispatches this unit to the call.""),
+  response_timestamp DATETIME OPTIONS(description=""Date and time this unit acknowledges the dispatch and records that the unit is en route to the location of the call.""),
+  on_scene_timestamp DATETIME OPTIONS(description=""Date and time the unit records arriving to the location of the incident""),
+  transport_timestamp DATETIME OPTIONS(description=""If this unit is an ambulance, date and time the unit begins the transport unit arrives to hospital""),
+  hospital_timestamp DATETIME OPTIONS(description=""If this unit is an ambulance, date and time the unit arrives to the hospital.""),
+  call_final_disposition STRING OPTIONS(description=""Disposition of the call (Code). For example TH2: Transport to Hospital - Code 2, FIR: Resolved by Fire Department""),
+  available_timestamp DATETIME OPTIONS(description=""Date and time this unit is not longer assigned to this call and it is available for another dispatch.""),
+  address STRING OPTIONS(description=""Address of midblock point associated with incident (obfuscated address to protect caller privacy)""),
+  city STRING OPTIONS(description=""City of incident""),
+  zipcode_of_incident STRING OPTIONS(description=""Zipcode of incident""),
+  battalion STRING OPTIONS(description=""Emergency Response District (There are 9 Fire Emergency Response Districts)""),
+  station_area STRING OPTIONS(description=""Fire Station First Response Area associated with the address of the incident""),
+  box STRING OPTIONS(description=""Fire box associated with the address of the incident. A box is the smallest area used to divide the City. Each box is associated with a unique unit dispatch order. The City is divided into more than 2,400 boxes.""),
+  original_priority STRING OPTIONS(description=""Initial call priority (Code 2: Non-Emergency or Code 3:Emergency).""),
+  priority STRING OPTIONS(description=""Call priority (Code 2: Non-Emergency or Code 3:Emergency).""),
+  final_priority INT64 OPTIONS(description=""Final call priority (Code 2: Non-Emergency or Code 3:Emergency).""),
+  als_unit BOOL OPTIONS(description=""Does this unit includes ALS (Advance Life Support) resources? Is there a paramedic in this unit?""),
+  call_type_group STRING OPTIONS(description=""Call types are divided into four main groups: Fire, Alarm, Potential Life Threatening and Non Life Threatening.""),
+  number_of_alarms INT64 OPTIONS(description=""Number of alarms associated with the incident. This is a number between 1 and 5.""),
+  unit_type STRING OPTIONS(description=""Unit type""),
+  unit_sequence_in_call_dispatch INT64 OPTIONS(description=""A number that indicates the order this unit was assigned to this call""),
+  fire_prevention_district STRING OPTIONS(description=""Bureau of Fire Prevention District associated with this address""),
+  supervisor_district STRING OPTIONS(description=""Supervisor District associated with this address""),
+  row_id STRING OPTIONS(description=""Unique identifier used for managing data updates. It is the concatenation of Call Number and Unit ID separated by a dash""),
+  latitude FLOAT64 OPTIONS(description=""Latitude of the address""),
+  longitude FLOAT64 OPTIONS(description=""Longitude of the address""),
+  neighborhood_name STRING OPTIONS(description=""Text name of the neighborhood in which the incident occurred""),
+  location_geom GEOGRAPHY OPTIONS(description=""Latitude and longitude of address obfuscated either to the midblock, intersection or call box"")
+);"
+
+-- Schema from: bigquery-public-data.san_francisco_sfpd_incidents/DDL.csv
+table_name,ddl
+sfpd_incidents,"CREATE TABLE `bigquery-public-data.san_francisco_sfpd_incidents.sfpd_incidents`
+(
+  unique_key INT64 NOT NULL OPTIONS(description=""The unique incident number for this accident""),
+  category STRING OPTIONS(description=""""),
+  descript STRING OPTIONS(description=""""),
+  dayofweek STRING OPTIONS(description=""""),
+  pddistrict STRING OPTIONS(description=""Police Department district""),
+  resolution STRING OPTIONS(description=""Whether there was an arrest, citation, booking, etc.""),
+  address STRING OPTIONS(description=""""),
+  longitude FLOAT64 OPTIONS(description=""""),
+  latitude FLOAT64 OPTIONS(description=""""),
+  location STRING OPTIONS(description=""Latitude/Longitude""),
+  pdid INT64 OPTIONS(description=""Unique Identifier for use in update and insert operations""),
+  timestamp DATETIME OPTIONS(description="""")
+);"
+
+-- Schema from: bigquery-public-data.san_francisco_transit_muni/DDL.csv
+table_name,ddl
+calendar,"CREATE TABLE `bigquery-public-data.san_francisco_transit_muni.calendar`
+(
+  service_id STRING OPTIONS(description=""Unique identifier for a set of dates when service is available for one or more routes""),
+  service_desc STRING OPTIONS(description=""Text description of service category""),
+  sunday BOOL OPTIONS(description=""Indicates whether the service is valid for all Sundays operating on the agency is using normal schedules and fare categories""),
+  monday BOOL OPTIONS(description=""Indicates whether the service is valid for all Sundays operating on the agency is using normal schedules and fare categories""),
+  tuesday BOOL OPTIONS(description=""Indicates whether the service is valid for all Sundays operating on the agency is using normal schedules and fare categories""),
+  wednesday BOOL OPTIONS(description=""Indicates whether the service is valid for all Sundays operating on the agency is using normal schedules and fare categories""),
+  thursday BOOL OPTIONS(description=""Indicates whether the service is valid for all Sundays operating on the agency is using normal schedules and fare categories""),
+  friday BOOL OPTIONS(description=""Indicates whether the service is valid for all Sundays operating on the agency is using normal schedules and fare categories""),
+  saturday BOOL OPTIONS(description=""Indicates whether the service is valid for all Sundays operating on the agency is using normal schedules and fare categories""),
+  exceptions DATE OPTIONS(description=""Specifies a particular date when this service is not available. This is typically during holidays, special events, etc. If applicable, the operating service for the day is indicated in replacement_service. Format for the date is YYYY-MM-DD""),
+  exception_type BOOL OPTIONS(description=""Indicates whether service is available on the date specified in the exceptions field. The following are valid values for this field:  - TRUE: Service will be operating during the date listed in the column exceptions -  FALSE: Service will not be operating during the date listed in the column exceptions"")
+);"
+stop_monitoring,"CREATE TABLE `bigquery-public-data.san_francisco_transit_muni.stop_monitoring`
+(
+  time_recorded TIMESTAMP OPTIONS(description=""The timestamp of the real-time update from the particular vehicle.""),
+  stop_id STRING OPTIONS(description=""Unique reference for the stop being monitored. Maps to stop_id in the stops table""),
+  stop_name STRING OPTIONS(description=""Full text name of the stop being monitored. Maps to stop_name in the stops table""),
+  route_id STRING OPTIONS(description=""Unique reference for the route on which the vehicle is traveling. Maps to route_id in the routes table""),
+  direction STRING OPTIONS(description=""Indicates the direction of travel for a trip. The following values are valid: - O: Outbound travel - I: Inbound travel  This field is not used in routing, but instead provides a way to separate trips by direction""),
+  trip_date DATE OPTIONS(description=""The service date for the trip the vehicle is serving.""),
+  trip_id STRING OPTIONS(description=""Unique reference for the trip that the vehicle is traveling. Maps to trip_id in the trips table""),
+  route_long_name STRING OPTIONS(description=""Contains the full name of a route. This name is generally more descriptive than the name from route_short_name and often includes the route's destination or stop. Maps to route_long_name in routes table""),
+  vehicle_location_lat FLOAT64 OPTIONS(description=""The latitude of the vehicle's location at the time when time_recorded indicates""),
+  vehicle_location_lon FLOAT64 OPTIONS(description=""The longitude of the vehicle's location at the time when time_recorded indicates""),
+  vehicle_location GEOGRAPHY OPTIONS(description=""The geographic representation of the vehicle's location at the time indicated in the time_recorded column""),
+  vehicle_id STRING OPTIONS(description=""The unique identifier of the vehicle to be monitored.""),
+  vehicle_at_stop BOOL OPTIONS(description=""Determines if the vehicle is at the monitored stop during the time_recorded. TRUE if vehicle is at the stop""),
+  aimed_arrival_time TIMESTAMP OPTIONS(description=""Vehicle's expected arrival time""),
+  aimed_departure_time TIMESTAMP OPTIONS(description=""Vehicle's expected departure time"")
+);"
+shapes,"CREATE TABLE `bigquery-public-data.san_francisco_transit_muni.shapes`
+(
+  shape_id STRING OPTIONS(description=""Uniquely identifies each shape""),
+  shape_point_sequence INT64 OPTIONS(description=""Associates the latitude and longitude of a shape point with its sequence order along the shape. The values for shape_pt_sequence must increase throughout the trip but don't need to be consecutive.""),
+  shape_point_lat FLOAT64 OPTIONS(description=""Associates a shape point's latitude with a shape ID.""),
+  shape_point_lon FLOAT64 OPTIONS(description=""Associates a shape point's longitude with a shape ID.""),
+  shape_point_geom GEOGRAPHY OPTIONS(description=""Geographic representation of the points latitude and longitude""),
+  shape_distance_traveled FLOAT64 OPTIONS(description=""Provides the actual distance traveled along the shape from the first shape point to the point specified in this record. This information allows the trip planner to determine how much of the shape to draw when they show part of a trip on the map. The values used for shape_dist_traveled must increase along with shape_pt_sequence: they can't be used to show reverse travel along a route."")
+);"
+stops,"CREATE TABLE `bigquery-public-data.san_francisco_transit_muni.stops`
+(
+  stop_id STRING OPTIONS(description=""Unique identifier for each stop""),
+  stop_name STRING OPTIONS(description=""Full text name of the  transit stop""),
+  stop_lat FLOAT64 OPTIONS(description=""Latitude of the stop""),
+  stop_lon FLOAT64 OPTIONS(description=""Longitude of the stop""),
+  stop_geom GEOGRAPHY OPTIONS(description=""Geographic representation of the stop's position"")
+);"
+trips,"CREATE TABLE `bigquery-public-data.san_francisco_transit_muni.trips`
+(
+  trip_id STRING OPTIONS(description=""Unique identifier for each trip""),
+  route_id STRING OPTIONS(description=""Unique identifier for each route. A single route will have multiple trips""),
+  direction STRING OPTIONS(description=""\""Indicates the direction of travel for a trip. The following values are valid:   -  O: Outbound travel -  I: Inbound travel  This field is not used in routing, but instead provides a way to separate trips by direction\""""),
+  block_id STRING OPTIONS(description=""Identifies the block to which the trip belongs. A block consists of a single trip or many sequential trips made with the same vehicle. The trips are grouped into a block by the use of a shared service day andblock_id. A block_id can include trips with different service days, which then makes distinct blocks. For more details, see: https://developers.google.com/transit/gtfs/reference/#example-showing-blocks-and-service-day""),
+  service_category STRING OPTIONS(description=""Indicates the type of service for this trip""),
+  trip_headsign STRING OPTIONS(description=""Contains the text that appears on signage that identifies the trip's destination to riders. Use this field to distinguish between different patterns of service on the same route.""),
+  shape_id STRING OPTIONS(description=""Unique identifier for the geospatial shape that describes the vehicle travel for a trip along individual points. Use to JOIN with the shapes available in the shapes table""),
+  trip_shape GEOGRAPHY OPTIONS(description=""Geographical representation of the trip's entire route."")
+);"
+vehicle_monitoring,"CREATE TABLE `bigquery-public-data.san_francisco_transit_muni.vehicle_monitoring`
+(
+  time_recorded TIMESTAMP OPTIONS(description=""The timestamp of the last real-time update from the particular vehicle.""),
+  route_id STRING OPTIONS(description=""Unique reference for the route on which the vehicle is traveling. Maps to route_id in the routes table""),
+  direction STRING OPTIONS(description=""Indicates the direction of travel for a trip. The following values are valid:   -  O: Outbound travel -  I: Inbound travel  This field is not used in routing, but instead provides a way to separate trips by direction""),
+  trip_date DATE OPTIONS(description=""The service date for the trip the vehicle is serving.""),
+  trip_id STRING OPTIONS(description=""Unique reference for the trip that the vehicle is traveling. Maps to trip_id in the trips table""),
+  route_long_name STRING OPTIONS(description=""Contains the full name of a route. This name is generally more descriptive than the name from route_short_name and often includes the route's destination or stop. Maps to route_long_name in routes table""),
+  vehicle_location_lat FLOAT64 OPTIONS(description=""The latitude of the vehicle's location at the time when time_recorded indicates""),
+  vehicle_location_lon FLOAT64 OPTIONS(description=""The longitude of the vehicle's location at the time when time_recorded indicates""),
+  vehicle_location GEOGRAPHY OPTIONS(description=""The geographic representation of the vehicle's location at the time indicated in the time_recorded column""),
+  vehicle_id STRING OPTIONS(description=""The unique identifier of the vehicle to be monitored.""),
+  next_stop_id STRING OPTIONS(description=""Unique reference for the stop being monitored. Maps to stop_id in the stops table""),
+  next_stop_name STRING OPTIONS(description=""Full text name of the stop being monitored. Maps to stop_name in the stops table""),
+  next_stop_expected_arrival_time TIMESTAMP OPTIONS(description=""Estimated arrival time at the next stop""),
+  next_stop_aimed_arrival_time TIMESTAMP OPTIONS(description=""Aimed arrival time at the next stop""),
+  next_stop_expected_departure_time TIMESTAMP OPTIONS(description=""Estimated departure time from the next stop""),
+  next_stop_aimed_departure_time TIMESTAMP OPTIONS(description=""Aimed departure time from the next stop""),
+  onward_stop_id_1 STRING OPTIONS(description=""Unique reference for onward stop 1. Maps to stop_id in the stops table""),
+  onward_stop_name_1 STRING OPTIONS(description=""Full text name of onward stop 1. Maps to stop_name in the stops table""),
+  onward_stop_expected_arrival_time_1 TIMESTAMP OPTIONS(description=""Estimated arrival time at onward stop 1""),
+  onward_stop_aimed_arrival_time_1 TIMESTAMP OPTIONS(description=""Estimated arrival time at onward stop 1""),
+  onward_stop_aimed_departure_time_1 TIMESTAMP OPTIONS(description=""Aimed departure time from onward stop 1""),
+  onward_stop_id_2 STRING OPTIONS(description=""Unique reference for onward stop 2. Maps to stop_id in the stops table""),
+  onward_stop_name_2 STRING OPTIONS(description=""Full text name of onward stop 2. Maps to stop_name in the stops table""),
+  onward_stop_expected_arrival_time_2 TIMESTAMP OPTIONS(description=""Estimated arrival time at onward stop 2""),
+  onward_stop_aimed_arrival_time_2 TIMESTAMP OPTIONS(description=""Estimated arrival time at onward stop 2""),
+  onward_stop_aimed_departure_time_2 TIMESTAMP OPTIONS(description=""Aimed departure time from onward stop 2""),
+  onward_stop_id_3 STRING OPTIONS(description=""Unique reference for onward stop 3. Maps to stop_id in the stops table""),
+  onward_stop_name_3 STRING OPTIONS(description=""Full text name of onward stop 3. Maps to stop_name in the stops table""),
+  onward_stop_expected_arrival_time_3 TIMESTAMP OPTIONS(description=""Estimated arrival time at onward stop 3""),
+  onward_stop_aimed_arrival_time_3 TIMESTAMP OPTIONS(description=""Estimated arrival time at onward stop 3""),
+  onward_stop_aimed_departure_time_3 TIMESTAMP OPTIONS(description=""Aimed departure time from onward stop 3""),
+  onward_stop_id_4 STRING OPTIONS(description=""Unique reference for onward stop 4. Maps to stop_id in the stops table""),
+  onward_stop_name_4 STRING OPTIONS(description=""Full text name of onward stop 4. Maps to stop_name in the stops table""),
+  onward_stop_expected_arrival_time_4 TIMESTAMP OPTIONS(description=""Estimated arrival time at onward stop 4""),
+  onward_stop_aimed_arrival_time_4 TIMESTAMP OPTIONS(description=""Estimated arrival time at onward stop 4""),
+  onward_stop_aimed_departure_time_4 TIMESTAMP OPTIONS(description=""Aimed departure time from onward stop 4""),
+  onward_stop_id_5 STRING OPTIONS(description=""Unique reference for onward stop 5. Maps to stop_id in the stops table""),
+  onward_stop_name_5 STRING OPTIONS(description=""Full text name of onward stop 5. Maps to stop_name in the stops table""),
+  onward_stop_expected_arrival_time_5 TIMESTAMP OPTIONS(description=""Estimated arrival time at onward stop 5""),
+  onward_stop_aimed_arrival_time_5 TIMESTAMP OPTIONS(description=""Estimated arrival time at onward stop 5""),
+  onward_stop_aimed_departure_time_5 TIMESTAMP OPTIONS(description=""Aimed departure time from onward stop 5""),
+  onward_stop_id_6 STRING OPTIONS(description=""Unique reference for onward stop 6. Maps to stop_id in the stops table""),
+  onward_stop_name_6 STRING OPTIONS(description=""Full text name of onward stop 6. Maps to stop_name in the stops table""),
+  onward_stop_expected_arrival_time_6 TIMESTAMP OPTIONS(description=""Estimated arrival time at onward stop 6""),
+  onward_stop_aimed_arrival_time_6 TIMESTAMP OPTIONS(description=""Estimated arrival time at onward stop 6""),
+  onward_stop_aimed_departure_time_6 TIMESTAMP OPTIONS(description=""Aimed departure time from onward stop 6""),
+  onward_stop_id_7 STRING OPTIONS(description=""Unique reference for onward stop 7. Maps to stop_id in the stops table""),
+  onward_stop_name_7 STRING OPTIONS(description=""Full text name of onward stop 7. Maps to stop_name in the stops table""),
+  onward_stop_expected_arrival_time_7 TIMESTAMP OPTIONS(description=""Estimated arrival time at onward stop 7""),
+  onward_stop_aimed_arrival_time_7 TIMESTAMP OPTIONS(description=""Estimated arrival time at onward stop 7""),
+  onward_stop_aimed_departure_time_7 TIMESTAMP OPTIONS(description=""Aimed departure time from onward stop 7""),
+  onward_stop_id_8 STRING OPTIONS(description=""Unique reference for onward stop 8. Maps to stop_id in the stops table""),
+  onward_stop_name_8 STRING OPTIONS(description=""Full text name of onward stop 8. Maps to stop_name in the stops table""),
+  onward_stop_expected_arrival_time_8 TIMESTAMP OPTIONS(description=""Estimated arrival time at onward stop 8""),
+  onward_stop_aimed_arrival_time_8 TIMESTAMP OPTIONS(description=""Estimated arrival time at onward stop 8""),
+  onward_stop_aimed_departure_time_8 TIMESTAMP OPTIONS(description=""Aimed departure time from onward stop 8""),
+  onward_stop_id_9 STRING OPTIONS(description=""Unique reference for onward stop 9. Maps to stop_id in the stops table""),
+  onward_stop_name_9 STRING OPTIONS(description=""Full text name of onward stop 9. Maps to stop_name in the stops table""),
+  onward_stop_expected_arrival_time_9 TIMESTAMP OPTIONS(description=""Estimated arrival time at onward stop 9""),
+  onward_stop_aimed_arrival_time_9 TIMESTAMP OPTIONS(description=""Estimated arrival time at onward stop 9""),
+  onward_stop_aimed_departure_time_9 TIMESTAMP OPTIONS(description=""Aimed departure time from onward stop 9""),
+  onward_stop_id_10 STRING OPTIONS(description=""Unique reference for onward stop 10. Maps to stop_id in the stops table""),
+  onward_stop_name_10 STRING OPTIONS(description=""Full text name of onward stop 10. Maps to stop_name in the stops table""),
+  onward_stop_expected_arrival_time_10 TIMESTAMP OPTIONS(description=""Estimated arrival time at onward stop 10""),
+  onward_stop_aimed_arrival_time_10 TIMESTAMP OPTIONS(description=""Estimated arrival time at onward stop 10""),
+  onward_stop_aimed_departure_time_10 TIMESTAMP OPTIONS(description=""Aimed departure time from onward stop 10"")
+);"
+fares,"CREATE TABLE `bigquery-public-data.san_francisco_transit_muni.fares`
+(
+  fare_id STRING OPTIONS(description=""Unique identifier a fare class.""),
+  rider_id STRING OPTIONS(description=""Unique identifier a rider category. Rider categories are used to assign different pricing to different groups of individuals""),
+  rider_desc STRING OPTIONS(description=""Text description of the rider category""),
+  price NUMERIC OPTIONS(description=""Contains the fare price, in USD""),
+  payment_method STRING OPTIONS(description=""Indicates when the fare must be paid. The following are valid values for this field: -  during: Indicates the fare is paid when riders board -  before: Indicates fare must be paid before riders board""),
+  transfers_permitted STRING OPTIONS(description=""Specifies the number of transfers permitted on this fare.  -  0: No transfers are permitted on this fare. -  1: One transfer is permitted on this fare. -  2: Two transfers are permitted on this fare. -  NULL: Unlimited transfers are permitted on this fare.""),
+  transfer_duration INT64 OPTIONS(description=""Specifies the length of time, in seconds, before a transfer expires. When used with a transfers_permitted value of 0, the transfer_duration field indicates how long a ticket is valid for a fare where no transfers are allowed."")
+);"
+stop_times,"CREATE TABLE `bigquery-public-data.san_francisco_transit_muni.stop_times`
+(
+  stop_id INT64 OPTIONS(description=""Identifies the serviced stop. Multiple routes can use the same stop.""),
+  trip_id INT64 OPTIONS(description=""Identifies a trip. Multiple trips can have the same stop""),
+  stop_sequence INT64 OPTIONS(description=""Identifies the order of the stops for a particular trip. The values for stop_sequence must increase throughout the trip but do not need to be consecutive.""),
+  arrival_time TIME OPTIONS(description=""Specifies the scheduled arrival time at a specific stop for a specific trip on a route.""),
+  arrives_next_day BOOL OPTIONS(description=""Several routes begin before midnight, with service continuing throughout the night. This variable specifies whether arrival_time occurs after midnight the day after the scheduled day.  This is useful for identifying routes that begin one day and end the next day""),
+  departure_time TIME OPTIONS(description=""Specifies the scheduled departure time at a specific stop for a specific trip on a route.""),
+  departs_next_day BOOL OPTIONS(description=""Several routes begin before midnight, with service continuing throughout the night. This variable specifies whether departure_time occurs after midnight the day after the scheduled day.  This is useful for identifying routes that begin one day and end the next day""),
+  dropoff_type STRING OPTIONS(description=""\""Indicates whether riders are dropped off at a stop as part of the normal schedule or whether a drop off at the stop isn't available. Available options:  -  regular -  none -  phone (indicates must phone agency to arrange drop off) -  driver (indicates must coordinate with driver to arrange drop off)\""""),
+  exact_timepoint BOOL OPTIONS(description=""Indicates if the specified arrival and departure times for a stop are strictly adhered to by the transit vehicle, or if they're instead approximate or interpolated times."")
+);"
+routes,"CREATE TABLE `bigquery-public-data.san_francisco_transit_muni.routes`
+(
+  route_id STRING OPTIONS(description=""Unique identifier for each route. A single route will have multiple trips""),
+  route_short_name STRING OPTIONS(description=""Contains the short name of a route. This is a short, abstract identifier like 32, 100X, or Green that riders use to identify a route, but which doesn't give any indication of what places the route serves.""),
+  route_long_name STRING OPTIONS(description=""Contains the full name of a route. This name is generally more descriptive than the name from route_short_name and often includes the route's destination or stop.""),
+  route_type STRING OPTIONS(description=""\""Describes the type of transportation used on a route. The following are valid values for this field:  -  light_rail: Streetcar or light rail. Used for any light rail or street-level system within a metropolitan area. -  subway: Subway or metro. Used for any underground rail system within a metropolitan area. -  rail: Used for intercity or long-distance travel. -  bus: Used for short- and long-distance bus routes. -  ferry: Used for short- and long-distance boat service. -  cable_car: Used for street-level cable cars where the cable runs beneath the car. -  tram: Gondola or suspended cable car. Typically used for aerial cable cars where the car is suspended from the cable. -  funicular: Used for any rail system that moves on steep inclines with a cable traction system.\"""")
+);"
+
+-- Schema from: bigquery-public-data.san_francisco_trees/DDL.csv
+table_name,ddl
+street_trees,"CREATE TABLE `bigquery-public-data.san_francisco_trees.street_trees`
+(
+  tree_id INT64 NOT NULL OPTIONS(description=""Unique ID for Tree""),
+  legal_status STRING OPTIONS(description=""Legal staus: Permitted or DPW maintained""),
+  species STRING OPTIONS(description=""Species of tree""),
+  address STRING OPTIONS(description=""Address of Tree""),
+  site_order INT64 OPTIONS(description=""Order of tree at address where multiple trees are at same address. Trees are ordered in ascending address order""),
+  site_info STRING OPTIONS(description=""Description of location of tree""),
+  plant_type STRING OPTIONS(description=""Landscaping or Tree""),
+  care_taker STRING OPTIONS(description=""Agency or person that is primary caregiver to tree. Owner of Tree""),
+  care_assistant STRING OPTIONS(description=""Agency or person that is secondary caregiver to tree""),
+  plant_date TIMESTAMP OPTIONS(description=""Date tree was planted""),
+  dbh STRING OPTIONS(description=""depth height""),
+  plot_size STRING OPTIONS(description=""dimension of tree plot""),
+  permit_notes STRING OPTIONS(description=""Tree permit number reference""),
+  x_coordinate FLOAT64 OPTIONS(description=""CA State Plane III""),
+  y_coordinate FLOAT64 OPTIONS(description=""CA State Plane III""),
+  latitude FLOAT64 OPTIONS(description=""WGS84""),
+  longitude FLOAT64 OPTIONS(description=""WGS84""),
+  location STRING OPTIONS(description=""Location formatted for mapping"")
+)
+OPTIONS(
+  description=""San Francisco street trees table""
+);"
+```
+
+## ❓ Natural Language Question
+"Which month in 2017 had the largest absolute difference between cumulative bike usage minutes for customers and subscribers?	Which month (in number) in 2017 had the largest absolute difference between cumulative bike usage minutes (in thousands) for customers and subscribers, based on the trip end dates in the San Francisco bikeshare data?"
+
+## ✅ Correct SQL Query
+```sql
+WITH monthly_totals AS (
+  SELECT
+    SUM(CASE WHEN subscriber_type = 'Customer' THEN duration_sec / 60 ELSE NULL END) AS customer_minutes_sum,
+    SUM(CASE WHEN subscriber_type = 'Subscriber' THEN duration_sec / 60 ELSE NULL END) AS subscriber_minutes_sum,
+    EXTRACT(MONTH FROM end_date) AS end_month
+  FROM
+    `bigquery-public-data.san_francisco_bikeshare.bikeshare_trips`
+  WHERE
+    EXTRACT(YEAR FROM end_date) = 2017
+  GROUP BY
+    end_month
+),
+
+cumulative_totals AS (
+  SELECT
+    end_month,
+    SUM(customer_minutes_sum) OVER (ORDER BY end_month ROWS UNBOUNDED PRECEDING) / 1000 AS cumulative_minutes_cust,
+    SUM(subscriber_minutes_sum) OVER (ORDER BY end_month ROWS UNBOUNDED PRECEDING) / 1000 AS cumulative_minutes_sub
+  FROM
+    monthly_totals
+),
+
+differences AS (
+  SELECT
+    end_month,
+    ABS(cumulative_minutes_cust - cumulative_minutes_sub) AS abs_diff
+  FROM
+    cumulative_totals
+)
+
+SELECT
+  end_month
+FROM
+  differences
+ORDER BY
+  abs_diff DESC
+LIMIT 1;
+```
+
+## 🔧 Your Task
+Analyze the correct SQL query above and modify it to introduce the specific error type: **Clause Missing**.
+
+Think about:
+1. How this error typically manifests in real-world scenarios
+2. What parts of the query are most relevant to this error type
+3. How to make this data be meaningful for improving LLM SQL semantic detection area
+
+## 📤 Output Format
+Return your response in the following format:
+
+**Modified SQL Query:**
+```sql
+[Your modified SQL query here]
+```
+
+**Brief Explanation:**
+[A very brief explanation (1-2 sentences) of what specific change you made to inject the error]
+

@@ -1,0 +1,1 @@
+I introduced a subquery mismatch by changing the join condition in the `middle_info` CTE from joining on `Category1."month" = Category2."month"` (which matches monthly data) to `Category1."category" = Category2."category"`, causing the subquery to no longer match the intended context of comparing categories across the same months.

@@ -1,0 +1,1 @@
+I injected a conversion function error by casting the numeric "cost" field to VARCHAR in the CTE `e`, which will cause subsequent aggregate and arithmetic operations on "cost" to behave incorrectly or produce type mismatches.

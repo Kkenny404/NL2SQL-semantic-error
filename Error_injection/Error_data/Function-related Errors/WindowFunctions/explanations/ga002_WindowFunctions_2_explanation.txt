@@ -1,0 +1,1 @@
+I removed the `PARTITION BY period` clause from the `RANK() OVER (...)` window function, causing the ranking to be computed globally across all periods instead of separately within each period.

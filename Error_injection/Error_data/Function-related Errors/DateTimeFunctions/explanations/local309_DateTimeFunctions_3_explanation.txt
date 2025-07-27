@@ -1,0 +1,1 @@
+I injected a DateTime function error by using `STRFTIME('%Y', races.date)` to extract the year, even though `races.year` is already available as an integer year; this can cause semantic issues, especially if `races.date` is missing or formatted inconsistently.

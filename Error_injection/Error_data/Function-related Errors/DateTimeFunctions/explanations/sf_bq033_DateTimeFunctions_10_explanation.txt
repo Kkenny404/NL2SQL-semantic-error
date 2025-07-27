@@ -1,0 +1,1 @@
+I changed the date format string in the TO_DATE function from `'YYYYMMDD'` to the incorrect `'YYYY-DD-MM'`, which will misinterpret the numeric date and result in incorrect date parsing—a classic DateTime function misuse.

@@ -1,0 +1,1 @@
+I modified the TractGroup subquery to incorrectly aggregate by BlockGroupID instead of StateCountyTractID, causing the subquery to return mismatched totals and thus introducing a subquery mismatch error.

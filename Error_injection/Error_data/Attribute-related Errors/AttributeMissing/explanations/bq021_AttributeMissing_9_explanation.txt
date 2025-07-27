@@ -1,0 +1,1 @@
+I removed the `end_station_name` attribute from the SELECT list in the CTE and the final output, even though it is essential for uniquely identifying a route (since multiple routes can share the same start station), thus introducing an attribute missing error.

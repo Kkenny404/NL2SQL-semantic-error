@@ -4,8 +4,8 @@ import json
 # input_path = "Spider/9Errors/spider2-lite_Attribute-related Errors_errors.jsonl"
 # output_path = "Spider/9Errors/spider2-lite_Attribute-related Errors_errors.json"
 
-PATH = "Error_injection/Error_data/Value-related Errors/ground_truth.jsonl"
-output_path = "Error_injection/Error_data/Value-related Errors/ground_truth.json"
+PATH = "SSS-data/random_order_ground_truth.jsonl"
+output_path = "SSS-data/random_order_ground_truth.json"
 
 # 读取每一行 JSONL 并组装成列表
 with open(PATH, "r", encoding="utf-8") as f:

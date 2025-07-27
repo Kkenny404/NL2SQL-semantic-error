@@ -1,0 +1,1 @@
+I changed the aggregate function from COUNT(*) to SUM(*) in both the SELECT and HAVING clauses, which is an incorrect use of the SUM function since SUM requires a numeric column argument, not the wildcard (*) used for counting rows.

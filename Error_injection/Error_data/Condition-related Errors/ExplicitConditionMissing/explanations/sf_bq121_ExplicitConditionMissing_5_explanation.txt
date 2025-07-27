@@ -1,0 +1,1 @@
+I removed the explicit condition in the WHERE clause that filters users to only those who joined on or before October 1, 2021, thus including users who joined after that date and failing to meet the stated requirement.

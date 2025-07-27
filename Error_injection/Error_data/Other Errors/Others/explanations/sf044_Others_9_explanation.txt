@@ -1,0 +1,1 @@
+I replaced the original calculation of percentage change in post-market close prices with a query that instead computes the average pre-market open price, which is a fundamental deviation from the original intent and requires a complete rewrite to correct.

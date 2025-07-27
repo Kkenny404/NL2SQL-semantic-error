@@ -1,0 +1,1 @@
+I changed the `ORDER BY "month"` clause to `ORDER BY "month" DESC`, which reverses the intended chronological order and introduces an ASC_DESC semantic error.

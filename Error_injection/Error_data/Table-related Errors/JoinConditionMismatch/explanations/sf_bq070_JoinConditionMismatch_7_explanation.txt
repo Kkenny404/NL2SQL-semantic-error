@@ -1,0 +1,1 @@
+I modified the join condition between `sm_images` (alias `a`) and `tissue_types` (alias `b`) to join on `a."patient_id" = b."digital_slide_id"` instead of the correct `a."digital_slide_id" = b."digital_slide_id"`, creating a join condition mismatch between unrelated attributes.

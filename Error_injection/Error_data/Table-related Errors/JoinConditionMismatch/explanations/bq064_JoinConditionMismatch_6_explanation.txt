@@ -1,0 +1,1 @@
+I modified the join condition in the `joined` CTE to join `census_totals` and `zip_tract_join` on `c.geo_id = ztj.tract_ce` instead of the correct `c.geo_id = ztj.tract_geo_id`, creating a join between unrelated attributes (full tract geo_id vs. tract code), which is a classic join condition mismatch.

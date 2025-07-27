@@ -1,0 +1,1 @@
+I removed the `LIMIT 1 OFFSET 3` clause, so the query now returns the full ordered list of channel groupings instead of just the fourth highest; this is

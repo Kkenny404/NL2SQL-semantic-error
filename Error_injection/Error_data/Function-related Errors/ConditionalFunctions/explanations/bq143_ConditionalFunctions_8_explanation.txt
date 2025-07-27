@@ -1,0 +1,1 @@
+I replaced the simple `WHERE ABS(corr) <= 0.5` filter with a semantically incorrect conditional function: `WHERE CASE WHEN ABS(corr) <= 0.5 THEN TRUE ELSE FALSE END`. While this is functionally equivalent, it is a misuse of the `CASE WHEN` conditional function, as it is unnecessary and adds no value, representing a typical model error in conditional function usage.

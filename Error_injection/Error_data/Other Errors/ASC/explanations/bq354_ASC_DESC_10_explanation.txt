@@ -1,0 +1,1 @@
+I injected the ASC_DESC error by adding an `ORDER BY percentage_of_participants ASC` clause to the final SELECT, which sorts the results in ascending order of percentage, whereas the natural intent would be to show the most prevalent conditions first (i.e., descending order or no explicit order).

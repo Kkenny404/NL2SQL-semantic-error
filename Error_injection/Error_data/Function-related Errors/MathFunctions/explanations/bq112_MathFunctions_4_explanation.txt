@@ -1,0 +1,1 @@
+I changed the precision argument in the ROUND function for annual wages from 2 to -1, causing the values to be rounded to the nearest 10 instead of to two decimal places—this is a classic math function misapplication.

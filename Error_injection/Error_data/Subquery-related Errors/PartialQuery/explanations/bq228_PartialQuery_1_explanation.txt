@@ -1,0 +1,1 @@
+I removed the logic that limits the results to the top three categories, returning only the grouped and ordered list—this is a partial query that should be wrapped in another query or use a LIMIT to fully answer the question.

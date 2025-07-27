@@ -1,0 +1,1 @@
+I changed the `INNER JOIN` to a `LEFT JOIN`, which could include countries with age-specific population data but missing total population data, thus mismatching the join type with the intent of only including countries present in both tables.

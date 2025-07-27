@@ -1,0 +1,1 @@
+I removed the outer query that selects only the most prescribed medication per state, leaving only the inner aggregation; this partial query lists all drugs per state instead of just the top one, thus not fully answering the original question.

@@ -1,0 +1,1 @@
+I changed the `ORDER BY mutation_percentage DESC` to `ORDER BY mutation_percentage ASC`, which will return the five histological types with the lowest (instead of highest) mutation percentages, thus reversing the intended result order.

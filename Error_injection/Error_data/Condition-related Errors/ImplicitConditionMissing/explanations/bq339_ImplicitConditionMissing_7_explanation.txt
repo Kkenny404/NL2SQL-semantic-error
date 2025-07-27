@@ -1,0 +1,1 @@
+I removed the implicit condition that should filter out trips with NULL or zero duration (e.g., `duration_sec IS NOT NULL AND duration_sec > 0`), which is standard domain logic to ensure only valid bike usage is counted; now, the query may include incomplete or invalid trips, manifesting the "implicit condition missing" error.

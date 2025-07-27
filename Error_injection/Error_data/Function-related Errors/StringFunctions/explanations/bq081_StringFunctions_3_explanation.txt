@@ -1,0 +1,1 @@
+I incorrectly concatenated the region name with the first two characters of the trip ID using `CONCAT(Regions.name, LEFT(Trips.trip_id, 2))` instead of just using `Regions.name`, introducing a string function misuse.

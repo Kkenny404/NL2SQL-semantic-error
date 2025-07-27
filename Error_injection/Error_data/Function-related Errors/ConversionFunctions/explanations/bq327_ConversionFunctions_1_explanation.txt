@@ -1,0 +1,1 @@
+I injected a conversion function error by casting the numeric column value to STRING before comparing it to '0', which can lead to incorrect results due to type mismatch or formatting issues (e.g., '0.0' vs '0').
