@@ -1,0 +1,13 @@
+{
+  "result_path": "results/CoT/BUGS-2008/baseline_GPT_results_None_20250803_003334.jsonl",
+  "skipped": 0,
+  "accuracy": 0.7126,
+  "precision": 0.8079,
+  "recall": 0.5653,
+  "negative_precision": 0.6605,
+  "negative_recall": 0.8629,
+  "true_negative": 862,
+  "false_positive": 137,
+  "false_negative": 443,
+  "true_positive": 576
+}

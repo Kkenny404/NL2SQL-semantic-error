@@ -10,3 +10,4 @@ tqdm
 dotenv
 scikit-learn
 seaborn
+sqlplot

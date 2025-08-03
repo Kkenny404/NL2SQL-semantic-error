@@ -7,6 +7,9 @@ import google.generativeai as genai
 import anthropic
 from openai import OpenAI
 from schema.get_spider_schema import get_schema, schema_shrink
+import sqlglot
+from sqlglot import parse_one
+import json
 
 load_dotenv()
 api_key = os.getenv("GOOGLE_API_KEY")
@@ -67,6 +70,7 @@ SQL: {sql}
 Is the SQL semantically correct?"""
 
 
+
 def build_cot_prompt(question: str, schema: str, sql: str) -> str:
     return f"""You are a database expert. Analyze whether the SQL query correctly answers the natural language question. 
 
@@ -105,58 +109,6 @@ def query_gemini(prompt: str) -> str:
     response = GEN_model.generate_content(prompt)
     return response.text.strip().lower()
 
-# def query_gemini(prompt: str) -> str:
-#     """Call Gemini 2.5 Flash with error handling"""
-#     safety_settings = [
-#         {"category": "HARM_CATEGORY_HARASSMENT", "threshold": "BLOCK_NONE"},
-#         {"category": "HARM_CATEGORY_HATE_SPEECH", "threshold": "BLOCK_NONE"},
-#         {"category": "HARM_CATEGORY_SEXUALLY_EXPLICIT", "threshold": "BLOCK_NONE"},
-#         {"category": "HARM_CATEGORY_DANGEROUS_CONTENT", "threshold": "BLOCK_NONE"},
-#     ]
-    
-#     try:
-#         response = GEN_model.generate_content(
-#             "You are a harmless assistant for academic research. The following input is about database query analysis only.\n\n" + prompt,
-#             generation_config=genai.types.GenerationConfig(
-#                 temperature=0,
-#                 max_output_tokens=200,
-#             ),
-#             safety_settings=safety_settings  # ✅ 这必须被传入
-#         )
-        
-#         if not response.candidates:
-#             print("[ERROR] No candidates returned")
-#             return "unknown"
-            
-#         candidate = response.candidates[0]
-        
-#         # 正确的finish_reason处理
-#         if candidate.finish_reason == 1:  # STOP - 正常完成
-#             return response.text.strip().lower()
-#         elif candidate.finish_reason == 2:  # SAFETY - 安全过滤
-#             print(f"[SAFETY] Content filtered by safety settings")
-#             return "unknown"
-#         elif candidate.finish_reason == 3:  # RECITATION - 重复内容
-#             print(f"[RECITATION] Content blocked for recitation")
-#             return "unknown" 
-#         elif candidate.finish_reason == 4:  # MAX_TOKENS - 真正的token限制
-#             print(f"[MAX_TOKENS] Hit max tokens limit")
-#             return "unknown"
-#         else:
-#             print(f"[UNKNOWN] Unknown finish reason: {candidate.finish_reason}")
-#             return "unknown"
-#     except Exception as e:
-#         print(f"[ERROR] Gemini API error: {e}")
-#         return "no"
-
-# def parse_answer(text: str) -> bool:
-#     """Parse model's Yes/No answer to boolean"""
-#     if "yes" in text:
-#         return True
-#     elif "no" in text:
-#         return False
-#     else:
-#         return None
 
 def parse_answer(text: str) -> bool:
     """Parse model's Yes/No answer to boolean - improved version"""
@@ -220,6 +172,34 @@ def load_sql(sql_root, sql_id):
         return None
     with open(sql_path, "r", encoding="utf-8") as f:
         return f.read()
+
+
+
+def parser_sql(origin_sql: str) -> str:
+    """Parse SQL into a simplified AST (meta removed) and return as JSON string"""
+    ast = parse_one(origin_sql)  # 修正变量名
+
+    # 转 dict
+    ast_dict = ast.to_dict()
+
+    # 去掉 meta
+    def strip_meta(node):
+        if isinstance(node, dict):
+            return {k: strip_meta(v) for k, v in node.items() if k != "meta"}
+        elif isinstance(node, list):
+            return [strip_meta(i) for i in node]
+        else:
+            return node
+
+    clean_ast = strip_meta(ast_dict)
+    return json.dumps(clean_ast, indent=2)  # 返回 JSON 字符串
+
+def parser_call_prompt(question: str, schema: str, sql: str) -> str:
+    """Build a prompt for the SQL parser"""
+    new_sql_ast = parser_sql(sql)  # Parse SQL to JSON format
+    return build_prompt(question, schema, new_sql_ast)
+   
+
 
 
 

@@ -4,7 +4,7 @@ import time
 from datetime import datetime
 from tqdm import tqdm
 from sklearn.metrics import confusion_matrix, accuracy_score, precision_score, recall_score
-from utils import build_prompt, build_cot_prompt, parse_answer, query_gemini, query_claude, query_gpt, load_sql
+from utils import build_prompt, build_cot_prompt, parse_answer, query_gemini, query_claude, query_gpt, load_sql, parser_call_prompt
 from schema.get_spider_schema import get_schema, schema_shrink
 
 # ========== 配置数据集 ==========
@@ -41,8 +41,9 @@ def choose_prompt():
     prompts = {
         "1": ("Baseline", build_prompt),
         "2": ("CoT", build_cot_prompt),
+        "3": ("SQL AST parser", parser_call_prompt),  # 假设有一个SQL AST解析器的构建函数
     }
-    print("Please choose a prompt type:")
+    print("Please choose a method:")
     for k, v in prompts.items():
         print(f"{k}. {v[0]}")
     choice = input("Enter the number to choose: ").strip()
