@@ -6,16 +6,16 @@ from tqdm import tqdm
 from datetime import datetime
 from sklearn.metrics import confusion_matrix
 from sklearn.metrics import accuracy_score, precision_score, recall_score
-from utils import build_prompt, parse_answer, query_gemini, query_claude, build_cot_prompt, query_gpt
+from utils import build_prompt, parse_answer, query_gemini, query_claude, build_cot_prompt, query_gpt, build_prompt_no_schema
 from sqlite_schema_extract import sqlite_schema_extract_format
 
 # path
 DATA_PATH = "bug-data/NL2SQL-Bugs.json"
 DB_ROOT = "BIRD/dev_20240627/dev_databases"
-MAX_EXAMPLES = None  # None for all, and running is super slow for whole dataset, so use a small number for now
+MAX_EXAMPLES = None # None for all, and running is super slow for whole dataset, so use a small number for now
 
 timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-RESULT_PATH = f"results/CoT/BUGS-2008/baseline_GPT_results_{MAX_EXAMPLES}_{timestamp}.jsonl"
+RESULT_PATH = f"results/Baseline/BUGS_Gemini_results_{MAX_EXAMPLES}_{timestamp}.jsonl"
 
 # load data
 with open(DATA_PATH, "r") as f:
@@ -47,11 +47,11 @@ for idx, ex in enumerate(tqdm(examples)):
 
     try:
         schema = sqlite_schema_extract_format(db_path)
-        prompt = build_cot_prompt(q, schema, sql)
+        prompt = build_prompt(q, schema, sql)
         # retry logic
         for attempt in range(MAX_RETRIES):
             try:
-                response = query_gpt(prompt)
+                response = query_gemini(prompt)
                 break
             except Exception as e:
                 error_str = str(e).lower()
@@ -127,7 +127,7 @@ evaluation_summary = {
     "true_positive": int(tp),
 }
 
-eval_path = f"results/CoT/BUGs_GPT41_could_delete.json"
+eval_path = f"results/Baseline/Baseline_GPT4o_could_delete.json"
 with open(eval_path, "w") as f:
     json.dump(evaluation_summary, f, indent=2)
 print(f"\nEvaluation summary saved to: {eval_path}")

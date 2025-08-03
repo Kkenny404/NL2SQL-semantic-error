@@ -1,0 +1,14 @@
+{
+  "dataset": "SSS",
+  "result_path": "results/SSS/No_Schema_None/GPT-4.1_20250804_002808.jsonl",
+  "skipped": 0,
+  "accuracy": 0.6732,
+  "precision": 0.653,
+  "recall": 0.572,
+  "negative_precision": 0.6862,
+  "negative_recall": 0.7548,
+  "true_negative": 234,
+  "false_positive": 76,
+  "false_negative": 107,
+  "true_positive": 143
+}

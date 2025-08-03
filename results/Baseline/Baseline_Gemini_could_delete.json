@@ -1,0 +1,13 @@
+{
+  "result_path": "results/Baseline/BUGS_Gemini_results_None_20250803_222042.jsonl",
+  "skipped": 0,
+  "accuracy": 0.7582,
+  "precision": 0.7555,
+  "recall": 0.7704,
+  "negative_precision": 0.761,
+  "negative_recall": 0.7457,
+  "true_negative": 745,
+  "false_positive": 254,
+  "false_negative": 234,
+  "true_positive": 785
+}

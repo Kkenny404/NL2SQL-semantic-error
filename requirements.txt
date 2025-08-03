@@ -11,3 +11,4 @@ dotenv
 scikit-learn
 seaborn
 sqlplot
+numpy

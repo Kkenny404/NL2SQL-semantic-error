@@ -35,7 +35,7 @@ def get_schema(instance_id, db_id, schema_root, include_all_related=True):
     elif instance_id.startswith("bq") or instance_id.startswith("ga"):
         base = os.path.join(schema_root, "bigquery", db_id)
     elif instance_id.startswith("local"):
-        sqlite_path = os.path.join(schema_root, "spider2-localdb", f"{db_id}.sqlite")
+        sqlite_path = os.path.join(schema_root, "local_sqlite", f"{db_id}.sqlite")
         print(f"Trying to open SQLite file at: {sqlite_path}")
         return extract_schema_from_sqlite(sqlite_path)
     else:

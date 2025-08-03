@@ -1,0 +1,14 @@
+{
+  "dataset": "SSS",
+  "result_path": "results/SSS/No_Schema_None/Gemini_20250803_202459.jsonl",
+  "skipped": 0,
+  "accuracy": 0.7071,
+  "precision": 0.668,
+  "recall": 0.684,
+  "negative_precision": 0.7401,
+  "negative_recall": 0.7258,
+  "true_negative": 225,
+  "false_positive": 85,
+  "false_negative": 79,
+  "true_positive": 171
+}

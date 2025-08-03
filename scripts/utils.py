@@ -47,7 +47,7 @@ def extract_schema_from_sqlite(sqlite_path: str) -> str:
     schema_parts = []
     for table in tables:
         cursor.execute(f"PRAGMA table_info('{table}');")
-        cols = [col[1] for col in cursor.fetchall()]
+        cols = [col[1] for col in  cursor.fetchall()]
         schema_parts.append(f"{table}({', '.join(cols)})")
     conn.close()
     return " | ".join(schema_parts)
@@ -69,6 +69,19 @@ SQL: {sql}
 
 Is the SQL semantically correct?"""
 
+
+def build_prompt_no_schema(question: str, schema: str, sql: str) -> str:
+    return f"""You are a database expert.
+
+Given the following natural language question and the SQL query. Please determine whether the SQL is semantically correct with respect to the question.
+
+You need to answer with "Yes" or "No" only, without outputting any explanation or additional text.
+
+Question: {question}
+
+SQL: {sql}
+
+Is the SQL semantically correct?"""
 
 
 def build_cot_prompt(question: str, schema: str, sql: str) -> str:
