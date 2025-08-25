@@ -1,0 +1,184 @@
+{
+  "Function-Related Errors": {
+    "Aggregate Functions": {
+      "total": 71,
+      "detected_false_positives": 55,
+      "recall": 0.7746
+    },
+    "Window Functions": {
+      "total": 3,
+      "detected_false_positives": 2,
+      "recall": 0.6667
+    },
+    "Conversion Functions": {
+      "total": 11,
+      "detected_false_positives": 10,
+      "recall": 0.9091
+    },
+    "Date/Time Functions": {
+      "total": 21,
+      "detected_false_positives": 18,
+      "recall": 0.8571
+    },
+    "Conditional Functions": {
+      "total": 43,
+      "detected_false_positives": 27,
+      "recall": 0.6279
+    },
+    "Math Functions": {
+      "total": 10,
+      "detected_false_positives": 4,
+      "recall": 0.4
+    },
+    "String Functions": {
+      "total": 19,
+      "detected_false_positives": 14,
+      "recall": 0.7368
+    },
+    "average_recall": 0.7103
+  },
+  "Clause-Related Errors": {
+    "Clause Missing": {
+      "total": 94,
+      "detected_false_positives": 66,
+      "recall": 0.7021
+    },
+    "Clause Redundancy": {
+      "total": 37,
+      "detected_false_positives": 27,
+      "recall": 0.7297
+    },
+    "average_recall": 0.7159
+  },
+  "Attribute-Related Errors": {
+    "Attribute Mismatch": {
+      "total": 360,
+      "detected_false_positives": 269,
+      "recall": 0.7472
+    },
+    "Attribute Redundancy": {
+      "total": 53,
+      "detected_false_positives": 37,
+      "recall": 0.6981
+    },
+    "Attribute Missing": {
+      "total": 60,
+      "detected_false_positives": 51,
+      "recall": 0.85
+    },
+    "average_recall": 0.7651
+  },
+  "Condition-Related Errors": {
+    "Implicit Condition Missing": {
+      "total": 28,
+      "detected_false_positives": 18,
+      "recall": 0.6429
+    },
+    "Explicit Condition Missing": {
+      "total": 118,
+      "detected_false_positives": 107,
+      "recall": 0.9068
+    },
+    "Explicit Condition Redundancy": {
+      "total": 29,
+      "detected_false_positives": 22,
+      "recall": 0.7586
+    },
+    "Explicit Condition Mismatch": {
+      "total": 95,
+      "detected_false_positives": 72,
+      "recall": 0.7579
+    },
+    "average_recall": 0.7665
+  },
+  "Value-Related Errors": {
+    "Value Mismatch": {
+      "total": 238,
+      "detected_false_positives": 183,
+      "recall": 0.7689
+    },
+    "Data Format Mismatch": {
+      "total": 14,
+      "detected_false_positives": 10,
+      "recall": 0.7143
+    },
+    "average_recall": 0.7416
+  },
+  "Table-Related Errors": {
+    "Table Missing": {
+      "total": 66,
+      "detected_false_positives": 56,
+      "recall": 0.8485
+    },
+    "Join Condition Mismatch": {
+      "total": 79,
+      "detected_false_positives": 65,
+      "recall": 0.8228
+    },
+    "Table Mismatch": {
+      "total": 96,
+      "detected_false_positives": 71,
+      "recall": 0.7396
+    },
+    "Join Type Mismatch": {
+      "total": 3,
+      "detected_false_positives": 2,
+      "recall": 0.6667
+    },
+    "Table Redundancy": {
+      "total": 119,
+      "detected_false_positives": 106,
+      "recall": 0.8908
+    },
+    "average_recall": 0.7937
+  },
+  "Operator-Related Errors": {
+    "Logical Operator Mismatch": {
+      "total": 16,
+      "detected_false_positives": 16,
+      "recall": 1.0
+    },
+    "Comparison Operator Mismatch": {
+      "total": 24,
+      "detected_false_positives": 20,
+      "recall": 0.8333
+    },
+    "average_recall": 0.9167
+  },
+  "Subquery-Related Errors": {
+    "Subquery Missing": {
+      "total": 33,
+      "detected_false_positives": 29,
+      "recall": 0.8788
+    },
+    "Partial Query": {
+      "total": 6,
+      "detected_false_positives": 4,
+      "recall": 0.6667
+    },
+    "Subquery Mismatch": {
+      "total": 7,
+      "detected_false_positives": 5,
+      "recall": 0.7143
+    },
+    "average_recall": 0.7532
+  },
+  "Other Errors": {
+    "ASC/DESC": {
+      "total": 12,
+      "detected_false_positives": 11,
+      "recall": 0.9167
+    },
+    "Other": {
+      "total": 35,
+      "detected_false_positives": 29,
+      "recall": 0.8286
+    },
+    "DISTINCT": {
+      "total": 88,
+      "detected_false_positives": 68,
+      "recall": 0.7727
+    },
+    "average_recall": 0.8393
+  }
+}

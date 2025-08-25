@@ -4,7 +4,7 @@ from datetime import datetime
 from sklearn.metrics import confusion_matrix, accuracy_score, precision_score, recall_score
 
 # ==== CONFIG ====
-RESULT_PATH = "results/Baseline/BUGS-2008/baseline_GPT_results_None_20250803_000240.jsonl"  # 你已有的结果路径
+RESULT_PATH = "results/Baseline_no_key/4o_None_20250813_163105.jsonl"  # 你已有的结果路径
 EVAL_SAVE = True  # 是否保存 eval_summary 文件
 # ===============
 
@@ -47,7 +47,7 @@ evaluation_summary = {
 # ==== Save ====
 if EVAL_SAVE:
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    eval_path = f"results/Baseline/BUGS-2008/BUGS_GPT4.1_eval_summary.json"
+    eval_path = f"results/eval_result/4o.json"
     with open(eval_path, "w") as f:
         json.dump(evaluation_summary, f, indent=2)
     print(f"\n✅ Evaluation summary saved to: {eval_path}")
@@ -66,10 +66,9 @@ for k, v in evaluation_summary.items():
 # import os
 
 # # 路径配置
-# SUBSET_PATH = "bug-data/NL2SQL-Bugs-Subset.json"
-# RESULT_PATH = "results/Duck_reflex/Duck_reflex_gpt4o_adaptive_None_20250714_070836.jsonl"
-# OUTPUT_PATH = "results/Duck_reflex/error_GPT4o.json"
-
+# SUBSET_PATH = "bug-data/NL2SQL-Bugs.json"
+# RESULT_PATH = "results/Baseline_no_key/4o_None_20250813_163105.jsonl"
+# OUTPUT_PATH = "results/eval_result/errors/4o.json"
 # # 加载原始数据和预测结果
 # with open(SUBSET_PATH, "r") as f:
 #     raw_data = json.load(f)
@@ -80,13 +79,13 @@ for k, v in evaluation_summary.items():
 # stats = defaultdict(lambda: defaultdict(lambda: {"total": 0, "correct_detected": 0}))
 
 # # index raw_data by question
-# question_to_data = {d["question"]: d for d in raw_data}
+# question_to_data = {d["id"]: d for d in raw_data}
 
 # matched = 0
 # skipped = 0
 
 # for r in results:
-#     q = r["question"]
+#     q = r["id"]
 #     d = question_to_data.get(q)
 #     if d is None:
 #         skipped += 1
@@ -129,5 +128,8 @@ for k, v in evaluation_summary.items():
 # with open(OUTPUT_PATH, "w") as f:
 #     json.dump(result_summary, f, indent=2)
 
+
+# print(len(results), "results loaded")
+# print(len(raw_data), "raw data loaded")
 # print(f"✅ Finished. Matched: {matched}, Skipped: {skipped}")
 # print("📄 Saved to: {OUTPUT_PATH}")

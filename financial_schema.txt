@@ -1,144 +1,63 @@
-Table: actor
-- actor_id [PK]
-- first_name
-- last_name
-- last_update
+Table: alignment
+- id [PK]
+- alignment
 
-Table: country
-- country_id [PK]
-- country
-- last_update
+Table: attribute
+- id [PK]
+- attribute_name
 
-Table: city
-- city_id [PK]
-- city
-- country_id
-- last_update
+Table: colour
+- id [PK]
+- colour
 
-Table: address
-- address_id [PK]
-- address
-- address2
-- district
-- city_id
-- postal_code
-- phone
-- last_update
+Table: gender
+- id [PK]
+- gender
 
-Table: language
-- language_id [PK]
-- name
-- last_update
+Table: publisher
+- id [PK]
+- publisher_name
 
-Table: category
-- category_id [PK]
-- name
-- last_update
+Table: race
+- id [PK]
+- race
 
-Table: customer
-- customer_id [PK]
-- store_id
-- first_name
-- last_name
-- email
-- address_id
-- active
-- create_date
-- last_update
+Table: superhero
+- id [PK]
+- superhero_name
+- full_name
+- gender_id
+- eye_colour_id
+- hair_colour_id
+- skin_colour_id
+- race_id
+- publisher_id
+- alignment_id
+- height_cm
+- weight_kg
 
-Table: film
-- film_id [PK]
-- title
-- description
-- release_year
-- language_id
-- original_language_id
-- rental_duration
-- rental_rate
-- length
-- replacement_cost
-- rating
-- special_features
-- last_update
+Table: hero_attribute
+- hero_id
+- attribute_id
+- attribute_value
 
-Table: film_actor
-- actor_id [PK]
-- film_id [PK]
-- last_update
+Table: superpower
+- id [PK]
+- power_name
 
-Table: film_category
-- film_id [PK]
-- category_id [PK]
-- last_update
-
-Table: film_text
-- film_id [PK]
-- title
-- description
-
-Table: inventory
-- inventory_id [PK]
-- film_id
-- store_id
-- last_update
-
-Table: staff
-- staff_id [PK]
-- first_name
-- last_name
-- address_id
-- picture
-- email
-- store_id
-- active
-- username
-- password
-- last_update
-
-Table: store
-- store_id [PK]
-- manager_staff_id
-- address_id
-- last_update
-
-Table: payment
-- payment_id [PK]
-- customer_id
-- staff_id
-- rental_id
-- amount
-- payment_date
-- last_update
-
-Table: rental
-- rental_id [PK]
-- rental_date
-- inventory_id
-- customer_id
-- return_date
-- staff_id
-- last_update
+Table: hero_power
+- hero_id
+- power_id
 
 Foreign Keys:
-- city.country_id → country.country_id
-- address.city_id → city.city_id
-- customer.address_id → address.address_id
-- customer.store_id → store.store_id
-- film.original_language_id → language.language_id
-- film.language_id → language.language_id
-- film_actor.film_id → film.film_id
-- film_actor.actor_id → actor.actor_id
-- film_category.category_id → category.category_id
-- film_category.film_id → film.film_id
-- inventory.film_id → film.film_id
-- inventory.store_id → store.store_id
-- staff.address_id → address.address_id
-- staff.store_id → store.store_id
-- store.address_id → address.address_id
-- store.manager_staff_id → staff.staff_id
-- payment.staff_id → staff.staff_id
-- payment.customer_id → customer.customer_id
-- payment.rental_id → rental.rental_id
-- rental.customer_id → customer.customer_id
-- rental.inventory_id → inventory.inventory_id
-- rental.staff_id → staff.staff_id
+- superhero.skin_colour_id → colour.id
+- superhero.race_id → race.id
+- superhero.publisher_id → publisher.id
+- superhero.hair_colour_id → colour.id
+- superhero.gender_id → gender.id
+- superhero.eye_colour_id → colour.id
+- superhero.alignment_id → alignment.id
+- hero_attribute.hero_id → superhero.id
+- hero_attribute.attribute_id → attribute.id
+- hero_power.power_id → superpower.id
+- hero_power.hero_id → superhero.id

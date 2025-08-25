@@ -1,3 +1,7 @@
+
+
+
+
 WITH LatestWeek AS (
     SELECT
         DATEADD(WEEK, -52, MAX("week")) AS "last_year_week"
@@ -37,3 +41,10 @@ WHERE
 ORDER BY
     "rank"
 LIMIT 1;
+
+
+
+
+
+
+

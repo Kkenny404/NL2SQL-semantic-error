@@ -6,7 +6,7 @@ from tqdm import tqdm
 from datetime import datetime
 from sklearn.metrics import confusion_matrix
 from sklearn.metrics import accuracy_score, precision_score, recall_score
-from utils import build_prompt, parse_answer, query_gemini, query_claude, build_cot_prompt, query_gpt, build_prompt_no_schema
+from utils import build_prompt, parse_answer, query_gemini, query_claude, build_cot_prompt, query_gpt, build_prompt_no_schema, build_prompt_sql_parser, basic_schema_from_sqlite, build_self_reflection_prompt, build_prompt_sql_parser_with_COT
 from sqlite_schema_extract import sqlite_schema_extract_format
 
 # path
@@ -15,11 +15,11 @@ DB_ROOT = "BIRD/dev_20240627/dev_databases"
 MAX_EXAMPLES = None # None for all, and running is super slow for whole dataset, so use a small number for now
 
 timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-RESULT_PATH = f"results/Baseline/BUGS_Gemini_results_{MAX_EXAMPLES}_{timestamp}.jsonl"
+RESULT_PATH = f"results/Baseline_no_key/4o_{MAX_EXAMPLES}_{timestamp}.jsonl"
 
 # load data
 with open(DATA_PATH, "r") as f:
-    examples = json.load(f)
+    examples = json.load(f) 
 
 if MAX_EXAMPLES is not None:
     examples = examples[:MAX_EXAMPLES]
@@ -33,11 +33,18 @@ result_file = open(RESULT_PATH, "w")
 
 MAX_RETRIES = 5
 
+# Load parsed SQL data
+PARSED_SQL_PATH = "bug-data/NL2SQL-Bugs-parsed.json"
+with open(PARSED_SQL_PATH, "r") as f:
+    parsed_data = json.load(f)
+parsed_lookup = {item["id"]: item["parsed_sql"] for item in parsed_data}
+
 for idx, ex in enumerate(tqdm(examples)):
     q = ex["question"]
     sql = ex["sql"]
     db_id = ex["db_id"]
     label = ex["label"]  # True if correct
+    parsed_sql = parsed_lookup.get(ex["id"], {})
 
     db_path = os.path.join(DB_ROOT, db_id, f"{db_id}.sqlite")
     if not os.path.exists(db_path):
@@ -46,12 +53,12 @@ for idx, ex in enumerate(tqdm(examples)):
         continue
 
     try:
-        schema = sqlite_schema_extract_format(db_path)
+        schema = basic_schema_from_sqlite(db_path)
         prompt = build_prompt(q, schema, sql)
         # retry logic
         for attempt in range(MAX_RETRIES):
             try:
-                response = query_gemini(prompt)
+                response = query_gpt(prompt)
                 break
             except Exception as e:
                 error_str = str(e).lower()
@@ -72,7 +79,7 @@ for idx, ex in enumerate(tqdm(examples)):
             labels.append(label)
 
             result_file.write(json.dumps({
-                "id": ex.get("id", idx),  # 用原始文件的id，如果没有就用idx
+                "id": ex.get("id", idx),
                 "question": q,
                 "sql": sql,
                 "db_id": db_id,
@@ -80,7 +87,7 @@ for idx, ex in enumerate(tqdm(examples)):
                 "prediction": pred,
                 "response_raw": response,
                 "schema": schema,
-                "prompt": prompt
+                "parsed_sql": parsed_sql,
             }, ensure_ascii=False) + "\n")
 
         else:
@@ -127,7 +134,7 @@ evaluation_summary = {
     "true_positive": int(tp),
 }
 
-eval_path = f"results/Baseline/Baseline_GPT4o_could_delete.json"
+eval_path = f"results/Baseline_no_key/4o.json"
 with open(eval_path, "w") as f:
     json.dump(evaluation_summary, f, indent=2)
 print(f"\nEvaluation summary saved to: {eval_path}")

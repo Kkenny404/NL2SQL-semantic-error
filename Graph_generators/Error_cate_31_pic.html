@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NL2SQL Semantic Error Taxonomy</title>
+    <style>
+        body {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            margin: 0;
+            padding: 10px;
+            background: #fafafa;
+            line-height: 1.4;
+            color: #333;
+            font-size: 13px;
+        }
+
+        .container {
+            max-width: 1800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 6px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 3px solid #1e40af;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .taxonomy-grid {
+            display: grid;
+            grid-template-columns: repeat(9, 1fr);
+            gap: 0;
+        }
+
+        .category-section {
+            border-right: 1px solid #e5e7eb;
+            transition: all 0.3s ease;
+        }
+
+        .category-section:last-child {
+            border-right: none;
+        }
+
+        .category-section:hover {
+            background: #fafbfc;
+        }
+
+        .category-header {
+            padding: 15px;
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            border-left: 4px solid #3b82f6;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        .category-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1e40af;
+            margin: 0 0 8px 0;
+        }
+
+        .category-description {
+            font-size: 11px;
+            color: #6b7280;
+            font-style: italic;
+            margin: 0;
+            line-height: 1.3;
+        }
+
+        .error-list {
+            padding: 0;
+            margin: 0;
+        }
+
+        .error-item {
+            border-bottom: 1px solid #f3f4f6;
+            transition: all 0.2s ease;
+        }
+
+        .error-item:hover {
+            background: #f8fafc;
+        }
+
+        .error-item:last-child {
+            border-bottom: none;
+        }
+
+        .error-header {
+            padding: 10px 15px 6px 15px;
+            font-weight: 600;
+            color: #1e40af;
+            font-size: 13px;
+            background: #ffffff;
+        }
+
+        .error-description {
+            padding: 6px 15px 10px 15px;
+            color: #4b5563;
+            font-size: 11px;
+            line-height: 1.4;
+        }
+
+        .highlight {
+            background: #fef3c7;
+            padding: 1px 3px;
+            border-radius: 2px;
+            font-weight: 600;
+            color: #92400e;
+            font-size: 10px;
+        }
+
+        .emphasis {
+            font-weight: 600;
+            color: #1e40af;
+        }
+
+        /* Color coding for different categories */
+        .category-section:nth-child(1) .category-header { border-left-color: #dc2626; }
+        .category-section:nth-child(2) .category-header { border-left-color: #ea580c; }
+        .category-section:nth-child(3) .category-header { border-left-color: #d97706; }
+        .category-section:nth-child(4) .category-header { border-left-color: #16a34a; }
+        .category-section:nth-child(5) .category-header { border-left-color: #0891b2; }
+        .category-section:nth-child(6) .category-header { border-left-color: #7c3aed; }
+        .category-section:nth-child(7) .category-header { border-left-color: #be185d; }
+        .category-section:nth-child(8) .category-header { border-left-color: #059669; }
+        .category-section:nth-child(9) .category-header { border-left-color: #6366f1; }
+
+        @media (max-width: 1400px) {
+            .taxonomy-grid {
+                grid-template-columns: repeat(3, 1fr);
+                grid-template-rows: repeat(3, 1fr);
+            }
+            .category-section {
+                border-bottom: 1px solid #e5e7eb;
+            }
+            .category-section:nth-child(3n) {
+                border-right: none;
+            }
+            .category-section:nth-child(n+7) {
+                border-bottom: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .taxonomy-grid {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto;
+            }
+            .category-section {
+                border-right: none;
+                border-bottom: 1px solid #e5e7eb;
+            }
+            .category-section:last-child {
+                border-bottom: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>A Taxonomy of NL2SQL Translation Semantic Errors</h1>
+        </div>
+        
+        <div class="taxonomy-grid">
+            <!-- Attribute-related Errors -->
+            <div class="category-section">
+                <div class="category-header">
+                    <h2 class="category-title">Attribute-related Errors</h2>
+                    <p class="category-description">Incorrectly mapping required columns in natural language queries to corresponding database attributes.</p>
+                </div>
+                <div class="error-list">
+                    <div class="error-item">
+                        <div class="error-header">Attribute Mismatch</div>
+                        <div class="error-description">
+                            Selecting <span class="emphasis">incorrect attributes</span> from schema. The attribute <span class="highlight">[A]</span> may be wrong.
+                        </div>
+                    </div>
+                    <div class="error-item">
+                        <div class="error-header">Attribute Redundancy</div>
+                        <div class="error-description">
+                            Including <span class="emphasis">unnecessary attributes</span> not mentioned in NL. The attribute <span class="highlight">[A]</span> may not be mentioned.
+                        </div>
+                    </div>
+                    <div class="error-item">
+                        <div class="error-header">Attribute Missing</div>
+                        <div class="error-description">
+                            Failing to include <span class="emphasis">essential attributes</span>. The attribute <span class="highlight">[A]</span> may be missing.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Table-related Errors -->
+            <div class="category-section">
+                <div class="category-header">
+                    <h2 class="category-title">Table-related Errors</h2>
+                    <p class="category-description">Failing to correctly identify, link, or utilize required tables from database schema.</p>
+                </div>
+                <div class="error-list">
+                    <div class="error-item">
+                        <div class="error-header">Table Mismatch</div>
+                        <div class="error-description">
+                            Selecting <span class="emphasis">incorrect tables</span>. The table <span class="highlight">[T]</span> may be wrong.
+                        </div>
+                    </div>
+                    <div class="error-item">
+                        <div class="error-header">Table Redundancy</div>
+                        <div class="error-description">
+                            Including <span class="emphasis">unnecessary tables</span>. The table <span class="highlight">[T]</span> may be unnecessary.
+                        </div>
+                    </div>
+                    <div class="error-item">
+                        <div class="error-header">Table Missing</div>
+                        <div class="error-description">
+                            Failing to include <span class="emphasis">required tables</span>. The table <span class="highlight">[T]</span> may be missing.
+                        </div>
+                    </div>
+                    <div class="error-item">
+                        <div class="error-header">Join Condition Mismatch</div>
+                        <div class="error-description">
+                            Errors in <span class="emphasis">JOIN conditions</span> between tables. Join condition between <span class="highlight">[T]</span> and <span class="highlight">[T]</span> is incorrect.
+                        </div>
+                    </div>
+                    <div class="error-item">
+                        <div class="error-header">Join Type Mismatch</div>
+                        <div class="error-description">
+                            <span class="emphasis">Inappropriate JOIN types</span>. The join type <span class="highlight">[K]</span> is inconsistent with NL.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Value-related Errors -->
+            <div class="category-section">
+                <div class="category-header">
+                    <h2 class="category-title">Value-related Errors</h2>
+                    <p class="category-description">Incorrectly parsing or interpreting required attribute values from natural language expressions.</p>
+                </div>
+                <div class="error-list">
+                    <div class="error-item">
+                        <div class="error-header">Value Mismatch</div>
+                        <div class="error-description">
+                            Failing to map <span class="emphasis">values from NL</span> to database representations. Value <span class="highlight">[V]</span> in condition <span class="highlight">[C]</span> may be wrong.
+                        </div>
+                    </div>
+                    <div class="error-item">
+                        <div class="error-header">Data Format Mismatch</div>
+                        <div class="error-description">
+                            Improperly <span class="emphasis">formatting values</span> according to data type. Data format of <span class="highlight">[V]</span> in <span class="highlight">[A]</span> may be wrong.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Operator-related Errors -->
+            <div class="category-section">
+                <div class="category-header">
+                    <h2 class="category-title">Operator-related Errors</h2>
+                    <p class="category-description">Failing to select appropriate operators for SQL conditions.</p>
+                </div>
+                <div class="error-list">
+                    <div class="error-item">
+                        <div class="error-header">Comparison Operator</div>
+                        <div class="error-description">
+                            <span class="emphasis">Incorrect comparison operators</span> (e.g., using '>' instead of '>='). Operator <span class="highlight">[O]</span> in condition <span class="highlight">[C]</span> may be wrong.
+                        </div>
+                    </div>
+                    <div class="error-item">
+                        <div class="error-header">Logical Operator</div>
+                        <div class="error-description">
+                            Misinterpreting <span class="emphasis">logical relationships</span> (AND, OR, NOT). Boolean operator <span class="highlight">[O]</span> or precedence may be wrong.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Condition-related Errors -->
+            <div class="category-section">
+                <div class="category-header">
+                    <h2 class="category-title">Condition-related Errors</h2>
+                    <p class="category-description">Failing to properly handle query conditions, both explicit and implicit.</p>
+                </div>
+                <div class="error-list">
+                    <div class="error-item">
+                        <div class="error-header">Explicit Condition Missing</div>
+                        <div class="error-description">
+                            Missing <span class="emphasis">stated conditions</span>. Condition <span class="highlight">[C]</span> in NL may be missing.
+                        </div>
+                    </div>
+                    <div class="error-item">
+                        <div class="error-header">Explicit Condition Mismatch</div>
+                        <div class="error-description">
+                            <span class="emphasis">Incorrect conditions</span> deviating from NL. Condition <span class="highlight">[C]</span> may be wrong.
+                        </div>
+                    </div>
+                    <div class="error-item">
+                        <div class="error-header">Explicit Condition Redundancy</div>
+                        <div class="error-description">
+                            <span class="emphasis">Unnecessary conditions</span> not in NL. Condition <span class="highlight">[C]</span> not mentioned in NL.
+                        </div>
+                    </div>
+                    <div class="error-item">
+                        <div class="error-header">Implicit Condition Missing</div>
+                        <div class="error-description">
+                            Missing <span class="emphasis">implied conditions</span> (e.g., NULL handling). Missing implicit conditions <span class="highlight">[C]</span> (e.g., IS NOT NULL).
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Function-related Errors -->
+            <div class="category-section">
+                <div class="category-header">
+                    <h2 class="category-title">Function-related Errors</h2>
+                    <p class="category-description">Incorrectly using SQL functions or misunderstanding their purposes.</p>
+                </div>
+                <div class="error-list">
+                    <div class="error-item">
+                        <div class="error-header">Aggregate Functions</div>
+                        <div class="error-description">
+                            Incorrect <span class="emphasis">aggregate functions</span> <span class="highlight">[F]</span> (e.g., SUM, AVG).
+                        </div>
+                    </div>
+                    <div class="error-item">
+                        <div class="error-header">Window Functions</div>
+                        <div class="error-description">
+                            Incorrect <span class="emphasis">window functions</span> <span class="highlight">[F]</span> (e.g., OVER, PARTITION BY).
+                        </div>
+                    </div>
+                    <div class="error-item">
+                        <div class="error-header">Date/Time Functions</div>
+                        <div class="error-description">
+                            Incorrect <span class="emphasis">date/time functions</span> <span class="highlight">[F]</span> (e.g., STRFTIME).
+                        </div>
+                    </div>
+                    <div class="error-item">
+                        <div class="error-header">Conversion Functions</div>
+                        <div class="error-description">
+                            Incorrect <span class="emphasis">conversion functions</span> <span class="highlight">[F]</span> (e.g., CAST).
+                        </div>
+                    </div>
+                    <div class="error-item">
+                        <div class="error-header">Math Functions</div>
+                        <div class="error-description">
+                            Incorrect <span class="emphasis">math functions</span> <span class="highlight">[F]</span> (e.g., ROUND).
+                        </div>
+                    </div>
+                    <div class="error-item">
+                        <div class="error-header">String Functions</div>
+                        <div class="error-description">
+                            Incorrect <span class="emphasis">string functions</span> <span class="highlight">[F]</span> (e.g., SUBSTR).
+                        </div>
+                    </div>
+                    <div class="error-item">
+                        <div class="error-header">Conditional Functions</div>
+                        <div class="error-description">
+                            Incorrect <span class="emphasis">conditional functions</span> <span class="highlight">[F]</span> (e.g., CASE WHEN).
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Clause-related Errors -->
+            <div class="category-section">
+                <div class="category-header">
+                    <h2 class="category-title">Clause-related Errors</h2>
+                    <p class="category-description">Failing to correctly include, omit, or structure SQL clauses.</p>
+                </div>
+                <div class="error-list">
+                    <div class="error-item">
+                        <div class="error-header">Clause Missing</div>
+                        <div class="error-description">
+                            Missing <span class="emphasis">necessary clauses</span>. Clause <span class="highlight">[K]</span> (e.g., GROUP BY) is missing.
+                        </div>
+                    </div>
+                    <div class="error-item">
+                        <div class="error-header">Clause Redundancy</div>
+                        <div class="error-description">
+                            Including <span class="emphasis">extraneous clauses</span>. Clause <span class="highlight">[K]</span> (e.g., GROUP BY) is redundant.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Subquery-related Errors -->
+            <div class="category-section">
+                <div class="category-header">
+                    <h2 class="category-title">Subquery-related Errors</h2>
+                    <p class="category-description">Failing to correctly use or generate subqueries.</p>
+                </div>
+                <div class="error-list">
+                    <div class="error-item">
+                        <div class="error-header">Subquery Missing</div>
+                        <div class="error-description">
+                            Missing <span class="emphasis">necessary subquery</span>. Subquery <span class="highlight">[Q]</span> is missing.
+                        </div>
+                    </div>
+                    <div class="error-item">
+                        <div class="error-header">Subquery Mismatch</div>
+                        <div class="error-description">
+                            <span class="emphasis">Subquery doesn't match</span> context. Subquery <span class="highlight">[Q]</span> mismatches with NL logic.
+                        </div>
+                    </div>
+                    <div class="error-item">
+                        <div class="error-header">Partial Query</div>
+                        <div class="error-description">
+                            Query is only <span class="emphasis">part of complete query</span>. Query <span class="highlight">[Q]</span> is partial.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Other Errors -->
+            <div class="category-section">
+                <div class="category-header">
+                    <h2 class="category-title">Other Errors</h2>
+                    <p class="category-description">Incorrect use of special keywords and queries with significant semantic deviation.</p>
+                </div>
+                <div class="error-list">
+                    <div class="error-item">
+                        <div class="error-header">ASC/DESC</div>
+                        <div class="error-description">
+                            Improper handling of <span class="emphasis">result ordering</span>. ASC/DESC usage is incorrect.
+                        </div>
+                    </div>
+                    <div class="error-item">
+                        <div class="error-header">DISTINCT</div>
+                        <div class="error-description">
+                            Improper <span class="emphasis">deduplication operations</span>. DISTINCT is omitted or incorrectly applied.
+                        </div>
+                    </div>
+                    <div class="error-item">
+                        <div class="error-header">Other</div>
+                        <div class="error-description">
+                            SQL <span class="emphasis">deviates significantly</span> from required output, necessitating complete rewrite.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

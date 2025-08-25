@@ -12,3 +12,4 @@ scikit-learn
 seaborn
 sqlplot
 numpy
+sqlparse

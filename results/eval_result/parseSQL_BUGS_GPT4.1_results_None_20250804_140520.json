@@ -1,0 +1,14 @@
+{
+  "result_path": "results/Parsed_SQL/BUGS_GPT4.1_results_None_20250804_140520.jsonl",
+  "accuracy": 0.7185,
+  "precision": 0.7589,
+  "recall": 0.6487,
+  "negative_precision": 0.6879,
+  "negative_recall": 0.7898,
+  "true_negative": 789,
+  "false_positive": 210,
+  "false_negative": 358,
+  "true_positive": 661,
+  "pos_f1": 0.6994862603012221,
+  "neg_f1": 0.7353365635785342
+}

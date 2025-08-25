@@ -1,4 +1,5 @@
 import sqlite3
+from utils import basic_schema_from_sqlite
 
 def extract_sqlite_schema(db_path):
     conn = sqlite3.connect(db_path)
@@ -67,7 +68,8 @@ def sqlite_schema_extract_format(db_path):
 
 
 if __name__ == "__main__":
-    db_path = "spider2-lite/resource/databases/spider2-localdb/sqlite-sakila.sqlite"
+    db_path = "BIRD/dev_20240627/dev_databases/superhero/superhero.sqlite"
+    # formatted = basic_schema_from_sqlite(db_path)
     formatted = sqlite_schema_extract_format(db_path)
     print(formatted)
 

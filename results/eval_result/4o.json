@@ -1,0 +1,14 @@
+{
+  "result_path": "results/Baseline_no_key/4o_None_20250813_163105.jsonl",
+  "accuracy": 0.7175,
+  "precision": 0.6863,
+  "recall": 0.8116,
+  "negative_precision": 0.7638,
+  "negative_recall": 0.6216,
+  "true_negative": 621,
+  "false_positive": 378,
+  "false_negative": 192,
+  "true_positive": 827,
+  "pos_f1": 0.7437092996862275,
+  "neg_f1": 0.6854021654395842
+}

@@ -4,10 +4,10 @@ import time
 from datetime import datetime
 from tqdm import tqdm
 from sklearn.metrics import confusion_matrix, accuracy_score, precision_score, recall_score
-from utils import build_prompt, build_cot_prompt, parse_answer, query_gemini, query_claude, query_gpt, load_sql, build_prompt_no_schema
+from utils import build_prompt, build_cot_prompt, parse_answer, query_gemini, query_claude, query_gpt, load_sql, build_prompt_no_schema, build_prompt_sql_parser, build_self_reflection_prompt
 from schema.get_spider_schema import get_schema, schema_shrink
 
-# ========== 配置数据集 ==========
+# ====================
 DATASETS = {
     "1": {
         "name": "SSS",
@@ -17,57 +17,62 @@ DATASETS = {
     }
 }
 
-# ========== 用户交互 ==========
+# ====================
 def choose_dataset():
     print("Please choose a dataset:")
     for k, v in DATASETS.items():
         print(f"{k}. {v['name']}")
     choice = input("Enter the number to choose: ").strip()
-    return DATASETS.get(choice, DATASETS["1"])  # 默认SSS
+    return DATASETS.get(choice, DATASETS["1"])
 
 def choose_model():
     models = {
         "1": ("Claude", query_claude),
         "2": ("Gemini", query_gemini),
-        "3": ("GPT-4.1", query_gpt),
+        "3": ("GPT4o", query_gpt),
     }
     print("Please choose a model:")
     for k, v in models.items():
         print(f"{k}. {v[0]}")
     choice = input("Enter the number to choose: ").strip()
-    return models.get(choice, models["3"])  # 默认 GPT-4o
+    return models.get(choice, models["3"]) 
 
 def choose_prompt():
     prompts = {
         "1": ("Baseline", build_prompt),
         "2": ("CoT", build_cot_prompt),
-        # "3": ("SQL AST parser", parser_call_prompt),  # 假设有一个SQL AST解析器的构建函数
+        "3": ("SQL AST parser", build_prompt_sql_parser), 
         "4": ("No_Schema", build_prompt_no_schema),
+        "5": ("Self-Reflection", build_self_reflection_prompt),
     }
     print("Please choose a method:")
     for k, v in prompts.items():
         print(f"{k}. {v[0]}")
     choice = input("Enter the number to choose: ").strip()
-    return prompts.get(choice, prompts["1"])  # 默认普通Prompt
+    return prompts.get(choice, prompts["1"]) 
 
-# ========== 参数 ==========
+# ====================
 MAX_EXAMPLES = None
 SCHEMA_LINE_THRESHOLD = 700
 MAX_RETRIES = 5
 
 if __name__ == "__main__":
-    # Step 1: 交互选择
+    # Step 1: user choice
     dataset = choose_dataset()
     model_name, query_func = choose_model()
     prompt_name, prompt_builder = choose_prompt()
 
-    # Step 2: 加载数据
+    # Step 2: load data
     with open(dataset["data_path"], "r") as f:
         examples = json.load(f)
     if MAX_EXAMPLES:
         examples = examples[:MAX_EXAMPLES]
 
-    # Step 3: 自动路径
+    PARSED_SQL_PATH = "SSS-data/parsed_sql.json"
+    with open(PARSED_SQL_PATH, "r") as f:
+        parsed_data = json.load(f)
+    parsed_lookup = {item["sql_id"]: item["parsed_sql"] for item in parsed_data}
+
     # timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     # result_dir = f"results/{dataset['name']}/method_{MAX_EXAMPLES or 'all'}"
     # os.makedirs(result_dir, exist_ok=True)
@@ -78,7 +83,6 @@ if __name__ == "__main__":
     RESULT_PATH = f"results/{dataset['name']}/{prompt_name}_{MAX_EXAMPLES}/{model_name}_{timestamp}.jsonl"
     EVAL_PATH = f"results/{dataset['name']}/{prompt_name}_{MAX_EXAMPLES}/{model_name}_eval_{timestamp}.json"
     os.makedirs(os.path.dirname(RESULT_PATH), exist_ok=True)
-    # Step 4: 初始化
     preds, labels, skip_count = [], [], 0
 
     with open(RESULT_PATH, "w", encoding="utf-8") as result_file:
@@ -88,7 +92,7 @@ if __name__ == "__main__":
             db_id = ex["db"]
             label = ex["label"]
 
-            # Schema 提取 + Shrink
+  
             try:
                 schema_full = get_schema(sql_id, db_id, dataset["db_root"])
                 schema = schema_shrink(schema_full) if len(schema_full.strip().split("\n")) > SCHEMA_LINE_THRESHOLD else schema_full
@@ -97,10 +101,13 @@ if __name__ == "__main__":
                 skip_count += 1
                 continue
             sql = load_sql(dataset["sql_root"], sql_id)
+            parsed_sql = parsed_lookup.get(sql_id, {})
             # Prompt
-            prompt = prompt_builder(q, schema, sql)
+            if prompt_builder == build_prompt_sql_parser:
+                prompt = prompt_builder(parsed_sql, q, schema, sql)
+            else:
+                prompt = prompt_builder(q, schema, sql)
 
-            # 调用模型
             for attempt in range(MAX_RETRIES):
                 try:
                     response = query_func(prompt)

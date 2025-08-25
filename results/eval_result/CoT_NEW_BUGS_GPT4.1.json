@@ -1,0 +1,15 @@
+{
+  "result_path": "results/CoT/CoT_NEW_BUGS_GPT4.1_results_None_20250810_215504.jsonl",
+  "skipped": 0,
+  "accuracy": 0.7146,
+  "precision": 0.7822,
+  "recall": 0.6026,
+  "negative_precision": 0.6715,
+  "negative_recall": 0.8288,
+  "true_negative": 828,
+  "false_positive": 171,
+  "false_negative": 405,
+  "true_positive": 614,
+  "pos_f1": 0.6807534950895436,
+  "neg_f1": 0.7419038858894887
+}

@@ -5,7 +5,7 @@ import seaborn as sns
 import numpy as np
 
 # === Step 1: Load JSON ===
-with open('bug-data/NL2SQL-Bugs.json', 'r') as f:
+with open('SSS-data/random_order_ground_truth.json', 'r') as f:
     data = json.load(f)
 
 # === Step 2: Collect (error_type, sub_error_type) where label == False ===

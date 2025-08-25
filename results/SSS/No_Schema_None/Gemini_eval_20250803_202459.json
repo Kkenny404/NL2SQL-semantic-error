@@ -10,5 +10,7 @@
   "true_negative": 225,
   "false_positive": 85,
   "false_negative": 79,
-  "true_positive": 171
+  "true_positive": 171,
+  "pos_f1": 0.675905325443787,
+  "neg_f1": 0.7328802510403165
 }

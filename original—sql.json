@@ -1,0 +1,45 @@
+{
+    "sql_id": "local029_ClauseMissing_10.sql",
+    "parsed_sql": {
+      "select": [
+        "WITH customer_orders AS (SELECT c.customer_unique_id, COUNT(o.order_id) AS Total_Orders_By_Customers, AVG(p.payment_value) AS Average_Payment_By_Customer, c.customer_city, c.customer_state FROM olist_customers AS c JOIN olist_orders AS o ON c.customer_id = o.customer_id JOIN olist_order_payments AS p ON o.order_id = p.order_id WHERE o.order_status = 'delivered') SELECT Average_Payment_By_Customer, customer_city, customer_state FROM customer_orders ORDER BY Total_Orders_By_Customers DESC LIMIT 3",
+        "SELECT c.customer_unique_id, COUNT(o.order_id) AS Total_Orders_By_Customers, AVG(p.payment_value) AS Average_Payment_By_Customer, c.customer_city, c.customer_state FROM olist_customers AS c JOIN olist_orders AS o ON c.customer_id = o.customer_id JOIN olist_order_payments AS p ON o.order_id = p.order_id WHERE o.order_status = 'delivered'"
+      ],
+      "from": [
+        "customer_orders",
+        "olist_customers AS c",
+        "olist_orders AS o",
+        "olist_order_payments AS p"
+      ],
+      "where": [
+        "o.order_status = 'delivered'"
+      ],
+      "group_by": [],
+      "order_by": [
+        "ORDER BY Total_Orders_By_Customers DESC"
+      ],
+      "ctes": [
+        {
+          "name": "customer_orders",
+          "query": {
+            "select": [
+              "SELECT c.customer_unique_id, COUNT(o.order_id) AS Total_Orders_By_Customers, AVG(p.payment_value) AS Average_Payment_By_Customer, c.customer_city, c.customer_state FROM olist_customers AS c JOIN olist_orders AS o ON c.customer_id = o.customer_id JOIN olist_order_payments AS p ON o.order_id = p.order_id WHERE o.order_status = 'delivered'"
+            ],
+            "from": [
+              "olist_customers AS c",
+              "olist_orders AS o",
+              "olist_order_payments AS p"
+            ],
+            "where": [
+              "o.order_status = 'delivered'"
+            ],
+            "group_by": [],
+            "order_by": [],
+            "ctes": [],
+            "subqueries": []
+          }
+        }
+      ],
+      "subqueries": []
+    }
+  },
